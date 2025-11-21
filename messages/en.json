@@ -1,0 +1,19 @@
+{
+  "HomePage": {
+    "title": "Hello world!"
+    },
+  "NavItems": {
+    "home": "Home",
+    "about": "About Us",
+    "reviews": "Business Weekly Reviews",
+    "services": "Our Services",
+    "insights": "Insights",
+    "contact": "Contact Us"
+  },
+  "Search": {
+    "placeholder": "Search..."  ,
+    "noResults": "No results found.",
+    "pressEnter": "Press Enter to search"
+  }
+
+}

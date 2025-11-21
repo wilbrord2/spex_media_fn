@@ -1,0 +1,18 @@
+{
+  "HomePage": {
+    "title": "Bonjour le monde !"
+  },
+  "NavItems": {
+    "home": "Accueil",
+    "about": "Présentation",
+    "reviews": "Avis",
+    "services": "Services",
+    "insights": "Analyses",
+    "contact": "Contactez-nous"
+  },
+  "Search": {
+    "placeholder": "Rechercher...",
+    "noResults": "Aucun résultat trouvé.",
+    "pressEnter": "Appuyez sur Entrée pour rechercher"
+  }
+}
