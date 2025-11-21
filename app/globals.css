@@ -150,6 +150,13 @@
   animation: slideUp 0.2s ease-out forwards;
 }
 
+.max-width-container {
+  width: 100%;
+  max-width: 1570px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .animate-slideDown {
   animation: slideDown 0.2s ease-out forwards;
 }

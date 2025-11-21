@@ -18,7 +18,7 @@ const Footer = () => {
   ];
   return (
     <div className="bg-primary dark:bg-slate-950">
-      <div className="max-w-[1570px] mx-auto w-full flex flex-row flex-wrap items-start justify-between p-8 gap-4">
+      <div className="max-width-container w-full flex flex-row flex-wrap items-start justify-between p-8 gap-4">
         <div className="flex flex-col  gap-4  text-sm">
           <Link href="/" className="bg-white p-2 rounded-lg w-fit">
             <Image

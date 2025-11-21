@@ -6,7 +6,6 @@ import { LuNewspaper } from "react-icons/lu";
 import { FiMessageSquare } from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
 
-
 export const BusinesReviewData = [
   {
     category: "Lead Story",
@@ -91,5 +90,36 @@ export const OurMotivesData = [
   {
     title: "Ethical & Authoritative Voice",
     description: "Content and counsel you can trust.",
+  },
+];
+
+export const TeamData = [
+  {
+    image: Review1,
+    name: "Dr. Sarah Mukamana",
+    role: "Chief Executive Officer",
+    description:
+      "Leading strategic vision with 15+ years in African media landscape.",
+  },
+  {
+    image: Review1,
+    name: "Jean-Baptiste Nzeyimana",
+    role: "Editor-in-Chief",
+    description:
+      "Award-winning journalist specializing in pan-African business coverage.",
+  },
+  {
+    image: Review1,
+    name: "Dr. Amina Hassan",
+    role: "Head of Research & Analysis",
+    description:
+      "Economics PhD with expertise in African market dynamics and policy analysis.",
+  },
+  {
+    image: Review1,
+    name: "Prof. Kwame Asante",
+    role: "Senior Strategic Advisor",
+    description:
+      "Renowned business strategist and thought leader in African development.",
   },
 ];

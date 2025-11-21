@@ -7,7 +7,7 @@ import RedirectionBtn from "../Buttons/redirectionBtn";
 
 const BusinesReviewSection = () => {
   return (
-    <div className="p-8 space-y-8 flex flex-col items-center justify-center">
+    <div className="p-8 space-y-16 flex flex-col items-center justify-center">
       <Headline
         title="This Week in Business Weekly Review"
         description="Stay informed with our curated selection of the most impactful African business stories, market analysis, and leadership insights."

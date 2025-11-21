@@ -21,7 +21,7 @@ const ServiceCard = ({
         <h3 className="text-xl font-semibold mt-2 group-hover:text-primary duration-500">
           {title}
         </h3>
-        <p className="text-gray-600 mt-1">{description}</p>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">{description}</p>
       </div>
       <a href={link} className="text-primary hover:text-secondary group font-bold mt-2 flex items-center gap-2">
         {name}
