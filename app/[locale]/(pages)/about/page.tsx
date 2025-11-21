@@ -16,7 +16,7 @@ const AboutPage = () => {
   return (
     <div className="">
       {/* top section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-8 py-16 items-center justify-between">
+      <div className="grid grid-cols-1 p-4 md:grid-cols-2 max-w-4xl mx-auto gap-8 py-16 items-center justify-between">
         <div className="space-y-2">
           <h1 className="text-lg font-medium uppercase">About us</h1>
           <h2 className="text-4xl font-bold text-primary">
@@ -38,7 +38,7 @@ const AboutPage = () => {
       </div>
       {/* our story */}
       <div className="bg-slate-50 dark:bg-background py-16 px-8 w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full items-center justify-between max-width-container">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 w-full items-center justify-between max-width-container">
           <div>
             <img
               src={logo.src}
@@ -77,7 +77,7 @@ const AboutPage = () => {
 
       {/* vision and mission */}
       <section className="py-16 px-8 w-full bg-[#fafafa] dark:bg-background">
-        <div className="max-width-container grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-width-container p-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <InfoCard
             icon={GiSpiralLollipop}
             title="Our Mission"

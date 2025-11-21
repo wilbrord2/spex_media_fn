@@ -21,9 +21,9 @@ const Navbar = () => {
   const navitems = [
     { label: t("home"), href: "/" },
     { label: t("about"), href: "/about" },
-    { label: t("reviews"), href: "/reviews" },
-    { label: t("services"), href: "/services" },
-    { label: t("insights"), href: "/insights" },
+    { label: t("reviews"), href: "/review" },
+    { label: t("services"), href: "/service" },
+    { label: t("insights"), href: "/insight" },
     { label: t("contact"), href: "/contact" },
   ];
 

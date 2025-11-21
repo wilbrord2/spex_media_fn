@@ -29,7 +29,7 @@ const ContentCard = ({
           height={192}
         />
       </div>
-      <div className="absolute top-2 left-2 bg-primary text-sm text-white mb-2 py-1 px-2 font-semibold rounded-full">
+      <div className="absolute top-2 left-2 bg-primary group-hover:bg-secondary text-sm text-white mb-2 py-1 px-2 font-semibold rounded-full">
         {category}
       </div>
       <div className=" p-4 ">

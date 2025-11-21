@@ -13,7 +13,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 export function HeroSection() {
-  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
+  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
   const [current, setCurrent] = useState(0);
   const totalSlides = BusinesReviewData.length;
 
@@ -38,8 +38,8 @@ export function HeroSection() {
                   className="w-full h-full object-cover"
                   fill
                 />
-                <div className="absolute inset-0 bg-black/60 text-center flex flex-col items-center justify-center p-8 space-y-4">
-                  <h2 className=" text-3xl md:text-5xl max-w-2xl font-bold text-white drop-shadow-lg">
+                <div className="absolute inset-0 bg-black/60 text-center flex flex-col items-center sm:justify-center p-8 space-y-4">
+                  <h2 className="text-3xl md:text-5xl max-w-2xl font-bold text-white drop-shadow-lg">
                     {data.title}
                   </h2>
                   <p className=" text-lg md:text-xl max-w-3xl font-medium text-white drop-shadow-lg">
@@ -51,16 +51,16 @@ export function HeroSection() {
           ))}
         </CarouselContent>
 
-        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex space-x-4">
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center text-nowrap">
           <motion.button
             whileTap={{ scale: 0.85 }}
-            className="cursor-pointer  px-6 py-3 bg-white text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition"
+            className="cursor-pointer w-full px-6 py-3 bg-white text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition"
           >
             Explore Business Weekly Review
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.85 }}
-            className="cursor-pointer  px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-md shadow-md hover:bg-white hover:text-primary transition"
+            className="cursor-pointer w-full px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-md shadow-md hover:bg-white hover:text-primary transition"
           >
             Our Advisory Services
           </motion.button>
