@@ -123,3 +123,98 @@ export const TeamData = [
       "Renowned business strategist and thought leader in African development.",
   },
 ];
+
+export const VideoData = [
+  {
+    thumbnail: Review1.src,
+    title: "CEO Spotlight: Building Pan-African Brands",
+    views: "12.5K",
+    duration: "24:30",
+  },
+  {
+    thumbnail: Review2.src,
+    title: "Market Analysis: East African Trade Dynamics",
+    views: "8.2K",
+    duration: "18:45",
+  },
+  {
+    thumbnail: Review3.src,
+    title: "Innovation Series: African Agritech Startups",
+    views: "15.7K",
+    duration: "32:15",
+  },
+];
+
+// articles.data.ts
+export interface Article {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  name: string;
+  img: string;
+}
+
+export const ArticlesData: Article[] = [
+  {
+    id: 1,
+    title: "Rwanda’s Digital Economy Reaches $2.3B Milestone",
+    description:
+      "Comprehensive analysis of Rwanda’s digital transformation journey and its impact on regional economic growth.",
+    category: "Technology",
+    name: "Dr. Sarah Mukamana",
+    date: "January 15, 2025",
+    img: Review1.src,
+  },
+  {
+    id: 2,
+    title: "East African Banking Sector Transformation",
+    description:
+      "How digital banking innovations are reshaping financial services across East Africa.",
+    category: "Finance",
+    name: "Jean-Baptiste Nziyimana",
+    date: "January 14, 2025",
+    img: Review4.src,
+  },
+  {
+    id: 3,
+    title: "Nigeria’s Fintech Revolution Continues",
+    description:
+      "Deep dive into Nigeria’s fintech ecosystem and its expansion into West African markets.",
+    category: "Finance",
+    name: "Dr. Amina Hassan",
+    date: "January 13, 2025",
+    img: Review2.src,
+  },
+  {
+    id: 4,
+    title: "Agribusiness Innovation Across the Continent",
+    description:
+      "Transformation from Kenya’s vertical farms to Ghana’s agri-tech startups.",
+    category: "Agribusiness",
+    name: "Prof. Kwame Asante",
+    date: "January 12, 2025",
+    img: Review3.src,
+  },
+  {
+    id: 5,
+    title: "Renewable Energy Boom in Southern Africa",
+    description:
+      "Wind and solar energy projects transforming the landscape across Botswana, Namibia, and Zambia.",
+    category: "Energy",
+    name: "Dr. Sarah Mukamana",
+    date: "January 11, 2025",
+    img: Review1.src,
+  },
+  {
+    id: 6,
+    title: "Healthcare Innovation in African Cities",
+    description:
+      "Telemedicine and digital health solutions revolutionizing healthcare delivery across Africa.",
+    category: "Healthcare",
+    name: "Dr. Fatima Al-Rashid",
+    date: "January 10, 2025",
+    img: Review2.src,
+  },
+];
