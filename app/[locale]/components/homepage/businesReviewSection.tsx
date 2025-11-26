@@ -25,7 +25,7 @@ const BusinesReviewSection = () => {
           />
         ))}
       </div>
-      <RedirectionBtn title="View All Weekly Reviews" link="/business-reviews" />
+      <RedirectionBtn title="View All Weekly Reviews" link="/review" />
     </div>
   );
 };
