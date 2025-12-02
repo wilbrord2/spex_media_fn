@@ -1,6 +1,6 @@
-import { ServiceData } from "@/app/constants";
+import { MainSercivesData } from "@/app/constants";
 import Headline from "../text/headline";
-import ServiceCard from "../card/serviceCard";
+import MainServiceCard from "../card/mainServiceCard";
 
 const ServiceSection = () => {
   return (
@@ -9,15 +9,15 @@ const ServiceSection = () => {
         title="Our Core Services"
         description="Integrated solutions designed to amplify African business narratives and drive meaningful engagement across diverse markets and audiences."
       />
-      <div className="flex items-stretch grow justify-start flex-wrap gap-4">
-        {ServiceData.map((service, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {MainSercivesData.map((service, index) => (
           <div key={index}>
-            <ServiceCard
-              Icon={service.icon}
+            <MainServiceCard
+              key={index}
+              image={service.image.src}
               title={service.title}
               description={service.description}
               link={service.link}
-              name={service.name}
             />
           </div>
         ))}

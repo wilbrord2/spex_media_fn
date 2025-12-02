@@ -8,8 +8,8 @@ import ArticlesSection from "../../components/review/reviewSection";
 const BusinessReview = () => {
   return (
     <>
-      <div className="bg-linear-to-br from-slate-900 via-slate-800 to-red-900 h-screen">
-        <div className="flex items-center justify-center p-10 max-width-container">
+      <div className="bg-linear-to-br from-slate-900 via-slate-800 to-red-900 lg:h-screen">
+        <div className="flex items-center justify-center gap-6 p-10 max-width-container">
           <div className="flex flex-col gap-4">
             <span className="text-white w-fit bg-secondary font-semibold px-4 py-2 rounded-full shadow">
               Latest Issues-January
@@ -23,13 +23,13 @@ const BusinessReview = () => {
               analysis, market insights, and exclusive interviews with
               continental leaders.
             </p>
-            <div className="space-x-4">
+            <div className="gap-4 flex flex-wrap">
               <RedirectionRedBtn title="Subscribe Now" link="#" />
               <RedirectionRedBtn title="Register Now" link="#" />
             </div>
           </div>
 
-          <div className="bg-white dark:bg-card space-y-3 w-[50%]  group hover:rotate-0 duration-300 rotate-4 flex flex-col items-center justify-center p-8 rounded-2xl shadow-lg">
+          <div className="max-lg:hidden bg-white dark:bg-card space-y-3 w-[50%]  group hover:rotate-0 duration-300 rotate-4 flex flex-col items-center justify-center p-8 rounded-2xl shadow-lg">
             <div className="text-center">
               <h2 className="text-3xl font-semibold mb-4">SPeX</h2>
               <p>BUSINESS WEEKLY REVIEW</p>
@@ -59,7 +59,7 @@ const BusinessReview = () => {
           </div>
         </div>
       </div>
-      <section className="py-20 bg-[#ECF0F3]">
+      <section className="py-20 px-8 bg-[#ECF0F3]">
         <div className="max-w-6xl mx-auto text-center">
           {/* Title */}
           <div className="flex items-center justify-center gap-2 mb-3">

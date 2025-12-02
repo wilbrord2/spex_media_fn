@@ -5,9 +5,12 @@ import Review4 from "@/public/images/bnreview4.jpeg";
 import { LuNewspaper } from "react-icons/lu";
 import { FiMessageSquare } from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
+import { image } from "motion/react-client";
+import { link } from "fs";
 
 export const BusinesReviewData = [
   {
+    id: 1,
     category: "Lead Story",
     title: "African Markets Rally Amid Global Economic Uncertainty",
     description:
@@ -17,6 +20,7 @@ export const BusinesReviewData = [
     img: Review1,
   },
   {
+    id: 2,
     category: "Market Analysis",
     title: "Commodities Drive Growth in African Economies",
     description:
@@ -26,6 +30,7 @@ export const BusinesReviewData = [
     img: Review2,
   },
   {
+    id: 3,
     category: "Leadership Insights",
     title: "Innovative Leadership in Africa's Tech Sector",
     description:
@@ -35,6 +40,7 @@ export const BusinesReviewData = [
     img: Review3,
   },
   {
+    id: 4,
     category: "Economic Policy",
     title: "New Trade Policies Boost Intra-African Commerce",
     description:
@@ -69,6 +75,30 @@ export const ServiceData = [
       "Expert consulting in market strategy, organizational growth, and leadership excellence. We partner with you to achieve peak performance in Africa.",
     link: "",
     name: "Unlock Your Potential ",
+  },
+];
+
+export const MainSercivesData = [
+  {
+    image: Review1,
+    title: "Media & Publishing",
+    description:
+      "Weekly business reviews, in-depth articles, newsletters, and editorial services — built for reach and subscription monetization.",
+    link: "service/publishing",
+  },
+  {
+    image: Review2,
+    title: "Event Management",
+    description:
+      "End-to-end event planning, management and coverage for conferences, exhibitions, sporting and faith events — virtual, hybrid and physical.",
+    link: "service/event",
+  },
+  {
+    image: Review3,
+    title: "Book Store & Self-Publishing",
+    description:
+      "A digital marketplace and self-publishing engine where authors upload manuscripts and readers buy securely across multiple currencies.",
+    link: "service/store",
   },
 ];
 
@@ -145,7 +175,6 @@ export const VideoData = [
   },
 ];
 
-// articles.data.ts
 export interface Article {
   id: number;
   title: string;
@@ -216,5 +245,31 @@ export const ArticlesData: Article[] = [
     name: "Dr. Fatima Al-Rashid",
     date: "January 10, 2025",
     img: Review2.src,
+  },
+];
+
+export const CommentData = [
+  {
+    id: 1,
+    name: "John Smith",
+    email: "john@example.com",
+    comment:
+      "Excellent analysis! This provides great insights into the market trends.",
+    date: "January 14, 2025",
+  },
+  {
+    id: 2,
+    name: "Maria Garcia",
+    email: "maria@example.com",
+    comment:
+      "Very informative article. Looking forward to more content like this.",
+    date: "January 13, 2025",
+  },
+  {
+    id: 3,
+    name: "Ahmed Hassan",
+    email: "ahmed@example.com",
+    comment: "Great perspective on African economic growth. Keep it up!",
+    date: "January 12, 2025",
   },
 ];

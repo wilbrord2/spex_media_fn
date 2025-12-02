@@ -77,7 +77,7 @@ const AboutPage = () => {
 
       {/* vision and mission */}
       <section className="py-16 px-8 w-full bg-[#fafafa] dark:bg-background">
-        <div className="max-width-container p-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-width-container p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <InfoCard
             icon={GiSpiralLollipop}
             title="Our Mission"
@@ -148,7 +148,7 @@ const AboutPage = () => {
           </p>
 
           {/* Team Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mt-16">
             {TeamData.map((member, index) => (
               <TeamCard
                 key={index}

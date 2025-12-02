@@ -18,31 +18,29 @@ export function HeroSection() {
   const totalSlides = BusinesReviewData.length;
 
   return (
-    <div className="relative w-full bg-primary overflow-hidden">
+    <div className="relative bg-primary w-full overflow-hidden">
       <Carousel
         plugins={[plugin.current]}
-        className="w-full"
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
+        className="w-full max-w-full"
         setApi={(api) => {
           api?.on("select", () => setCurrent(api.selectedScrollSnap()));
         }}
       >
-        <CarouselContent className="flex w-full">
+        <CarouselContent className="flex w-full max-w-full">
           {BusinesReviewData.map((data, index) => (
-            <CarouselItem key={index} className="w-full">
-              <div className="relative flex h-[80vh] items-center justify-center rounded-xl">
+            <CarouselItem  key={index} className="w-full">
+              <div className="relative flex h-[80vh] w-full items-center justify-center rounded-xl">
                 <Image
                   src={data.img}
                   alt={data.title}
                   className="w-full h-full object-cover"
                   fill
                 />
-                <div className="absolute inset-0 bg-black/60 text-center flex flex-col items-center sm:justify-center p-8 space-y-4">
+                <div className="absolute inset-0 bg-black/60 text-center flex flex-col items-center justify-center p-8 space-y-4">
                   <h2 className="text-3xl md:text-5xl max-w-2xl font-bold text-white drop-shadow-lg">
                     {data.title}
                   </h2>
-                  <p className=" text-lg md:text-xl max-w-3xl font-medium text-white drop-shadow-lg">
+                  <p className="hidden md:block text-lg md:text-xl max-w-3xl font-medium text-white drop-shadow-lg">
                     {data.description}
                   </p>
                 </div>
@@ -51,7 +49,7 @@ export function HeroSection() {
           ))}
         </CarouselContent>
 
-        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center text-nowrap">
+        <div className="absolute bottom-10 max-sm:mx-4 sm:bottom-24 sm:left-1/2 sm:-translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center">
           <motion.button
             whileTap={{ scale: 0.85 }}
             className="cursor-pointer w-full px-6 py-3 bg-white text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition"

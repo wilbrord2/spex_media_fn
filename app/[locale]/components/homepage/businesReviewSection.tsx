@@ -1,6 +1,5 @@
-import React from "react";
+"use client";
 import Headline from "../text/headline";
-import { Bus } from "lucide-react";
 import ContentCard from "../card/contentCard";
 import { BusinesReviewData } from "@/app/constants";
 import RedirectionBtn from "../Buttons/redirectionBtn";
@@ -15,7 +14,8 @@ const BusinesReviewSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
         {BusinesReviewData.map((review, index) => (
           <ContentCard
-            key={index}
+            key={review.id}
+            id={review.id}
             title={review.title}
             description={review.description}
             img={review.img.src}

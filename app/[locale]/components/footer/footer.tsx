@@ -61,7 +61,7 @@ const Footer = () => {
           <span className="text-white font-bold hover:underline flex items-center gap-1 cursor-pointer">
             <MdCall /> +50780891731
           </span>
-          <div className="flex gap-4 text-2xl mt-4">
+          <div className="flex flex-wrap gap-4 text-2xl mt-4">
             <Link
               href="/"
               className="text-gray-500 hover:text-white duration-300"

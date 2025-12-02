@@ -22,7 +22,7 @@ const NewsletterSection = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="px-4 py-2  focus:outline-none"
+            className="px-4 py-2 w-4/5  focus:outline-none"
           />
           <button
             onClick={handleSubscribe}

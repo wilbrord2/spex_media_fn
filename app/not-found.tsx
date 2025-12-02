@@ -6,11 +6,7 @@ export default function NotFound() {
   const router = useRouter();
 
   const handleReturn = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) {
-      router.back();
-    } else {
-      router.push("/");
-    }
+    router.push("/");
   };
 
   return (
