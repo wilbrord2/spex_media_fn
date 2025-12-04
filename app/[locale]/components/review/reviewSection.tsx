@@ -24,9 +24,9 @@ export default function ArticlesSection() {
       : ArticlesData.filter((item) => item.category === active);
 
   return (
-    <section className="w-full max-w-6xl mx-auto px-4 md:px-8 py-16 space-y-8">
+    <section className="w-full max-w-6xl mx-auto px-4 md:px-8 py-16 space-y-8 dark:bg-background">
       <h2 className="text-center text-2xl font-bold mb-2">Latest Articles</h2>
-      <p className="text-center text-gray-600 mb-8">
+      <p className="text-center mb-8">
         Stay informed with our comprehensive coverage of African business
         sectors
       </p>
@@ -38,8 +38,8 @@ export default function ArticlesSection() {
             onClick={() => setActive(cat)}
             className={`px-4 py-2 rounded-full text-sm border transition ${
               active === cat
-                ? "bg-black text-white"
-                : "bg-gray-100 hover:bg-gray-200"
+                ? "bg-primary text-white dark:bg-gray-900"
+                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
             }`}
           >
             {cat}

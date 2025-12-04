@@ -7,6 +7,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
 import { image } from "motion/react-client";
 import { link } from "fs";
+import { PricingCardProps } from "../[locale]/components/card/PricingCard";
 
 export const BusinesReviewData = [
   {
@@ -271,5 +272,98 @@ export const CommentData = [
     email: "ahmed@example.com",
     comment: "Great perspective on African economic growth. Keep it up!",
     date: "January 12, 2025",
+  },
+];
+
+export const PricingData: PricingCardProps[] = [
+  {
+    id: "free",
+    title: "Free",
+    price: 0,
+    priceLabel: "$0,00",
+    description: "Great for personal use or a first step to explore Nexwealth",
+    buttonText: "Get Started",
+    trial: "",
+    features: [
+      "AI Financial Advisor",
+      "Basic analytics and reporting",
+      "50 Gratis Transfer & Top up",
+      "Access Financial Dashboard",
+    ],
+  },
+  {
+    id: "pro",
+    title: "Pro",
+    price: 1200,
+    priceLabel: "$12,00",
+    badge: "Most Popular",
+    description: "Perfect for experts who want to analyze finances",
+    buttonText: "Try for 14 day",
+    trial: "14 days",
+    features: [
+      "AI Financial Advisor",
+      "Basic analytics and reporting",
+      "50 Gratis Transfer & Top up",
+      "Access Financial Dashboard",
+    ],
+  },
+  {
+    id: "extended",
+    title: "Extended",
+    price: 1500,
+    priceLabel: "$24,00",
+    description:
+      "Enhanced support with dedicated SLAs for optimal performance.",
+    buttonText: "Try for 14 day",
+    trial: "14 days",
+    features: [
+      "AI Financial Advisor",
+      "Basic analytics and reporting",
+      "50 Gratis Transfer & Top up",
+      "Access Financial Dashboard",
+    ],
+  },
+];
+
+export const ADVERTISING_PACKAGES = [
+  {
+    title: "Sponsored Article",
+    description:
+      "A native article written in collaboration with your brand, published and promoted to our audience.",
+    pricing: "From $500",
+    classname: "border-blue-500 shadow-blue-500/20",
+  },
+  {
+    title: "Newsletter Integration",
+    description:
+      "Insert a promoted story into our weekly newsletter with targeted placement.",
+    pricing: "From $350",
+    classname: "border-red-500 shadow-red-500/20",
+  },
+  {
+    title: "Programmatic Ad Slots",
+    description:
+      "Flexible programmatic or direct-buy slots across article pages and archive feeds.",
+    pricing: "Contact for pricing",
+    classname: "border-green-500 shadow-green-500/20",
+  },
+];
+
+export const PARTNERS = [
+  {
+    name: "Spex Media",
+    logoUrl: "/public/logo/spexlogo.png",
+  },
+  {
+    name: "Partner 2",
+    logoUrl: undefined,
+  },
+  {
+    name: "Partner 3",
+    logoUrl: undefined,
+  },
+  {
+    name: "Partner 4",
+    logoUrl: undefined,
   },
 ];

@@ -59,7 +59,7 @@ const BusinessReview = () => {
           </div>
         </div>
       </div>
-      <section className="py-20 px-8 bg-[#ECF0F3]">
+      <section className="py-20 px-8 bg-[#ECF0F3] dark:bg-gray-950">
         <div className="max-w-6xl mx-auto text-center">
           {/* Title */}
           <div className="flex items-center justify-center gap-2 mb-3">
@@ -67,7 +67,7 @@ const BusinessReview = () => {
             <h2 className="text-3xl font-bold">SPeX TV</h2>
           </div>
 
-          <p className="text-gray-600 max-w-2xl mx-auto mb-10">
+          <p className="max-w-2xl mx-auto mb-10">
             Exclusive video content featuring industry leaders, market analysis,
             and behind-the-scenes coverage of Africa’s business transformation.
           </p>

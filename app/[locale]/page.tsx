@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="relative flex flex-col">
       <Navbar />
-      <div className=" bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className=" bg-gray-50 dark:bg-background min-h-screen">
         <div className="max-w-[1850px] mx-auto flex flex-col gap-4">
           <HeroSection />
           <BusinesReviewSection />
