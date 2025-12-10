@@ -351,8 +351,8 @@ export const ADVERTISING_PACKAGES = [
 
 export const PARTNERS = [
   {
-    name: "Spex Media",
-    logoUrl: "/public/logo/spexlogo.png",
+    name: "Nexus Media",
+    logoUrl: "/public/logo/nexuslogo.png",
   },
   {
     name: "Partner 2",

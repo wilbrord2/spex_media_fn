@@ -9,13 +9,13 @@ const ChooseusSection = () => {
   return (
     <div className="lg:px-8 px-4 py-6 lg:py-16 space-y-16 ">
       <Headline
-        title="Why Choose SPeX Media?"
+        title="Why Choose nexus Media?"
         description="We combine deep African market knowledge with global best practices to deliver exceptional results for our clients across the continent."
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 items-center justify-center gap-8">
         <div className="space-y-6">
           <h1 className="text-xl font-medium text-gray-600 dark:text-gray-300">
-            At SPeX Media, we believe in the power of authentic African voices.
+            At nexus Media, we believe in the power of authentic African voices.
             From our strategic hub in Kigali, Rwanda, we are committed to
             delivering.
           </h1>
@@ -24,7 +24,9 @@ const ChooseusSection = () => {
               <div key={index} className="flex items-center gap-2 text-lg">
                 <CiCircleCheck className="text-primary" size={35} />
                 <div className="flex items-center gap-1">
-                  <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {feature.description}
+                  </p>
                 </div>
               </div>
             ))}

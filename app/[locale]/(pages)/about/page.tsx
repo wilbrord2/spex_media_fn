@@ -1,7 +1,7 @@
 import React from "react";
 import RedirectionBtn from "../../components/Buttons/redirectionBtn";
 import aboutus from "@/public/images/aboutus.jpeg";
-import logo from "@/public/logo/spexlogo.png";
+import logo from "@/public/logo/nexuslogo.png";
 import InfoCard from "../../components/card/infocard";
 import { GiSpiralLollipop } from "react-icons/gi";
 import { GoEye } from "react-icons/go";
@@ -20,7 +20,7 @@ const AboutPage = () => {
         <div className="space-y-2">
           <h1 className="text-lg font-medium uppercase">About us</h1>
           <h2 className="text-4xl font-bold text-primary">
-            SPeX Media & Communications Inc.
+            nexus Media & Communications Inc.
           </h2>
           <p className="text-gray-600 pb-6">
             Championing Africa's Business Renaissance Through Authentic
@@ -42,7 +42,7 @@ const AboutPage = () => {
           <div>
             <img
               src={logo.src}
-              alt="SPeX Media & Communications Inc. Logo"
+              alt="nexus Media & Communications Inc. Logo"
               className="w-full h-auto mx-auto md:mx-0"
             />
           </div>
@@ -50,7 +50,7 @@ const AboutPage = () => {
             <h2 className="text-3xl font-semibold text-primary">Our Story</h2>
             <div className="text-gray-700 dark:text-gray-300 space-y-4">
               <p>
-                Founded in the heart of Africa's fastest-growing economy, SPeX
+                Founded in the heart of Africa's fastest-growing economy, nexus
                 Media & Communications Inc. emerged from a simple yet powerful
                 recognition: Africa's business narrative was being told by
                 others, often missing the nuance, context, and authentic voice
@@ -65,10 +65,11 @@ const AboutPage = () => {
               </p>
               <p>
                 {" "}
-                Today, SPeX Media stands as the premier platform for pan-African
-                business journalism, strategic communications, and executive
-                advisory services, trusted by Fortune 500 companies, emerging
-                African champions, and policy makers across the continent.
+                Today, nexus Media stands as the premier platform for
+                pan-African business journalism, strategic communications, and
+                executive advisory services, trusted by Fortune 500 companies,
+                emerging African champions, and policy makers across the
+                continent.
               </p>
             </div>
           </div>
@@ -143,7 +144,7 @@ const AboutPage = () => {
 
           {/* Subtitle */}
           <p className="max-w-3xl mx-auto mt-6 text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-            Meet the visionaries and experts driving SPeX Media's mission to
+            Meet the visionaries and experts driving nexus Media's mission to
             elevate African business narratives on the global stage.
           </p>
 
@@ -175,7 +176,7 @@ const AboutPage = () => {
 
           {/* Paragraph */}
           <p className="max-w-3xl mx-auto mt-6 text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-            Since our inception, SPeX Media has been recognized for excellence
+            Since our inception, nexus Media has been recognized for excellence
             in journalism, strategic communications, and our contribution to
             shaping positive African business narratives. Our work has been
             featured in leading international publications and has influenced

@@ -15,25 +15,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SpeX",
+  title: "nexus",
   description:
-    "SPeX Media & Communications Inc. is a pan-African media and communications company bringing brands and stories to life online. We design and develop engaging corporate websites that seamlessly integrate with dynamic digital platforms. Our flagship online publication, Business Weekly Review, delivers authoritative business insights and multimedia features, including YouTube video inserts, to connect audiences with Africa’s fast-growing business landscape.",
+    "nexus Media & Communications Inc. is a pan-African media and communications company bringing brands and stories to life online. We design and develop engaging corporate websites that seamlessly integrate with dynamic digital platforms. Our flagship online publication, Business Weekly Review, delivers authoritative business insights and multimedia features, including YouTube video inserts, to connect audiences with Africa’s fast-growing business landscape.",
 
   alternates: {
-    canonical: "https://spexmedia.com",
+    canonical: "https://nexusmedia.com",
   },
 
   openGraph: {
-    title: "SPeX Media & Communications Inc.",
+    title: "nexus Media & Communications Inc.",
     description:
       "Pan-African media company powering brands online through corporate websites, digital platforms, and Business Weekly Review magazine.",
-    url: "https://spexmedia.com",
-    siteName: "SPeX Media",
+    url: "https://nexusmedia.com",
+    siteName: "nexus Media",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SPeX Media & Communications Inc.",
+    title: "nexus Media & Communications Inc.",
     description:
       "Driving Africa’s digital media future with Business Weekly Review, corporate websites, and multimedia storytelling.",
   },

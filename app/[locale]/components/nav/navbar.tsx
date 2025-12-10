@@ -2,7 +2,7 @@
 import { Link, useRouter } from "@/i18n/navigation";
 import { ThemeSwitchButton } from "../switch/themeSwitcher";
 import LocaleSwitcher from "../switch/LocaleSwitcher";
-import Logo from "@/public/logo/spexlogo.png";
+import Logo from "@/public/logo/nexuslogo.png";
 import Image from "next/image";
 import { IoIosSearch } from "react-icons/io";
 import { motion } from "motion/react";
@@ -34,7 +34,7 @@ const Navbar = () => {
         <Link href="/">
           <Image
             src={Logo}
-            alt="Spex Logo"
+            alt="Nexus Logo"
             height={40}
             width={120}
             className="object-cover"
@@ -113,7 +113,7 @@ const Navbar = () => {
         <Link href="/">
           <Image
             src={Logo}
-            alt="Spex Logo"
+            alt="Nexus Logo"
             height={40}
             width={120}
             className="object-cover"

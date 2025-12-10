@@ -1,5 +1,5 @@
 "use client";
-import Logo from "@/public/logo/spexlogo.png";
+import Logo from "@/public/logo/nexuslogo.png";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { AiFillInstagram } from "react-icons/ai";
@@ -23,7 +23,7 @@ const Footer = () => {
           <Link href="/" className="bg-white p-2 rounded-lg w-fit">
             <Image
               src={Logo}
-              alt="Spex Logo"
+              alt="Nexus Logo"
               height={40}
               width={120}
               className="object-cover"
@@ -34,7 +34,7 @@ const Footer = () => {
               "Elevating African Business Narratives to Their Peak."
             </span>
             <span className="text-slate-200 font-semibold text-sm">
-              © {year} SPeX Media & Communications Inc.
+              © {year} nexus Media & Communications Inc.
               <br /> All Rights Reserved. Kigali, Rwanda.
             </span>
           </div>
@@ -56,7 +56,7 @@ const Footer = () => {
         <div className="flex flex-col gap-2">
           <h2 className="text-white font-bold text-lg mb-2">Follow Us</h2>
           <span className="text-white font-bold hover:underline flex items-center gap-1 cursor-pointer">
-            <MdOutlineAlternateEmail /> spex@gmail.com
+            <MdOutlineAlternateEmail /> nexus@gmail.com
           </span>
           <span className="text-white font-bold hover:underline flex items-center gap-1 cursor-pointer">
             <MdCall /> +50780891731

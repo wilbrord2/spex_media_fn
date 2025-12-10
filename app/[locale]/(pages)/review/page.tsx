@@ -31,7 +31,7 @@ const BusinessReview = () => {
 
           <div className="max-lg:hidden bg-white dark:bg-card space-y-3 w-[50%]  group hover:rotate-0 duration-300 rotate-4 flex flex-col items-center justify-center p-8 rounded-2xl shadow-lg">
             <div className="text-center">
-              <h2 className="text-3xl font-semibold mb-4">SPeX</h2>
+              <h2 className="text-3xl font-semibold mb-4">nexus</h2>
               <p>BUSINESS WEEKLY REVIEW</p>
               <span>January 12-21, 2025 | issue#46 </span>
             </div>
@@ -64,7 +64,7 @@ const BusinessReview = () => {
           {/* Title */}
           <div className="flex items-center justify-center gap-2 mb-3">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <h2 className="text-3xl font-bold">SPeX TV</h2>
+            <h2 className="text-3xl font-bold">nexus TV</h2>
           </div>
 
           <p className="max-w-2xl mx-auto mb-10">
