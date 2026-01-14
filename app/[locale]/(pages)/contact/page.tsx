@@ -1,17 +1,25 @@
 "use client";
 import { useState } from "react";
-import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiClock,
+  FiUser,
+  FiSend,
+  FiMessageSquare,
+} from "react-icons/fi";
 
 const ContactUsPage = () => {
   return (
     <div>
       {/* Header */}
-      <div className="">
-        <div className="container mx-auto text-center w-full flex flex-col justify-center items-center h-full gap-4 p-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold  mb-4">
+      <div className="my-10 w-full bg-linear-to-br from-slate-900 via-slate-800 to-red-900">
+        <div className="container mx-auto text-center w-full flex flex-col justify-center items-center h-full gap-4 p-16 text-white">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
             Connect With Nexus
           </h1>
-          <p className="text-foreground max-w-3xl mx-auto text-lg">
+          <p className="text-white/90 max-w-3xl mx-auto text-lg">
             We&apos;re always looking for new voices and strategic partners to
             join our mission. If you&apos;re looking for communications support
             or want to contribute to the conversation, get in touch. We&apos;d
@@ -126,74 +134,101 @@ const ContactSection = () => {
 
         {/* Right Column: Send Us a Message */}
         <div>
-          <h2 className="text-3xl font-bold text-foreground mb-8">
-            Send Us a Message
-          </h2>
+          <div className="bg-white dark:bg-gray-800 border border-border rounded-2xl p-6 md:p-8 shadow-sm">
+            <h3 className="text-foreground text-2xl font-bold mb-6">
+              Send us a message
+            </h3>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              {/* Name & Email Row */}
+              <div className="flex flex-col md:flex-row gap-5">
+                <label className="flex flex-col flex-1">
+                  <p className="text-foreground text-sm font-medium leading-normal pb-2">
+                    Full Name
+                  </p>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter your full name"
+                      className="w-full rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none"
+                      onChange={(e) =>
+                        setFormData({ ...formData, fullName: e.target.value })
+                      }
+                    />
+                    <FiUser
+                      className="absolute left-3 top-3.5 text-foreground/50"
+                      size={20}
+                    />
+                  </div>
+                </label>
+                <label className="flex flex-col flex-1">
+                  <p className="text-foreground text-sm font-medium leading-normal pb-2">
+                    Email Address
+                  </p>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      placeholder="Enter your email address"
+                      className="w-full rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none"
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                    />
+                    <FiMail
+                      className="absolute left-3 top-3.5 text-foreground/50"
+                      size={20}
+                    />
+                  </div>
+                </label>
+              </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
-                Full Name
+              {/* Subject */}
+              <label className="flex flex-col w-full">
+                <p className="text-foreground text-sm font-medium leading-normal pb-2">
+                  Subject
+                </p>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="What can we help you with?"
+                    className="w-full rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none"
+                    onChange={(e) =>
+                      setFormData({ ...formData, subject: e.target.value })
+                    }
+                  />
+                  <FiMessageSquare
+                    className="absolute left-3 top-3.5 text-foreground/50"
+                    size={20}
+                  />
+                </div>
               </label>
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                className="w-full px-4 py-3 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-foreground/60"
-                onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
-                }
-              />
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
-                Email Address
+              {/* Message */}
+              <label className="flex flex-col w-full">
+                <p className="text-foreground text-sm font-medium leading-normal pb-2">
+                  Message
+                </p>
+                <textarea
+                  rows={6}
+                  placeholder="How can we help you today?"
+                  className="w-full resize-none rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary p-4 text-base transition-colors focus:outline-none"
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
+                />
               </label>
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="w-full px-4 py-3 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-foreground/60"
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-              />
-            </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
-                Subject
-              </label>
-              <input
-                type="text"
-                placeholder="What can we help you with?"
-                className="w-full px-4 py-3 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-foreground/60"
-                onChange={(e) =>
-                  setFormData({ ...formData, subject: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
-                Message
-              </label>
-              <textarea
-                rows={5}
-                placeholder="Tell us more about your inquiry..."
-                className="w-full px-4 py-3 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-foreground/60 resize-none"
-                onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
-                }
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-4 bg-primary/80 hover:bg-primary text-white font-bold rounded-lg transition-colors shadow-sm mt-4 active:scale-[0.98]"
-            >
-              Send Message
-            </button>
-          </form>
+              {/* Submit Button */}
+              <div className="flex justify-end pt-2">
+                <button
+                  type="submit"
+                  className="flex w-full md:w-auto items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-8 py-3 text-white font-bold transition-all transform active:scale-95 shadow-lg shadow-primary/20"
+                >
+                  <span>Send Message</span>
+                  <FiSend className="text-sm font-bold" />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

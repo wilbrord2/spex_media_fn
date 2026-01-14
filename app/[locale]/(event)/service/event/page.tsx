@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import {
-  FiSearch,
   FiCalendar,
   FiVideo,
   FiGrid,
@@ -15,7 +15,7 @@ import {
 } from "react-icons/fi";
 import NewsletterSection from "@/app/[locale]/components/homepage/newsletter";
 import RedirectionBtn from "@/app/[locale]/components/Buttons/redirectionBtn";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 
 // --- Types ---
 interface Event {
@@ -28,6 +28,8 @@ interface Event {
   image: string;
   location?: string;
   speakers?: string[];
+  category: string;
+  when: string;
   badges?: { label: string; color: string }[];
 }
 
@@ -43,6 +45,8 @@ const EVENTS: Event[] = [
     type: "Virtual",
     image:
       "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800",
+    category: "Publishing",
+    when: "Upcoming",
     speakers: ["/spk1.jpg", "/spk2.jpg"],
   },
   {
@@ -56,6 +60,8 @@ const EVENTS: Event[] = [
     location: "Javits Center, NYC",
     image:
       "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=800",
+    category: "Literature",
+    when: "Upcoming",
   },
   {
     id: 3,
@@ -67,11 +73,75 @@ const EVENTS: Event[] = [
     type: "Virtual",
     image:
       "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=800",
+    category: "Technology",
+    when: "Upcoming",
     speakers: ["Dr. Alan Grant"],
   },
 ];
 
 const EventManagementService: React.FC = () => {
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("q") || "";
+
+  const [dateFilter, setDateFilter] = useState("Any Date");
+  const [typeFilter, setTypeFilter] = useState("All Types");
+  const [categoryFilter, setCategoryFilter] = useState("All Categories");
+
+  useEffect(() => {
+    if (window.location.hash === "#upcoming-events") {
+      const element = document.getElementById("upcoming-events");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
+  const isEventThisWeek = (event: Event) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize today to start of day
+
+    const eventDate = new Date(event.date + " " + today.getFullYear());
+    eventDate.setHours(0, 0, 0, 0); // Normalize eventDate to start of day
+
+    const firstDayOfWeek = new Date(today);
+    firstDayOfWeek.setDate(today.getDate() - today.getDay()); // Sunday (0-6 where 0 is Sunday)
+
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); // Saturday
+    
+    return eventDate >= firstDayOfWeek && eventDate <= lastDayOfWeek;
+  };
+
+  const isEventThisMonth = (event: Event) => {
+    const today = new Date();
+    const eventDate = new Date(event.date + " " + today.getFullYear());
+    return eventDate.getMonth() === today.getMonth() && eventDate.getFullYear() === today.getFullYear();
+  };
+
+  const filteredEvents = EVENTS.filter((event) => {
+    const matchesSearch =
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (event.speakers &&
+        event.speakers.some((speaker) =>
+          speaker.toLowerCase().includes(searchQuery.toLowerCase()),
+        ));
+
+    const matchesDate =
+      dateFilter === "Any Date" ||
+      (dateFilter === "This Week" && isEventThisWeek(event)) ||
+      (dateFilter === "This Month" && isEventThisMonth(event));
+
+    const matchesType = typeFilter === "All Types" || event.type === typeFilter;
+
+    // This is a placeholder for category filtering as the mock data doesn't have a category field.
+    // In a real app, 'event' would have a category property.
+    const matchesCategory =
+      categoryFilter === "All Categories" || event.category === categoryFilter;
+
+    return matchesSearch && matchesDate && matchesType && matchesCategory;
+  });
+
   return (
     <div className="bg-background text-foreground min-h-screen font-sans pb-20">
       <main className=" max-w-[1440px] mx-auto px-4 md:px-10 py-5 flex flex-col gap-12">
@@ -84,37 +154,40 @@ const EventManagementService: React.FC = () => {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-linear-to-r from-background via-background/80 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent" />
           </div>
 
           <div className="relative z-10 max-w-2xl flex flex-col gap-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-xs font-bold uppercase tracking-wider w-fit backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-white text-xs font-bold uppercase tracking-wider w-fit backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
               Featured Event
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white">
               The Future of Digital Media Summit
             </h1>
-            <p className="text-foreground/70 text-lg max-w-lg">
+            <p className="text-white/80 text-lg max-w-lg">
               Live in 2 Days. Join over 5,000 industry leaders globally for the
               most anticipated virtual gathering of the year.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <button className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg shadow-primary/20">
+              <button className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg shadow-primary/20 cursor-pointer">
                 Register Now
               </button>
-              <button className="h-12 px-8 bg-foreground/10 hover:bg-foreground/20 backdrop-blur-md border border-foreground/10 rounded-lg font-bold transition-all">
+              <Link
+                href={`/service/event/1`}
+                className="h-12 px-8 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 text-white rounded-lg font-bold transition-all flex items-center"
+              >
                 View Agenda
-              </button>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* --- Page Heading & Filters --- */}
-        <section className="flex flex-col gap-8">
+        <section id="upcoming-events" className="flex flex-col gap-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-foreground/10 pb-6">
             <div className="flex flex-col gap-2">
               <h2 className="text-3xl font-black tracking-tight">
@@ -125,32 +198,32 @@ const EventManagementService: React.FC = () => {
               </p>
             </div>
             <div className="text-sm text-foreground/40 font-medium">
-              Showing <span className="text-foreground">12</span> of{" "}
-              <span className="text-foreground">48</span> events
+              Showing{" "}
+              <span className="text-foreground">{filteredEvents.length}</span>{" "}
+              of <span className="text-foreground">{EVENTS.length}</span> events
             </div>
           </div>
 
           {/* Toolbar */}
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="relative flex-1 group">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-primary" />
-              <input
-                className="w-full h-12 bg-foreground/5 border border-foreground/10 rounded-xl pl-12 pr-4 text-sm focus:outline-none focus:border-primary/50 transition-all placeholder:text-foreground/30"
-                placeholder="Search events by name, speaker, or topic"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col lg:flex-row gap-4 justify-end">
+            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
               <FilterSelect
                 icon={<FiCalendar />}
                 options={["Any Date", "This Week", "This Month"]}
+                selectedValue={dateFilter}
+                onChange={setDateFilter}
               />
               <FilterSelect
                 icon={<FiVideo />}
                 options={["All Types", "Virtual", "Hybrid"]}
+                selectedValue={typeFilter}
+                onChange={setTypeFilter}
               />
               <FilterSelect
                 icon={<FiGrid />}
                 options={["All Categories", "Tech & AI", "Design"]}
+                selectedValue={categoryFilter}
+                onChange={setCategoryFilter}
               />
             </div>
           </div>
@@ -158,9 +231,15 @@ const EventManagementService: React.FC = () => {
 
         {/* --- Event Grid --- */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {EVENTS.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+          {filteredEvents.length === 0 ? (
+            <div className="col-span-full py-20 text-center text-foreground/40">
+              <p className="text-lg">No events found matching your criteria.</p>
+            </div>
+          ) : (
+            filteredEvents.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))
+          )}
         </section>
 
         {/* Load More button */}
@@ -244,15 +323,23 @@ const EventCard = ({ event }: { event: Event }) => (
 const FilterSelect = ({
   icon,
   options,
+  selectedValue,
+  onChange,
 }: {
   icon: React.ReactNode;
   options: string[];
+  selectedValue: string;
+  onChange: (value: string) => void;
 }) => (
   <div className="relative group">
     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-primary pointer-events-none">
       {icon}
     </div>
-    <select className="appearance-none h-12 pl-12 pr-10 rounded-xl bg-foreground/5 border border-foreground/10 text-sm font-medium focus:outline-none focus:border-primary/50 cursor-pointer min-w-40 w-full lg:w-auto">
+    <select
+      className="appearance-none h-12 pl-12 pr-10 rounded-xl bg-foreground/5 border border-foreground/10 text-sm font-medium focus:outline-none focus:border-primary/50 cursor-pointer min-w-40 w-full lg:w-auto"
+      value={selectedValue}
+      onChange={(e) => onChange(e.target.value)}
+    >
       {options.map((opt) => (
         <option key={opt} className="bg-background">
           {opt}

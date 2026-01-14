@@ -6,6 +6,7 @@ import Image from "next/image";
 import RedirectionBtn from "../../components/Buttons/redirectionBtn";
 import NewsletterSection from "../../components/homepage/newsletter";
 import Link from "next/link";
+import Pageheader from "../../components/homepage/pageheader";
 
 const data = {
   general_insights: [
@@ -76,67 +77,82 @@ const InsightPage = () => {
       : general_insights.filter((item) => item.category === active);
   return (
     <div>
-      {/* Header */}
-      <div className="">
-        <div className="container mx-auto text-center w-full flex flex-col justify-center items-center h-full gap-4 p-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold  mb-4">
-            Nexus Insights
-          </h1>
-          <p className="text-foreground max-w-3xl mx-auto text-lg">
-            Dedicated to decoding the complexities of African business. We
-            bridge the gap between global economic trends and local strategic
-            leadership, providing the clarity needed to lead with confidence.
-          </p>
-        </div>
-      </div>
+      {/* Hero Section */}
+      <div className="w-full bg-linear-to-br from-slate-900 via-slate-800 to-red-900 py-12 lg:py-20">
+        <div className="max-w-[1440px] mx-auto px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Header Content */}
+          <div className="text-white text-center lg:text-left flex flex-col justify-center gap-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+              Nexus Insights
+            </h1>
+            <p className="text-lg leading-relaxed text-white/90">
+              Dedicated to decoding the complexities of African business. We
+              bridge the gap between global economic trends and local strategic
+              leadership, providing the clarity needed to lead with confidence.
+            </p>
+          </div>
 
-      {/* Featured Insight */}
-      <section className="w-full bg-[#f8fafc] dark:bg-slate-900/50 py-6 md:py-12 px-4">
-        <div className="max-w-5xl mx-auto p-4">
-          <div className="flex flex-col md:flex-row overflow-hidden rounded-xl  shadow-sm border border-border bg-card ">
-            <div className="w-full md:w-[42%] relative h-56 md:h-auto">
+          {/* Right: Featured Insight */}
+          <section className="relative w-full rounded-2xl overflow-hidden min-h-[400px] flex flex-col justify-end p-8 md:p-12 bg-background/95 group shadow-2xl">
+            {/* Background Image with Overlay */}
+            <div className="absolute inset-0 z-0">
               <Image
                 src={featuredImage}
-                alt="Analysis"
-                className="absolute inset-0 h-full w-full object-cover"
+                alt="Featured Insight"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
+              <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent" />
             </div>
-            <div className="w-full md:w-[58%] px-8 py-8 md:px-10 md:py-8 flex flex-col justify-center">
-              <div className="mb-3">
-                <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-[#856404] bg-[#fff3cd] rounded-full">
-                  Featured Insight
+
+            <div className="relative z-10 w-full flex flex-col gap-4">
+              {/* Badge */}
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-white text-xs font-bold uppercase tracking-wider w-fit backdrop-blur-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold leading-tight mb-3">
+                Featured Insight
+              </span>
+
+              {/* Title */}
+              <h1 className="text-2xl md:text-4xl font-black leading-tight text-white">
                 The Rise of African Sovereign Wealth Funds
-              </h2>
-              <p className=" text-sm md:text-base leading-relaxed mb-5">
-                Analyzing the emergence and strategic importance of sovereign
-                wealth funds across the continent and their role in economic
-                diversification.
-              </p>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-6 text-[13px]">
+              </h1>
+
+              {/* Meta */}
+              <div className="flex flex-wrap items-center gap-4 text-xs text-white/80 font-medium">
                 <div className="flex items-center gap-1.5">
                   <FiUser size={14} />
-                  <span className="">Dr. Sarah Mukamana</span>
+                  <span>Dr. Sarah Mukamana</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <FiCalendar size={14} />
-                  <span>January 14, 2025</span>
+                  <span>Jan 14, 2025</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <FiClock size={14} />
                   <span>8 min read</span>
                 </div>
               </div>
-              <button className="flex items-center gap-2 w-fit px-5 py-2 bg-[#1e293b] text-white rounded-md font-medium text-sm hover:bg-slate-800 transition-colors group">
-                <span>Read Full Insight</span>
-                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </button>
+
+              {/* Description */}
+              <p className="text-white/80 text-sm md:text-base leading-relaxed line-clamp-3">
+                Analyzing the emergence and strategic importance of sovereign
+                wealth funds across the continent and their role in economic
+                diversification.
+              </p>
+
+              {/* Button */}
+              <div className="flex flex-wrap gap-4 mt-2">
+                <button className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-bold flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+                  Read Full Insight <FiArrowRight />
+                </button>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       {/* Categories navigations */}
       <div className="flex justify-center gap-3 flex-wrap my-10">
@@ -146,7 +162,7 @@ const InsightPage = () => {
             onClick={() => setActive(cat)}
             className={`cursor-pointer px-4 py-2 rounded-full text-sm border transition ${
               active === cat
-                ? "bg-primary text-white dark:bg-gray-900"
+                ? "bg-primary text-primary-foreground"
                 : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
             }`}
           >
@@ -173,13 +189,13 @@ const InsightPage = () => {
 
             <div className="p-6 flex flex-col flex-1">
               <div className="mb-3">
-                <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-[#856404] bg-[#fff3cd] rounded-full">
+                <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary bg-primary/10 rounded-full">
                   {item.category}
                 </span>
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition">
+                <h3 className="text-xl font-bold mb-2 group-hover:text-red-700 transition">
                   {item.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">

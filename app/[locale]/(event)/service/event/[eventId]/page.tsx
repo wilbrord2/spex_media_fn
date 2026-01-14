@@ -16,7 +16,9 @@ import {
   FiCreditCard,
   FiEye,
 } from "react-icons/fi";
+import { toast } from "sonner";
 import Link from "next/link";
+import { error } from "console";
 
 // --- Types ---
 interface Speaker {
@@ -62,6 +64,30 @@ const SPEAKERS: Speaker[] = [
     image:
       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400",
   },
+  {
+    id: 4,
+    name: "Marcus Lee",
+    role: "Lead Designer",
+    company: "Creative Hub",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400",
+  },
+  {
+    id: 5,
+    name: "Jessica White",
+    role: "Marketing Director",
+    company: "Brand Innovations",
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400",
+  },
+  {
+    id: 6,
+    name: "Alex Johnson",
+    role: "Software Architect",
+    company: "Tech Solutions",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400",
+  },
 ];
 
 const AGENDA: AgendaItem[] = [
@@ -95,6 +121,9 @@ const AGENDA: AgendaItem[] = [
 const EventDetails: React.FC = () => {
   const [ticketType, setTicketType] = useState<"general" | "vip">("general");
   const [quantity, setQuantity] = useState(1);
+  const [showAllSpeakers, setShowAllSpeakers] = useState(false); // New state for "View All"
+
+  const displayedSpeakers = showAllSpeakers ? SPEAKERS : SPEAKERS.slice(0, 3);
 
   return (
     <div className="bg-background text-foreground min-h-screen font-sans selection:bg-primary/30">
@@ -118,7 +147,7 @@ const EventDetails: React.FC = () => {
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
             priority
           />
-          <div className="absolute inset-0 bg-linear-to-l from-background via-background/30 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent" />
 
           <div className="relative z-10 p-8 md:p-14 max-w-4xl">
             <div className="flex items-center gap-3 mb-6">
@@ -173,12 +202,17 @@ const EventDetails: React.FC = () => {
             <section>
               <div className="flex items-center justify-between mb-8">
                 <SectionHeading title="Featured Speakers" noMargin />
-                <button className="text-primary font-bold text-sm hover:underline">
-                  View All
-                </button>
+                {SPEAKERS.length > 3 && (
+                  <button
+                    onClick={() => setShowAllSpeakers(!showAllSpeakers)}
+                    className="text-primary font-bold text-sm hover:underline"
+                  >
+                    {showAllSpeakers ? "Show Less" : "View All"}
+                  </button>
+                )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {SPEAKERS.map((speaker) => (
+                {displayedSpeakers.map((speaker) => (
                   <SpeakerCard key={speaker.id} speaker={speaker} />
                 ))}
               </div>
@@ -308,7 +342,25 @@ const EventDetails: React.FC = () => {
                 </h4>
                 <div className="flex gap-3">
                   <AdminBtn icon={<FiEdit3 />} text="Edit" />
-                  <AdminBtn icon={<FiGlobe />} text="Publish" primary />
+                  <AdminBtn
+                    icon={<FiGlobe />}
+                    text="Publish"
+                    primary
+                    onClick={() => {
+                      const promise = new Promise<string>((resolve) => {
+                        setTimeout(
+                          () => resolve("Event published succeessfully!"),
+                          3000,
+                        );
+                      });
+
+                      toast.promise(promise, {
+                        loading: "Publishing event...",
+                        success: (msg) => msg,
+                        error: "Error",
+                      });
+                    }}
+                  />
                 </div>
               </div>
 
@@ -434,12 +486,15 @@ const AdminBtn = ({
   icon,
   text,
   primary,
+  onClick,
 }: {
   icon: React.ReactNode;
   text?: string;
   primary?: boolean;
+  onClick?: () => void;
 }) => (
   <button
+    onClick={onClick}
     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs transition-all ${primary ? "bg-amber-600 text-white shadow-lg shadow-amber-900/20" : "bg-foreground/5 text-foreground hover:bg-foreground/10"}`}
   >
     {icon} {text}
