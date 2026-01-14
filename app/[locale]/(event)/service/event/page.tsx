@@ -109,7 +109,6 @@ const EventManagementServiceContent: React.FC = () => {
 
     const lastDayOfWeek = new Date(firstDayOfWeek);
     lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); // Saturday
-
     return eventDate >= firstDayOfWeek && eventDate <= lastDayOfWeek;
   };
 

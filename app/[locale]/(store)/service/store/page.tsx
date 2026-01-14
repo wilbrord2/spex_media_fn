@@ -930,7 +930,7 @@ const BookCard = ({
             {book.title}
           </h3>
           <button
-            className="transition-colors shrink-0  p-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition- cursor-pointer "
+            className="transition-colors shrink-0  p-2 bg-primary hover:bg-primary/90 text-white rounded-lg cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               onAddToCart(book);
