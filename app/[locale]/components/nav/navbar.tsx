@@ -1,234 +1,276 @@
 "use client";
-import { Link, useRouter } from "@/i18n/navigation";
+
+import React, { PropsWithChildren, ReactNode, Suspense, useState } from "react";
+import { Link } from "@/i18n/navigation";
 import { ThemeSwitchButton } from "../switch/themeSwitcher";
 import LocaleSwitcher from "../switch/LocaleSwitcher";
-import Logo from "@/public/logo/nexuslogo.png";
-import Image from "next/image";
-import { IoIosSearch } from "react-icons/io";
-import { motion } from "motion/react";
-import { useState } from "react";
-import RightModal from "../model/rightSideModel";
+import { FiMenu, FiX, FiLoader } from "react-icons/fi";
 import { useAppContext } from "../../context";
-import CenterModal from "../model/centerModel";
 import { useTranslations } from "next-intl";
 
-const Navbar = () => {
+// Type definitions for navbar configuration
+interface NavItem {
+  label: string;
+  href: string;
+  submenu?: NavItem[];
+}
+
+interface NavbarProps extends PropsWithChildren {
+  brand?: string;
+  navItems?: NavItem[];
+  leftContent?: ReactNode;
+  rightContent?: ReactNode[];
+  onMobileMenuOpen?: () => void;
+  onMobileMenuClose?: () => void;
+}
+
+interface NavbarContentProps extends NavbarProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}
+
+// Desktop Navigation Links Component
+const DesktopNavLinks: React.FC<{
+  items: NavItem[];
+  readonly defaultItems: NavItem[];
+}> = ({ items, defaultItems }) => {
+  // const t = useTranslations("NavItems");
+
+  const allItems = [...defaultItems, ...items];
+
+  return (
+    <ul className="flex items-center gap-8">
+      {allItems.map((item) => {
+        if (item.submenu) {
+          return (
+            <li key={item.href} className="relative group">
+              <Link
+                href={item.href}
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors pb-1 border-b-2 border-transparent group-hover:border-primary"
+              >
+                {item.label}
+              </Link>
+              <div className="absolute left-0 mt-2 w-56 bg-background rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transform translate-y-1 group-hover:translate-y-0 transition-all z-50 border border-foreground/10">
+                <div className="flex flex-col py-1">
+                  {item.submenu.map((subitem) => (
+                    <Link
+                      key={subitem.href}
+                      href={subitem.href}
+                      className="px-4 py-2 text-sm text-foreground hover:text-primary hover:bg-foreground/5 transition-colors"
+                    >
+                      {subitem.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </li>
+          );
+        }
+
+        return (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors pb-1 border-b-2 border-transparent hover:border-primary"
+            >
+              {item.label}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
+// Mobile Navigation Links Component
+const MobileNavLinks: React.FC<{
+  items: NavItem[];
+  readonly defaultItems: NavItem[];
+  onClose: () => void;
+}> = ({ items, defaultItems, onClose }) => {
+  // const t = useTranslations("NavItems");
+
+  const allItems = [...defaultItems, ...items];
+
+  return (
+    <nav className="flex flex-col gap-2">
+      {allItems.map((item) => {
+        if (item.submenu) {
+          return (
+            <div key={item.href} className="w-full">
+              <Link
+                href={item.href}
+                onClick={onClose}
+                className="py-2 text-sm font-medium text-foreground hover:text-primary transition-colors border-b border-foreground/5"
+              >
+                {item.label}
+              </Link>
+              <div className="pl-4 flex flex-col">
+                {item.submenu.map((subitem) => (
+                  <Link
+                    key={subitem.href}
+                    href={subitem.href}
+                    onClick={onClose}
+                    className="text-sm text-foreground py-2 hover:text-primary transition-colors"
+                  >
+                    {subitem.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={onClose}
+            className="py-2 text-sm font-medium text-foreground hover:text-primary transition-colors border-b border-foreground/5"
+          >
+            {item.label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+};
+
+// Navbar Content Component
+const NavbarContent: React.FC<NavbarContentProps> = ({
+  brand = "Nexus Media",
+  navItems = [],
+  leftContent,
+  rightContent = [],
+  isOpen,
+  setIsOpen,
+  children,
+}) => {
   const { setActiveModalId } = useAppContext();
-  const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter();
   const t = useTranslations("NavItems");
-  const s = useTranslations("Search");
-  const navitems = [
+  const handleMobileMenuClose = () => {
+    setIsOpen(false);
+    setActiveModalId(null);
+  };
+
+  const defaultItems: NavItem[] = [
     { label: t("home"), href: "/" },
     { label: t("about"), href: "/about" },
-    { label: t("reviews"), href: "/review" },
-    { label: t("services"), href: "/service" },
-    { label: t("insights"), href: "/insight" },
+    {
+      label: t("services"),
+      href: "/service",
+      submenu: [
+        { label: "Media and Publishing", href: "/service/publishing" },
+        { label: "Book Store", href: "/service/store" },
+        { label: "Event Management", href: "/service/event" },
+      ],
+    },
     { label: t("contact"), href: "/contact" },
   ];
 
   return (
-    <div className="sticky top-0 left-0 right-0 z-50 w-full flex items-center justify-between py-2 px-6 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-700">
-      {/* desktop navbar */}
-      <div className="hidden lg:flex items-center justify-between w-full">
-        <Link href="/">
-          <Image
-            src={Logo}
-            alt="Nexus Logo"
-            height={40}
-            width={120}
-            className="object-cover"
-          />
-        </Link>
-
-        <div className="flex items-center gap-6 xl:gap-8">
-          {navitems.map((item) => {
-            if (item.href === "/service") {
-              return (
-                <div key={item.href} className="relative group">
-                  <Link
-                    href={item.href}
-                    className="text-gray-600 font-semibold text-start hover:text-gray-900 dark:text-gray-300 dark:hover:text-white py-2 text-sm hover:font-bold border-b-2 duration-500 hover:transition-colors border-transparent pb-1 hover:border-b-2 hover:border-red-700"
-                  >
-                    {item.label}
-                  </Link>
-
-                  <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transform translate-y-1 group-hover:translate-y-0 transition-all z-50 border border-gray-200 dark:border-gray-700">
-                    <div className="flex flex-col py-1">
-                      <Link
-                        href="/service/publishing"
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
-                      >
-                        Media and Publishing
-                      </Link>
-                      <Link
-                        href="/service/store"
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
-                      >
-                        Book Store
-                      </Link>
-                      <Link
-                        href="/service/event"
-                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
-                      >
-                        Event Management
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-gray-600 font-semibold text-start  hover:text-gray-900 dark:text-gray-300 dark:hover:text-white  py-2 text-sm hover:font-bold border-b-2 duration-500 hover:transition-colors border-transparent pb-1  hover:border-b-2 hover:border-red-700"
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+    <nav className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-foreground/10">
+      <div className="max-w-[1440px] mx-auto px-4 lg:px-10 h-16 flex items-center justify-between">
+        {/* Left Section */}
+        <div className="flex items-center gap-3">
+          {leftContent ? (
+            leftContent
+          ) : (
+            <Link
+              href="/"
+              className="text-xl font-bold tracking-tight flex items-center gap-2"
+            >
+              <span className="text-foreground">Nexus</span>
+              <span className="text-primary">
+                {brand?.split(" ")[1] || "Media"}
+              </span>
+            </Link>
+          )}
         </div>
 
+        {/* Center Section - Desktop Only */}
+        <div className="hidden lg:flex">
+          <DesktopNavLinks items={navItems} defaultItems={defaultItems} />
+        </div>
+
+        {/* Right Section */}
         <div className="flex items-center gap-4">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.8 }}
-            onClick={() => setActiveModalId("search-modal")}
-            className="cursor-pointer flex items-center gap-2 hover:text-red-700 border-b hover:bg-red-100/20 hover:border-red-700 duration-500 transition-all border-gray-300 rounded-md px-2 py-3"
-          >
-            <IoIosSearch size={16} className="cursor-pointer " />
-            <span className="lg:hidden xl:flex text-xs">
-              {s("placeholder")}
-            </span>
-          </motion.div>
-          <LocaleSwitcher />
-          <ThemeSwitchButton />
+          {/* Default Right Content */}
+          <div className="hidden md:flex items-center gap-3">
+            {rightContent &&
+              rightContent.length > 0 &&
+              rightContent.map((content, index) => (
+                <div key={index}>{content}</div>
+              ))}
+            <>
+              <LocaleSwitcher />
+              <ThemeSwitchButton />
+            </>
+            {children}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="flex lg:hidden items-center gap-2">
+            {children}
+            <button
+              className="text-foreground"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* mobile navbar */}
-      <div className="lg:hidden flex items-center justify-between w-full">
-        <Link href="/">
-          <Image
-            src={Logo}
-            alt="Nexus Logo"
-            height={40}
-            width={120}
-            className="object-cover"
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="lg:hidden border-t border-foreground/10 bg-background p-4 flex flex-col gap-4 shadow-xl">
+          {rightContent &&
+            rightContent.length > 0 &&
+            rightContent.map((content, index) => (
+              <div key={index}>{content}</div>
+            ))}
+          <MobileNavLinks
+            items={navItems}
+            defaultItems={defaultItems}
+            onClose={handleMobileMenuClose}
           />
-        </Link>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setActiveModalId("mobile-menu")}
-            aria-label="Open menu"
-            className="p-2 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-          >
-            <svg width={28} height={28} fill="none" viewBox="0 0 24 24">
-              <rect y="4" width="24" height="2" rx="1" fill="currentColor" />
-              <rect y="11" width="24" height="2" rx="1" fill="currentColor" />
-              <rect y="18" width="24" height="2" rx="1" fill="currentColor" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <RightModal id="mobile-menu">
-        <div className="flex flex-col gap-4 w-full">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.8 }}
-            onClick={() => setActiveModalId("search-modal")}
-            className="cursor-pointer w-full flex items-center gap-2 hover:text-red-700 border-b hover:bg-red-100/20 hover:border-red-700 duration-500 transition-all border-gray-300 rounded-md px-2 py-3"
-          >
-            <IoIosSearch size={16} className="cursor-pointer " />
-            <span className="text-xs">Search...</span>
-          </motion.div>
-
-          <div className="flex flex-col items-start gap-2 w-full">
-            {navitems.map((item) => {
-              if (item.href === "/service") {
-                return (
-                  <div key={item.href} className="w-full">
-                    <Link
-                      href={item.href}
-                      onClick={() => setActiveModalId(null)}
-                      className="text-gray-600 font-semibold text-start hover:text-gray-900 dark:text-gray-300 dark:hover:text-white py-2 text-sm hover:font-bold border-b-2 duration-500 hover:transition-colors border-transparent pb-1 hover:border-b-2 hover:border-red-700"
-                    >
-                      {item.label}
-                    </Link>
-
-                    <div className="pl-4 flex flex-col">
-                      <Link
-                        href="/service/publishing"
-                        onClick={() => setActiveModalId(null)}
-                        className="text-gray-600 text-sm py-2 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                      >
-                        Media and Publishing
-                      </Link>
-                      <Link
-                        href="/service/store"
-                        onClick={() => setActiveModalId(null)}
-                        className="text-gray-600 text-sm py-2 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                      >
-                        Book Store
-                      </Link>
-                      <Link
-                        href="/service/event"
-                        onClick={() => setActiveModalId(null)}
-                        className="text-gray-600 text-sm py-2 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-                      >
-                        Event Management
-                      </Link>
-                    </div>
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setActiveModalId(null)}
-                  className="text-gray-600 font-semibold text-start  hover:text-gray-900 dark:text-gray-300 dark:hover:text-white  py-2 text-sm hover:font-bold border-b-2 duration-500 hover:transition-colors border-transparent pb-1  hover:border-b-2 hover:border-red-700"
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+          <div className="flex flex-col gap-3 pt-2">
+            <>
+              <LocaleSwitcher />
+              <ThemeSwitchButton />
+            </>
           </div>
-
-          <LocaleSwitcher />
-          <ThemeSwitchButton />
         </div>
-      </RightModal>
-
-      <CenterModal id="search-modal">
-        <div className="flex flex-col gap-2 bg-white dark:bg-slate-500 p-4 rounded-md w-full justify-center">
-          <div className="w-full max-w-lg sm:min-w-sm md:min-w-lg flex items-center gap-2 bg-white dark:bg-slate-800 duration-500 transition-all border border-gray-600 dark:border-gray-600 rounded-md px-2 py-3">
-            <IoIosSearch size={16} className="cursor-pointer " />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={s("placeholder")}
-              className="w-full bg-transparent outline-none"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  console.log("Searching for:", searchQuery);
-                  setSearchQuery("");
-                  setActiveModalId(null);
-                  router.push(`/insight${searchQuery}`);
-                }
-              }}
-            />
-          </div>
-          <span className="text-xs text-center">{s("pressEnter")}</span>
-        </div>
-      </CenterModal>
-    </div>
+      )}
+    </nav>
   );
 };
 
-export default Navbar;
+// Main Navbar Component with Suspense
+const Navbar = (props: NavbarProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <FiLoader className="animate-spin text-primary" size={32} />
+        </div>
+      }
+    >
+      <NavbarContent {...props} isOpen={isOpen} setIsOpen={setIsOpen}>
+        {props.children}
+      </NavbarContent>
+    </Suspense>
+  );
+};
+
+// Preset: Default Main Page Navbar
+const MainNavbar = () => {
+  return <Navbar brand="Nexus Media" />;
+};
+
+export { Navbar };
+export default MainNavbar;

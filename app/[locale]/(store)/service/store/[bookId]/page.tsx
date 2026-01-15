@@ -117,7 +117,7 @@ const NexusBookDetails: React.FC = () => {
             </Link>
             <span>/</span>
             <Link
-              href="/service/store?category=Non-Fiction"
+              href="/service/store?category=Non-Fiction#browse-catalog"
               className="hover:text-primary transition-colors"
             >
               Non-Fiction

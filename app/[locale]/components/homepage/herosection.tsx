@@ -6,7 +6,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
+} from "@/app/[locale]/components/ui/carousel";
 import { useRef, useState } from "react";
 import { BusinesReviewData } from "@/app/constants";
 import Image from "next/image";
@@ -28,7 +28,7 @@ export function HeroSection() {
       >
         <CarouselContent className="flex w-full max-w-full">
           {BusinesReviewData.map((data, index) => (
-            <CarouselItem  key={index} className="w-full">
+            <CarouselItem key={index} className="w-full">
               <div className="relative flex h-[80vh] w-full items-center justify-center rounded-xl">
                 <Image
                   src={data.img}

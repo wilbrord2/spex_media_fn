@@ -16,7 +16,7 @@ export default function Home() {
           <BusinesReviewSection />
           <ServiceSection />
           <ChooseusSection />
-          <NewsletterSection/>
+          <NewsletterSection />
         </div>
       </div>
       <Footer />

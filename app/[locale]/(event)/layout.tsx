@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import EventNavbar from "@/components/nav/eventNavbar";
+import EventNavbar from "@/app/[locale]/components/nav/eventNavbar";
 import Footer from "@/app/[locale]/components/footer/footer";
 
 const EventLayout = ({ children }: { children: ReactNode }) => {
