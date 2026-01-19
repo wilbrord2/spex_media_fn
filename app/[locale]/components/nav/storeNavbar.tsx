@@ -1,45 +1,14 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { useSearchParams, useRouter, useParams } from "next/navigation";
-import { FiSearch, FiShoppingCart, FiLoader } from "react-icons/fi";
 import { useCartContext } from "@/app/[locale]/context";
-import { Navbar } from "./navbar";
+import { useParams } from "next/navigation";
+import React, { Suspense } from "react";
+import { FiLoader, FiShoppingCart } from "react-icons/fi";
+import Navbar from "./navbar";
 
 interface StoreNavbarProps {
   onCartIconClick: () => void;
 }
-
-const SearchBar: React.FC<{ isStoreMainPage: boolean }> = ({
-  isStoreMainPage,
-}) => {
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-
-  const handleSearch = (term: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("q", term);
-    } else {
-      params.delete("q");
-    }
-    replace(`?${params.toString()}${term ? "#browse-catalog" : ""}`);
-  };
-
-  if (!isStoreMainPage) return null;
-
-  return (
-    <div className="relative flex items-center group">
-      <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-primary transition-colors" />
-      <input
-        placeholder="Search titles, authors..."
-        className="bg-foreground/5 border border-transparent focus:border-primary rounded-full py-2 pl-10 pr-4 text-sm w-full md:w-48 md:focus:w-72 transition-all outline-none"
-        defaultValue={searchParams.get("q")?.toString()}
-        onChange={(e) => handleSearch(e.target.value)}
-      />
-    </div>
-  );
-};
 
 const CartButton: React.FC<{ onCartIconClick: () => void }> = ({
   onCartIconClick,
@@ -70,9 +39,8 @@ const StoreNavbarContent: React.FC<StoreNavbarProps> = ({
   return (
     <Navbar
       brand="Nexus Store"
-      rightContent={[
-        <SearchBar key="search" isStoreMainPage={isStoreMainPage} />,
-      ]}
+      includeSearchBar={isStoreMainPage}
+      searchBarPlaceholder="Search titles, authors..."
     >
       <CartButton onCartIconClick={onCartIconClick} />
     </Navbar>

@@ -1,14 +1,21 @@
 "use client";
-
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { toast } from "sonner";
+
+// --- User Type ---
+export interface User {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+}
 
 // --- App Context ---
 interface AppContextValue {
   activeModalId: string | null;
   setActiveModalId: (id: string | null) => void;
-  profile: {} | null;
-  setProfile: (user: {}) => void;
+  profile: User | null;
+  setProfile: (user: User | null) => void;
   activeTab: string;
   setActiveTab: (activeTab: string) => void;
 }
@@ -115,7 +122,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 function ContextProvider({ children }: PropsWithChildren) {
   const [activeModalId, setActiveModalId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("Dashboard");
-  const [profile, setProfile] = useState<{} | null>(null);
+  const [profile, setProfile] = useState<User | null>(null);
 
   return (
     <AppContext.Provider

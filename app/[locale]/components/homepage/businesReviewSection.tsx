@@ -14,6 +14,7 @@ const BusinesReviewSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
         {BusinesReviewData.map((review, index) => (
           <ContentCard
+            url={`/review/${review.id}`}
             key={review.id}
             id={review.id}
             title={review.title}

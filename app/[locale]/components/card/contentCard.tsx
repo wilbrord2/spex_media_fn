@@ -13,6 +13,7 @@ const ContentCard = ({
   category,
   name,
   date,
+  url,
 }: {
   id: number;
   title: string;
@@ -21,9 +22,10 @@ const ContentCard = ({
   category: string;
   name: string;
   date: string;
+  url?: string;
 }) => {
   return (
-    <Link href={`/review/${id}/`}>
+    <Link href={`${url}`}>
       <motion.div
         whileTap={{ scale: 0.95 }}
         className="group cursor-pointer relative w-full  border rounded-lg shadow-md hover:shadow-xl transition-shadow duration-500"
@@ -40,14 +42,14 @@ const ContentCard = ({
         <div className="absolute top-2 left-2 bg-primary group-hover:bg-secondary text-sm text-white mb-2 py-1 px-2 font-semibold rounded-full">
           {category}
         </div>
-        <div className=" p-4 ">
-          <h2 className="text-2xl font-semibold mb-2 dark:text-gray-300 text-primary dark:group-hover:text-primary group-hover:text-secondary transition-colors duration-500">
+        <div className=" p-4 flex flex-col gap-3 h-56 ">
+          <h2 className="text-xl font-semibold mb-2 dark:text-gray-300 text-primary dark:group-hover:text-primary group-hover:text-secondary transition-colors duration-500">
             {title}
           </h2>
-          <p className="text-gray-700 dark:text-gray-400 mb-4 line-clamp-3">
+          <p className="flex-1 text-gray-700 dark:text-gray-400 mb-4 line-clamp-3 overflow-hidden leading-relaxed text-sm">
             {description}
           </p>
-          <div className="text-sm text-gray-500 flex items-center justify-between">
+          <div className="text-xs text-gray-500 flex items-center justify-between">
             <span className="mr-4 flex items-baseline gap-1">
               <FaRegUser />
               {name}

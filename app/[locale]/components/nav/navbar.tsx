@@ -1,12 +1,13 @@
 "use client";
 
-import React, { PropsWithChildren, ReactNode, Suspense, useState } from "react";
+import React, { PropsWithChildren, ReactNode, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { ThemeSwitchButton } from "../switch/themeSwitcher";
 import LocaleSwitcher from "../switch/LocaleSwitcher";
-import { FiMenu, FiX, FiLoader } from "react-icons/fi";
+import { FiMenu, FiX, FiSearch, FiUser } from "react-icons/fi";
 import { useAppContext } from "../../context";
 import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Type definitions for navbar configuration
 interface NavItem {
@@ -15,27 +16,62 @@ interface NavItem {
   submenu?: NavItem[];
 }
 
-interface NavbarProps extends PropsWithChildren {
+interface BaseNavbarProps extends PropsWithChildren {
   brand?: string;
   navItems?: NavItem[];
   leftContent?: ReactNode;
-  rightContent?: ReactNode[];
-  onMobileMenuOpen?: () => void;
-  onMobileMenuClose?: () => void;
 }
 
-interface NavbarContentProps extends NavbarProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}
+type SearchBarProps = {
+  includeSearchBar?: boolean;
+  searchBarPlaceholder?: string;
+};
+
+type NavbarProps = BaseNavbarProps & SearchBarProps;
+
+type NavbarContentProps = BaseNavbarProps &
+  SearchBarProps & {
+    isOpen: boolean;
+    setIsOpen: (open: boolean) => void;
+  };
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  includeSearchBar,
+  searchBarPlaceholder,
+}) => {
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+
+  const handleSearch = (term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set("q", term);
+    } else {
+      params.delete("q");
+    }
+    replace(`?${params.toString()}${term ? "#browse-catalog" : ""}`);
+  };
+
+  if (!includeSearchBar) return null;
+
+  return (
+    <div className="relative flex items-center group">
+      <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-primary transition-colors" />
+      <input
+        placeholder={searchBarPlaceholder}
+        className="bg-foreground/5 border border-transparent focus:border-primary rounded-full py-2 pl-10 pr-4 text-sm w-full md:w-48 md:focus:w-72 transition-all outline-none"
+        defaultValue={searchParams.get("q")?.toString()}
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+    </div>
+  );
+};
 
 // Desktop Navigation Links Component
 const DesktopNavLinks: React.FC<{
   items: NavItem[];
   readonly defaultItems: NavItem[];
 }> = ({ items, defaultItems }) => {
-  // const t = useTranslations("NavItems");
-
   const allItems = [...defaultItems, ...items];
 
   return (
@@ -88,8 +124,6 @@ const MobileNavLinks: React.FC<{
   readonly defaultItems: NavItem[];
   onClose: () => void;
 }> = ({ items, defaultItems, onClose }) => {
-  // const t = useTranslations("NavItems");
-
   const allItems = [...defaultItems, ...items];
 
   return (
@@ -138,16 +172,26 @@ const MobileNavLinks: React.FC<{
 
 // Navbar Content Component
 const NavbarContent: React.FC<NavbarContentProps> = ({
+  includeSearchBar,
+  searchBarPlaceholder,
   brand = "Nexus Media",
   navItems = [],
   leftContent,
-  rightContent = [],
   isOpen,
   setIsOpen,
   children,
 }) => {
-  const { setActiveModalId } = useAppContext();
+  const { setActiveModalId, profile, setProfile } = useAppContext();
   const t = useTranslations("NavItems");
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    setProfile(null);
+    setIsProfileOpen(false);
+    router.push("/");
+  };
+
   const handleMobileMenuClose = () => {
     setIsOpen(false);
     setActiveModalId(null);
@@ -167,6 +211,35 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
     },
     { label: t("contact"), href: "/contact" },
   ];
+
+  const profileMenuItems = (
+    <ul className="py-1">
+      <li>
+        <Link
+          href="/#"
+          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 "
+        >
+          Profile Settings
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/dashboard/store"
+          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+        >
+          Dashboard
+        </Link>
+      </li>
+      <li>
+        <button
+          onClick={handleLogout}
+          className="w-full text-left block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+        >
+          Logout
+        </button>
+      </li>
+    </ul>
+  );
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-foreground/10">
@@ -197,21 +270,55 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
         <div className="flex items-center gap-4">
           {/* Default Right Content */}
           <div className="hidden md:flex items-center gap-3">
-            {rightContent &&
-              rightContent.length > 0 &&
-              rightContent.map((content, index) => (
-                <div key={index}>{content}</div>
-              ))}
-            <>
-              <LocaleSwitcher />
-              <ThemeSwitchButton />
-            </>
+            <SearchBar
+              includeSearchBar={includeSearchBar}
+              searchBarPlaceholder={searchBarPlaceholder}
+            />
+
+            <LocaleSwitcher />
+            <ThemeSwitchButton />
             {children}
+            {profile ? (
+              <div className="relative">
+                <button onClick={() => setIsProfileOpen(!isProfileOpen)}>
+                  <span className="flex items-center justify-center bg-primary text-white size-8 rounded-full uppercase font-bold">
+                    {profile.name.split(" ")[0][0]}
+                  </span>
+                </button>
+                {isProfileOpen && (
+                  <div className="hidden lg:block absolute top-12 right-0 w-48  bg-white border-gray-200 dark:border-gray-700 border  dark:bg-gray-800  dark:text-gray-200 rounded-md shadow-lg z-50">
+                    {profileMenuItems}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/auth"
+                className="bg-primary text-white px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-4">
             {children}
+            {profile ? (
+              <button onClick={() => setIsProfileOpen(!isProfileOpen)}>
+                <span className="flex items-center justify-center bg-primary text-white size-7 rounded-full uppercase font-bold">
+                  {profile.name.split(" ")[0][0]}
+                </span>
+              </button>
+            ) : (
+              <Link
+                href="/auth"
+                className="text-sm font-medium hover:text-primary transition-colors bg-primary/40 text-white p-2 rounded-full"
+              >
+                <FiUser size={16} />
+              </Link>
+            )}
+
             <button
               className="text-foreground"
               onClick={() => setIsOpen(!isOpen)}
@@ -223,24 +330,32 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
         </div>
       </div>
 
+      {/* Mobile Profile Drawer */}
+      {isProfileOpen && (
+        <div
+          className="lg:hidden fixed top-16 left-0 w-full bg-background shadow-lg p-4 z-40"
+          onClick={() => setIsProfileOpen(false)}
+        >
+          {profileMenuItems}
+        </div>
+      )}
+
       {/* Mobile Menu */}
       {isOpen && (
         <div className="lg:hidden border-t border-foreground/10 bg-background p-4 flex flex-col gap-4 shadow-xl">
-          {rightContent &&
-            rightContent.length > 0 &&
-            rightContent.map((content, index) => (
-              <div key={index}>{content}</div>
-            ))}
+          <SearchBar
+            includeSearchBar={includeSearchBar}
+            searchBarPlaceholder={searchBarPlaceholder}
+          />
+
           <MobileNavLinks
             items={navItems}
             defaultItems={defaultItems}
             onClose={handleMobileMenuClose}
           />
           <div className="flex flex-col gap-3 pt-2">
-            <>
-              <LocaleSwitcher />
-              <ThemeSwitchButton />
-            </>
+            <LocaleSwitcher />
+            <ThemeSwitchButton />
           </div>
         </div>
       )}
@@ -248,29 +363,15 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
   );
 };
 
-// Main Navbar Component with Suspense
+// Main Navbar Component
 const Navbar = (props: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <FiLoader className="animate-spin text-primary" size={32} />
-        </div>
-      }
-    >
-      <NavbarContent {...props} isOpen={isOpen} setIsOpen={setIsOpen}>
-        {props.children}
-      </NavbarContent>
-    </Suspense>
+    <NavbarContent {...props} isOpen={isOpen} setIsOpen={setIsOpen}>
+      {props.children}
+    </NavbarContent>
   );
 };
 
-// Preset: Default Main Page Navbar
-const MainNavbar = () => {
-  return <Navbar brand="Nexus Media" />;
-};
-
-export { Navbar };
-export default MainNavbar;
+export default Navbar;

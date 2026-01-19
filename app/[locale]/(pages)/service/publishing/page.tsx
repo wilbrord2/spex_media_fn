@@ -7,11 +7,12 @@ import AdvertisingPackageCard from "../../../components/card/AdvertisingPackageC
 import PricingCard from "../../../components/card/PricingCard";
 import PartnerCard from "../../../components/card/PartnerCard";
 import { ADVERTISING_PACKAGES, PARTNERS, PricingData } from "@/app/constants";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { FiLoader } from "react-icons/fi";
 
 const tabs = ["monthly", "yearly"];
 
-const PublishingService = () => {
+const PublishingServiceContent = () => {
   const [active, setActive] = useState("monthly");
   return (
     <main className="text-gray-900 dark:text-gray-100 space-y-8">
@@ -177,4 +178,16 @@ const PublishingService = () => {
   );
 };
 
-export default PublishingService;
+export default function PublishingService() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <FiLoader className="animate-spin text-primary" size={32} />
+        </div>
+      }
+    >
+      <PublishingServiceContent />
+    </Suspense>
+  );
+}

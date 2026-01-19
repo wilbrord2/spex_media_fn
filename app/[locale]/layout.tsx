@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server";
 import ContextProvider from "./context";
+import { FiLoader } from "react-icons/fi";
+import { Suspense } from "react";
 
 type Props = {
   children: React.ReactNode;
@@ -22,7 +24,15 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider locale={locale}>
-      <ContextProvider>{children}</ContextProvider>
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <FiLoader className="animate-spin text-primary" size={32} />
+          </div>
+        }
+      >
+        <ContextProvider>{children}</ContextProvider>
+      </Suspense>
     </NextIntlClientProvider>
   );
 }

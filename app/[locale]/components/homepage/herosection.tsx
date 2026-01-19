@@ -11,6 +11,7 @@ import { useRef, useState } from "react";
 import { BusinesReviewData } from "@/app/constants";
 import Image from "next/image";
 import { motion } from "motion/react";
+import Link from "next/link";
 
 export function HeroSection() {
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
@@ -49,18 +50,12 @@ export function HeroSection() {
           ))}
         </CarouselContent>
 
-        <div className="absolute bottom-10 max-sm:mx-4 sm:bottom-24 sm:left-1/2 sm:-translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center">
+        <div className="absolute bottom-10 smax-sm:mx-4 sm:bottom-18 sm:left-1/2 sm:-translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center">
           <motion.button
             whileTap={{ scale: 0.85 }}
-            className="cursor-pointer w-full px-6 py-3 bg-white text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition"
+            className="cursor-pointer w-full px-6 py-3 bg-white backdrop-blur-sm text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition-colors duration-150 mx-6"
           >
-            Explore Business Weekly Review
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            className="cursor-pointer w-full px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-md shadow-md hover:bg-white hover:text-primary transition"
-          >
-            Our Advisory Services
+            <Link href={`/review`}>Explore Business Weekly Review</Link>
           </motion.button>
         </div>
 

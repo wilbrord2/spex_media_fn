@@ -1,30 +1,30 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
+
+import { CartContext } from "@/app/[locale]/context";
+import Image from "next/image";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React, {
-  useState,
-  useRef,
-  useEffect,
-  useContext,
   ReactNode,
   Suspense,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
-import Image from "next/image";
 import {
-  FiShoppingCart,
   FiArrowRight,
-  FiChevronRight,
+  FiCheck,
+  FiChevronDown,
   FiChevronLeft,
+  FiChevronRight,
   FiFilter,
   FiGrid,
   FiList,
-  FiStar,
-  FiChevronDown,
-  FiCheck,
   FiLoader,
+  FiShoppingCart,
+  FiStar,
 } from "react-icons/fi";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { CartContext } from "@/app/[locale]/context";
 
 // --- Types ---
 interface Book {
@@ -265,10 +265,13 @@ const BookStoreServiceContent: React.FC = () => {
       ? Math.min(PRICE_MAX, parseInt(maxPriceParam))
       : PRICE_MAX;
 
-    if (newCategories.length > 0) setSelectedCategories(newCategories);
-    if (newRegions.length > 0) setSelectedRegions(newRegions);
-    if (newMinPrice > PRICE_MIN) setMinPrice(newMinPrice);
-    if (newMaxPrice < PRICE_MAX) setMaxPrice(newMaxPrice);
+    const updateFilters = () => {
+      if (newCategories.length > 0) setSelectedCategories(newCategories);
+      if (newRegions.length > 0) setSelectedRegions(newRegions);
+      if (newMinPrice > PRICE_MIN) setMinPrice(newMinPrice);
+      if (newMaxPrice < PRICE_MAX) setMaxPrice(newMaxPrice);
+    };
+    updateFilters();
 
     if (window.location.hash === "#browse-catalog") {
       const element = document.getElementById("browse-catalog");
@@ -530,13 +533,13 @@ const BookStoreServiceContent: React.FC = () => {
         [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 
         [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full 
         [&::-webkit-slider-thumb]:bg-primary 
-        [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-background 
+        [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-background/20 
         [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer
         
         /* Firefox Thumbs */
         [&::-moz-range-thumb]:relative [&::-moz-range-thumb]:z-10 
         [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 
-        [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-background 
+        [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-background/20 
         [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary 
         [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer"
                   />
@@ -977,7 +980,7 @@ const FilterGroup = ({
   className?: string;
 }) => (
   <div className={className}>
-    <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+    <h4 className="text-foreground font-semibold mb-4 text-sm uppercase tracking-wider">
       {title}
     </h4>
     <div className="space-y-3">{children}</div>

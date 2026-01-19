@@ -1,11 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import RedirectionRedBtn from "../../components/Buttons/redirectionRedBtn";
 import image from "@/public/images/bnreview1.jpeg";
 import { VideoData } from "@/app/constants";
 import VideoCard from "../../components/card/videoCard";
 import ArticlesSection from "../../components/review/reviewSection";
+import { FiLoader } from "react-icons/fi";
 
-const BusinessReview = () => {
+const BusinessReviewContent = () => {
   return (
     <>
       <div className="bg-linear-to-br from-slate-900 via-slate-800 to-red-900 lg:h-screen">
@@ -44,8 +45,8 @@ const BusinessReview = () => {
               <div className="absolute bg-black/30 bottom-4 left-4 text-white p-4 rounded">
                 <h1 className="font-bold text-lg">Cover Story</h1>
                 <p>
-                  Rwanda's Digital Revolution: How the Land of a Thousand Hills
-                  Became Africa's Silicon Valley
+                  Rwanda&apos;s Digital Revolution: How the Land of a Thousand
+                  Hills Became Africa&apos;s Silicon Valley
                 </p>
               </div>
             </div>
@@ -86,4 +87,16 @@ const BusinessReview = () => {
   );
 };
 
-export default BusinessReview;
+export default function BusinessReview() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <FiLoader className="animate-spin text-primary" size={32} />
+        </div>
+      }
+    >
+      <BusinessReviewContent />
+    </Suspense>
+  );
+}

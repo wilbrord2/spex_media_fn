@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { FiSearch, FiLoader } from "react-icons/fi";
-import { Navbar } from "@/app/[locale]/components/nav/navbar";
+import Navbar from "@/app/[locale]/components/nav/navbar";
 
 // Search component to be passed as rightContent
 const SearchComponent = () => {
@@ -51,7 +51,8 @@ const EventNavbarContent = () => {
   return (
     <Navbar
       leftContent={leftContent}
-      rightContent={isEventMainPage ? [<SearchComponent key="search" />] : []}
+      includeSearchBar={isEventMainPage}
+      searchBarPlaceholder="Search events..."
     />
   );
 };

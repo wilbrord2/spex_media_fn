@@ -128,14 +128,14 @@ const EventDetails: React.FC = () => {
   return (
     <div className="bg-background text-foreground min-h-screen font-sans selection:bg-primary/30">
       {/* Preview Mode Banner */}
-      <div className="w-full bg-amber-500/10 border-b border-amber-500/20">
+      {/* <div className="w-full bg-amber-500/10 border-b border-amber-500/20">
         <div className="max-w-7xl mx-auto py-3 px-4 text-center">
           <p className="text-amber-600 dark:text-amber-500 text-sm font-bold flex items-center justify-center gap-2">
             <FiEye className="text-base" />
             PREVIEW MODE: This event is currently unpublished.
           </p>
         </div>
-      </div>
+      </div> */}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* --- Hero Section --- */}
@@ -336,7 +336,7 @@ const EventDetails: React.FC = () => {
               </div>
 
               {/* Admin Panel */}
-              <div className="bg-amber-500/5 rounded-2xl border-2 border-dashed border-amber-500/20 p-6">
+              {/* <div className="bg-amber-500/5 rounded-2xl border-2 border-dashed border-amber-500/20 p-6">
                 <h4 className="text-amber-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
                   Admin Controls
                 </h4>
@@ -362,7 +362,7 @@ const EventDetails: React.FC = () => {
                     }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <Link
                 href="/contact"
