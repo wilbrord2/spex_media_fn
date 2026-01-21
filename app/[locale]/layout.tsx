@@ -5,6 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 import ContextProvider from "./context";
 import { FiLoader } from "react-icons/fi";
 import { Suspense } from "react";
+import { getUser } from "../actions/auth";
 
 type Props = {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           </div>
         }
       >
-        <ContextProvider>{children}</ContextProvider>
+        <ContextProvider initialUser={await getUser()}>{children}</ContextProvider>
       </Suspense>
     </NextIntlClientProvider>
   );

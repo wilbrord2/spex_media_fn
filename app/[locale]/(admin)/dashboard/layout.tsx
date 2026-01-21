@@ -18,7 +18,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ThemeSwitchButton } from "../../components/switch/themeSwitcher";
-import { LuUser } from "react-icons/lu";
 import { useAppContext } from "../../context";
 
 export default function AdminLayout({
@@ -168,7 +167,7 @@ export default function AdminLayout({
               {/* Profile Section */}
               <div className="flex items-center gap-3 p-3 rounded-lg bg-sidebar-accent/30 border border-sidebar-border my-2">
                 <div className="size-9 rounded-full bg-muted shrink-0 flex items-center justify-center">
-                  <LuUser />
+                  {profile?.name.split(" ")[0][0]}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sidebar-foreground text-sm font-bold truncate">

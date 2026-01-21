@@ -8,6 +8,8 @@ import { FiMenu, FiX, FiSearch, FiUser } from "react-icons/fi";
 import { useAppContext } from "../../context";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import { logout } from "@/app/actions/auth";
 
 // Type definitions for navbar configuration
 interface NavItem {
@@ -184,12 +186,11 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
   const { setActiveModalId, profile, setProfile } = useAppContext();
   const t = useTranslations("NavItems");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const router = useRouter();
-
   const handleLogout = () => {
     setProfile(null);
     setIsProfileOpen(false);
-    router.push("/");
+    toast.success("Successfully logged out!");
+   logout();
   };
 
   const handleMobileMenuClose = () => {
