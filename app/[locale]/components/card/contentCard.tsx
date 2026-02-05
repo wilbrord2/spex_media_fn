@@ -42,13 +42,13 @@ const ContentCard = ({
         <div className="absolute top-2 left-2 bg-primary group-hover:bg-secondary text-sm text-white mb-2 py-1 px-2 font-semibold rounded-full">
           {category}
         </div>
-        <div className=" p-4 flex flex-col gap-3 h-56 ">
-          <h2 className="text-xl font-semibold mb-2 dark:text-gray-300 text-primary dark:group-hover:text-primary group-hover:text-secondary transition-colors duration-500">
+        <div className=" p-4 flex flex-col gap-3 h-32">
+          <h2 className="text-xl font-semibold mb-2 dark:text-gray-300 text-primary dark:group-hover:text-primary group-hover:text-secondary transition-colors duration-500 line-clamp-2">
             {title}
           </h2>
-          <p className="flex-1 text-gray-700 dark:text-gray-400 mb-4 line-clamp-3 overflow-hidden leading-relaxed text-sm">
+          {/* <p className="flex-1 text-gray-700 dark:text-gray-400 mb-4 line-clamp-3 overflow-hidden leading-relaxed text-sm">
             {description}
-          </p>
+          </p> */}
           <div className="text-xs text-gray-500 flex items-center justify-between">
             <span className="mr-4 flex items-baseline gap-1">
               <FaRegUser />
@@ -56,7 +56,11 @@ const ContentCard = ({
             </span>{" "}
             <span className="flex items-center gap-1">
               <CiCalendar />
-              {date}
+              {new Date(date).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
             </span>
           </div>
         </div>

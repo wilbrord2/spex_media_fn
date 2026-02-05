@@ -1,27 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContentCard from "../card/contentCard";
-import { ArticlesData } from "@/app/constants";
 import RedirectionBtn from "../Buttons/redirectionBtn";
-
-const categories = [
-  "All",
-  "Finance",
-  "Technology",
-  "Agribusiness",
-  "Energy",
-  "Healthcare",
-  "Manufacturing",
-];
+import { getContentList, getCategories } from "@/app/actions/review";
+import { ContentItem, Category } from "@/lib/dto";
 
 export default function ArticlesSection() {
+  const [articles, setArticles] = useState<ContentItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [active, setActive] = useState("All");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      const [contentData, categoryData] = await Promise.all([
+        getContentList(1),
+        getCategories(),
+      ]);
+      if (contentData) setArticles(contentData.contentList);
+      if (categoryData) setCategories(categoryData);
+      setLoading(false);
+    }
+    loadData();
+  }, []);
 
   const filtered =
     active === "All"
-      ? ArticlesData
-      : ArticlesData.filter((item) => item.category === active);
+      ? articles
+      : articles.filter((item) => item.category.name === active);
+
+  if (loading) return <div className="text-center py-16">Loading...</div>;
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 md:px-8 py-16 space-y-8 dark:bg-background">
@@ -30,38 +39,51 @@ export default function ArticlesSection() {
         Stay informed with our comprehensive coverage of African business
         sectors
       </p>
+
       {/* Category Buttons */}
       <div className="flex justify-center gap-3 flex-wrap mb-10">
+        <button
+          onClick={() => setActive("All")}
+          className={`px-4 py-2 rounded-full text-sm border transition ${
+            active === "All"
+              ? "bg-primary text-white"
+              : "bg-gray-100 dark:bg-gray-700"
+          }`}
+        >
+          All
+        </button>
         {categories.map((cat) => (
           <button
-            key={cat}
-            onClick={() => setActive(cat)}
+            key={cat.id}
+            onClick={() => setActive(cat.name)}
             className={`px-4 py-2 rounded-full text-sm border transition ${
-              active === cat
-                ? "bg-primary text-white dark:bg-gray-900"
-                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+              active === cat.name
+                ? "bg-primary text-white"
+                : "bg-gray-100 dark:bg-gray-700"
             }`}
           >
-            {cat}
+            {cat.name}
           </button>
         ))}
       </div>
+
       {/* Articles Grid */}
       <div className="grid md:grid-cols-3 gap-8">
         {filtered.map((item) => (
           <ContentCard
             id={item.id}
             key={item.id}
-            category={item.category}
-            date={item.date}
-            description={item.description}
+            url={`/review/${item.id}`}
+            category={item.category?.name}
+            date={new Date(item.createdAt).toLocaleDateString()}
+            description={""}
             title={item.title}
-            img={item.img}
-            name={item.name}
+            img={item.coverImage}
+            name={"Unknown Author"} // Or author name if available
           />
         ))}
       </div>
-      {/* Load More */}
+
       <div className="flex justify-center">
         <RedirectionBtn title="Load More Articles" link="#" />
       </div>

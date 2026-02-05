@@ -82,6 +82,15 @@ const BusinessReviewContent = () => {
         </div>
       </section>
 
+      
+      <div className="text-center p-8">
+        <h2 className="text-3xl font-bold mb-4">Share Your Insights</h2>
+        <p className="max-w-2xl mx-auto mb-6">
+          Become a contributor and share your expertise with our community. Write a review, an article, or an analysis on business trends in Africa.
+        </p>
+        <RedirectionRedBtn title="Write a Review" link="/review/create" />
+      </div>
+
       <ArticlesSection />
     </>
   );

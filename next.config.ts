@@ -12,7 +12,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "i.pravatar.cc",
       },
+      {
+        protocol: "http",
+        hostname: "194.163.164.211",
+      },
     ],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
   },
 };
 

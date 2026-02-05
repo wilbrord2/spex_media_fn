@@ -7,16 +7,19 @@ const intlMiddleware = createMiddleware(routing);
 
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
+
   // 1. Extract token
   const token = request.cookies.get("auth_token")?.value;
 
   // 2. Identify if it's an Auth page or Protected route
   // We check for auth and protected routes
   const isAuthPage = pathname.match(/\/(auth)(\/|$)/);
-  const isProtectedRoute = ["/dashboard", "/profile", "/settings"].some(
-    (route) => pathname.includes(route)
-  );
+  const isProtectedRoute = [
+    "/dashboard",
+    "/profile",
+    "/settings",
+    "/review/create",
+  ].some((route) => pathname.includes(route));
 
   // 3. Logic: No token + Protected Route -> Redirect to Auth
   if (!token && isProtectedRoute) {
@@ -33,7 +36,6 @@ export default function proxy(request: NextRequest) {
   // 5. Finally, let next-intl handle language routing
   return intlMiddleware(request);
 }
-
 
 export const config = {
   matcher: [

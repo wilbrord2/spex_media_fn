@@ -6,7 +6,6 @@ import Image from "next/image";
 import RedirectionBtn from "../../components/Buttons/redirectionBtn";
 import NewsletterSection from "../../components/homepage/newsletter";
 import Link from "next/link";
-import Pageheader from "../../components/homepage/pageheader";
 
 const data = {
   general_insights: [

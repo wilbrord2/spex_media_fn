@@ -1,48 +1,60 @@
 "use client";
 import Headline from "../text/headline";
-import ContentCard from "../card/contentCard";
 import RedirectionBtn from "../Buttons/redirectionBtn";
+import EventCard, { Event } from "../card/EventCard";
 
-const eventsData = [
+const eventsData: Event[] = [
   {
     id: 1,
     title: "Annual Nexus Leadership Summit",
     description:
       "Join industry leaders and visionaries to discuss the future of business in Africa.",
-    img: "/images/chooseus.jpeg",
+    image: "/images/chooseus.jpeg",
     category: "Conference",
-    name: "Nexus Media Events",
-    date: "2023-10-25",
+    date: "Oct 25",
+    time: "10:00 AM",
+    type: "In-Person",
+    location: "Kigali, Rwanda",
+    when: "Upcoming",
   },
   {
     id: 2,
     title: "Digital Marketing Masterclass",
     description:
       "A hands-on workshop covering the latest strategies in digital marketing.",
-    img: "/images/aboutus.jpeg",
+    image: "/images/aboutus.jpeg",
     category: "Workshop",
-    name: "Marketing Gurus Inc.",
-    date: "2023-11-15",
+    date: "Nov 15",
+    time: "1:00 PM EST",
+    type: "Virtual",
+    when: "Upcoming",
+    speakers: [],
   },
   {
     id: 3,
     title: "The Future of Fintech",
     description:
       "An exclusive webinar with top fintech innovators and investors.",
-    img: "/images/bnreview1.jpeg",
+    image: "/images/bnreview1.jpeg",
     category: "Webinar",
-    name: "Fintech Forward",
-    date: "2023-12-05",
+    date: "Dec 05",
+    time: "4:00 PM GMT",
+    type: "Virtual",
+    when: "Upcoming",
+    speakers: [],
   },
   {
     id: 4,
     title: "Startup Pitch Competition",
     description:
       "Watch the brightest startups pitch their ideas to a panel of expert judges.",
-    img: "/images/bnreview2.jpeg",
+    image: "/images/bnreview2.jpeg",
     category: "Competition",
-    name: "Venture Capital Hub",
-    date: "2024-02-10",
+    date: "Feb 10",
+    time: "9:00 AM PST",
+    type: "Hybrid",
+    location: "Lagos, Nigeria & Online",
+    when: "Upcoming",
   },
 ];
 
@@ -55,17 +67,7 @@ const EventSection = () => {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
         {eventsData.map((event) => (
-          <ContentCard
-            url={`/service/event/${event.id}`}
-            key={event.id}
-            id={event.id}
-            title={event.title}
-            description={event.description}
-            img={event.img}
-            category={event.category}
-            name={event.name}
-            date={event.date}
-          />
+          <EventCard event={event} key={event.id} />
         ))}
       </div>
       <RedirectionBtn title="Explore All Events" link="/service/event" />

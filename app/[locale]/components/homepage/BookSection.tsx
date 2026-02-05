@@ -1,46 +1,45 @@
 "use client";
 import Headline from "../text/headline";
-import ContentCard from "../card/contentCard";
+import BookCard from "../card/BookCard";
 import RedirectionBtn from "../Buttons/redirectionBtn";
+import { Book } from "../card/BookCard";
 
-const booksData = [
+const booksData: Book[] = [
   {
     id: 1,
     title: "The Digital Age Marketer",
-    description:
-      "A comprehensive guide to navigating the modern marketing landscape.",
-    img: "/images/bnreview1.jpeg",
+    author: "John Doe",
+    image: "/images/bnreview1.jpeg",
     category: "Marketing",
-    name: "John Doe",
-    date: "2023-05-15",
+    price: 19.99,
+    rating: 4,
   },
   {
     id: 2,
     title: "Startup Blueprint",
-    description: "From idea to execution, the ultimate startup playbook.",
-    img: "/images/bnreview2.jpeg",
+    author: "Jane Smith",
+    image: "/images/bnreview2.jpeg",
     category: "Business",
-    name: "Jane Smith",
-    date: "2022-11-20",
+    price: 24.99,
+    rating: 5,
   },
   {
     id: 3,
     title: "Leadership in Focus",
-    description: "Developing the next generation of African leaders.",
-    img: "/images/bnreview3.jpeg",
+    author: "Samuel King",
+    image: "/images/bnreview3.jpeg",
     category: "Leadership",
-    name: "Samuel King",
-    date: "2023-01-30",
+    price: 29.99,
+    rating: 4.5,
   },
   {
     id: 4,
     title: "Economic Outlook: Africa",
-    description:
-      "An in-depth analysis of economic trends shaping the continent.",
-    img: "/images/bnreview4.jpeg",
+    author: "Adaobi Nwosu",
+    image: "/images/bnreview4.jpeg",
     category: "Economics",
-    name: "Adaobi Nwosu",
-    date: "2023-08-01",
+    price: 39.99,
+    rating: 4,
   },
 ];
 
@@ -53,17 +52,7 @@ const BookSection = () => {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
         {booksData.map((book) => (
-          <ContentCard
-            url={`/service/store/${book.id}`}
-            key={book.id}
-            id={book.id}
-            title={book.title}
-            description={book.description}
-            img={book.img}
-            category={book.category}
-            name={book.name}
-            date={book.date}
-          />
+          <BookCard book={book} key={book.id} />
         ))}
       </div>
       <RedirectionBtn title="Visit Our Book Store" link="/service/store" />
