@@ -38,7 +38,7 @@ const StoreNavbarContent: React.FC<StoreNavbarProps> = ({
 
   return (
     <Navbar
-      brand="Nexus Store"
+      brand="Store"
       includeSearchBar={isStoreMainPage}
       searchBarPlaceholder="Search titles, authors..."
     >

@@ -51,8 +51,8 @@ export default function CartModal({
                   className="flex items-center gap-4 bg-foreground/5 p-3 rounded-lg"
                 >
                   <Image
-                    src={item.image}
-                    alt={item.title}
+                    src={item.image!}
+                    alt={item.title!}
                     width={50}
                     height={75}
                     className="rounded-md"
@@ -60,11 +60,11 @@ export default function CartModal({
                   <div className="flex-1">
                     <h3 className="font-bold text-sm">{item.title}</h3>
                     <p className="text-xs text-foreground/60">
-                      ${item.price.toFixed(2)} x {item.quantity}
+                      ${item.price!.toFixed(2)} x {item.quantity}
                     </p>
                   </div>
                   <span className="font-semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${(item.price! * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}

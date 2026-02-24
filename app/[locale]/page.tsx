@@ -13,7 +13,7 @@ export default async function Home() {
   const reviews = await getContentList();
   return (
     <div className="relative flex flex-col">
-      <Navbar includeSearchBar searchBarPlaceholder="Search..." />
+      <Navbar />
       <div className=" bg-gray-50 dark:bg-background min-h-screen">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-10">
           <HeroSection />

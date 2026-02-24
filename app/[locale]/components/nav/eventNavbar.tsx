@@ -43,7 +43,7 @@ const EventNavbarContent = () => {
       href="/service/event"
       className="text-xl font-bold tracking-tight flex items-center gap-2"
     >
-      <span className="text-foreground">Nexus</span>
+      <span className="text-foreground">Inama</span>
       <span className="text-primary">Events</span>
     </Link>
   );

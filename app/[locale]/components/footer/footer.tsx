@@ -1,14 +1,15 @@
 "use client";
-import Logo from "@/public/logo/nexuslogo.png";
+
 import { Link } from "@/i18n/navigation";
-import Image from "next/image";
 import { AiFillInstagram } from "react-icons/ai";
 import { BsLinkedin, BsTwitterX } from "react-icons/bs";
 import { FaYoutube } from "react-icons/fa6";
 import { MdCall, MdOutlineAlternateEmail } from "react-icons/md";
+import Logo from "../Logo/DefaultLogo";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+
   const quickLinks = [
     { label: "Privacy Policy", href: "/" },
     { label: "Terms of Use", href: "/about" },
@@ -16,80 +17,98 @@ const Footer = () => {
     { label: "Advertise With Us", href: "/insights" },
     { label: "Contact Us", href: "/contact" },
   ];
+
   return (
-    <div className="bg-primary dark:bg-slate-950">
-      <div className="max-width-container w-full flex flex-row flex-wrap items-start justify-between p-8 gap-4">
-        <div className="flex flex-col  gap-4  text-sm">
-          <Link href="/" className="bg-white p-2 rounded-lg w-fit">
-            <Image
-              src={Logo}
-              alt="Nexus Logo"
-              height={40}
-              width={120}
-              className="object-cover"
-            />
-          </Link>
-          <div className="flex flex-col gap-2">
-            <span className="text-slate-300 text-lg font-medium">
-              "Elevating African Business Narratives to Their Peak."
-            </span>
-            <span className="text-slate-200 font-semibold text-sm">
-              © {year} nexus Media & Communications Inc.
-              <br /> All Rights Reserved. Kigali, Rwanda.
-            </span>
+    <footer className="mt-10 bg-background border-t border-border">
+      <div className="max-width-container w-full px-6 md:px-12 py-16">
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {/* Brand */}
+          <div className="flex flex-col gap-6">
+            <Logo withTagline />
+
+            <div className="text-sm leading-relaxed text-black/70 dark:text-white/70">
+              <span className="font-semibold block">
+                © {year} Inama | information to business insights.
+              </span>
+              <span className="block">All Rights Reserved.</span>
+              <span className="block">Kigali, Rwanda.</span>
+            </div>
           </div>
-        </div>
-        <div>
-          <h2 className="text-white font-bold text-lg mb-2">Quick Links</h2>
-          <div className="flex flex-col gap-2">
-            {quickLinks.map((link) => (
+
+          {/* Links */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-lg font-semibold tracking-wide text-black dark:text-white">
+              Quick Links
+            </h2>
+
+            <div className="flex flex-col gap-3 text-sm">
+              {quickLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-black/70 dark:text-white/70 
+                             hover:text-[#1B4965] dark:hover:text-[#5FA8D3]
+                             transition-colors duration-300"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact + Social */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-lg font-semibold tracking-wide text-black dark:text-white">
+              Connect With Us
+            </h2>
+
+            <div className="flex flex-col gap-3 text-sm text-black/70 dark:text-white/70">
+              <span className="flex items-center gap-2 hover:text-[#1B4965] dark:hover:text-[#5FA8D3] transition-colors cursor-pointer">
+                <MdOutlineAlternateEmail />
+                inama@gmail.com
+              </span>
+
+              <span className="flex items-center gap-2 hover:text-[#1B4965] dark:hover:text-[#5FA8D3] transition-colors cursor-pointer">
+                <MdCall />
+                +50780891731
+              </span>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex gap-4 pt-2">
               <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-300 hover:text-white hover:underline duration-300 font-semibold transition-colors"
+                href="/"
+                className="text-black/60 dark:text-white/60 hover:text-[#1B4965] dark:hover:text-[#5FA8D3] transition-colors"
               >
-                {link.label}
+                <AiFillInstagram size={22} />
               </Link>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <h2 className="text-white font-bold text-lg mb-2">Follow Us</h2>
-          <span className="text-white font-bold hover:underline flex items-center gap-1 cursor-pointer">
-            <MdOutlineAlternateEmail /> nexus@gmail.com
-          </span>
-          <span className="text-white font-bold hover:underline flex items-center gap-1 cursor-pointer">
-            <MdCall /> +50780891731
-          </span>
-          <div className="flex flex-wrap gap-4 text-2xl mt-4">
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-white duration-300"
-            >
-              <AiFillInstagram size={30} />
-            </Link>
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-white duration-300"
-            >
-              <FaYoutube size={30} />
-            </Link>
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-white duration-300"
-            >
-              <BsTwitterX size={30} />
-            </Link>
-            <Link
-              href="/"
-              className="text-gray-500 hover:text-white duration-300"
-            >
-              <BsLinkedin size={30} />
-            </Link>
+
+              <Link
+                href="/"
+                className="text-black/60 dark:text-white/60 hover:text-[#1B4965] dark:hover:text-[#5FA8D3] transition-colors"
+              >
+                <FaYoutube size={22} />
+              </Link>
+
+              <Link
+                href="/"
+                className="text-black/60 dark:text-white/60 hover:text-[#1B4965] dark:hover:text-[#5FA8D3] transition-colors"
+              >
+                <BsTwitterX size={20} />
+              </Link>
+
+              <Link
+                href="/"
+                className="text-black/60 dark:text-white/60 hover:text-[#1B4965] dark:hover:text-[#5FA8D3] transition-colors"
+              >
+                <BsLinkedin size={20} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { logout } from "@/app/actions/auth";
+import Logo from "../Logo/DefaultLogo";
 
 // Type definitions for navbar configuration
 interface NavItem {
@@ -176,7 +177,7 @@ const MobileNavLinks: React.FC<{
 const NavbarContent: React.FC<NavbarContentProps> = ({
   includeSearchBar,
   searchBarPlaceholder,
-  brand = "Nexus Media",
+  brand,
   navItems = [],
   leftContent,
   isOpen,
@@ -190,7 +191,7 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
     setProfile(null);
     setIsProfileOpen(false);
     toast.success("Successfully logged out!");
-   logout();
+    logout();
   };
 
   const handleMobileMenuClose = () => {
@@ -218,15 +219,15 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
       <li>
         <Link
           href="/#"
-          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 "
+          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
         >
           Profile Settings
         </Link>
       </li>
       <li>
         <Link
-          href="/dashboard/store"
-          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+          href="/dashboard/magazine"
+          className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
         >
           Dashboard
         </Link>
@@ -234,7 +235,7 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
       <li>
         <button
           onClick={handleLogout}
-          className="w-full text-left block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="w-full text-left block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
         >
           Logout
         </button>
@@ -243,25 +244,10 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
   );
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-foreground/10">
+    <nav className="sticky top-0 z-50 w-full bg-background backdrop-blur-md border-b border-foreground/10">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-10 h-16 flex items-center justify-between">
         {/* Left Section */}
-        <div className="flex items-center gap-3">
-          {leftContent ? (
-            leftContent
-          ) : (
-            <Link
-              href="/"
-              className="text-xl font-bold tracking-tight flex items-center gap-2"
-            >
-              <span className="text-foreground">Nexus</span>
-              <span className="text-primary">
-                {brand?.split(" ")[1] || "Media"}
-              </span>
-            </Link>
-          )}
-        </div>
-
+        <Logo descriptor={brand} />
         {/* Center Section - Desktop Only */}
         <div className="hidden lg:flex">
           <DesktopNavLinks items={navItems} defaultItems={defaultItems} />
@@ -282,7 +268,7 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
             {profile ? (
               <div className="relative">
                 <button onClick={() => setIsProfileOpen(!isProfileOpen)}>
-                  <span className="flex items-center justify-center bg-primary text-white size-8 rounded-full uppercase font-bold">
+                  <span className="flex items-center justify-center bg-primary text-white size-8 rounded-full uppercase font-bold cursor-pointer">
                     {profile.name.split(" ")[0][0]}
                   </span>
                 </button>

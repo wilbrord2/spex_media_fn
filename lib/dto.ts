@@ -60,6 +60,7 @@ export interface ContentItem {
   publishedAt: string;
   createdAt: string;
   updatedAt: string;
+  authorName: string;
 }
 
 export interface ContentListRes {

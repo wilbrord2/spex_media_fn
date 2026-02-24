@@ -253,3 +253,32 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 0.6;
+  }
+  100% {
+    box-shadow: 0 0 0 15px currentColor;
+    opacity: 0;
+  }
+}
+
+.animate-pulseDot {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.animate-rippleDot {
+  animation: ripple 3s ease-in-out infinite;
+}

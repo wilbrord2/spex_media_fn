@@ -25,7 +25,7 @@ const BusinesReviewSection = ({ reviews }: BusinesReviewSectionProps) => {
             description={review.content}
             img={review.coverImage}
             category={review.category.name}
-            name={"Nexus"}
+            name={review.authorName || "Unknown Author"}
             date={new Date(review.createdAt).toLocaleDateString()}
           />
         ))}

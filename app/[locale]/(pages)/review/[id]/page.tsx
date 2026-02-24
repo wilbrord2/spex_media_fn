@@ -7,12 +7,10 @@ import {
   getComments,
   postComment,
   getContentList,
-  deleteContent,
   BackendError,
 } from "@/app/actions/review";
 import { ContentItem, CommentRes, CommentInput } from "@/lib/dto";
 import { toast } from "sonner";
-import { Pencil, Trash2, AlertTriangle } from "lucide-react";
 
 const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
@@ -23,8 +21,6 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const [relatedArticles, setRelatedArticles] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -62,19 +58,6 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
     }
     loadPageData();
   }, [contentId]);
-
-  const confirmDelete = async () => {
-    setIsDeleting(true);
-    const success = await deleteContent(contentId);
-    if (success) {
-      toast.success("Article deleted successfully");
-      router.push("/review");
-    } else {
-      toast.error("Failed to delete article");
-      setIsDeleting(false);
-      setShowDeleteModal(false);
-    }
-  };
 
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -127,62 +110,9 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
     );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 relative">
-      {/* --- Delete Confirmation Modal --- */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-8 text-center">
-              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <AlertTriangle size={32} />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Are you sure?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-8">
-                You are about to delete this article. This action cannot be
-                undone.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 py-1.5 px-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmDelete}
-                  disabled={isDeleting}
-                  className="flex-1 py-1.5 px-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition disabled:opacity-50"
-                >
-                  {isDeleting ? "Deleting..." : "Delete"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
-        <button
-          onClick={() => router.push(`/review/edit/${contentId}`)}
-          className="p-4 bg-primary/95 text-white rounded-full shadow-2xl hover:bg-primary transition-all hover:scale-110 active:scale-95"
-          title="Edit Article"
-        >
-          <Pencil size={24} />
-        </button>
-        <button
-          onClick={() => setShowDeleteModal(true)}
-          className="p-4 bg-red-600 text-white rounded-full shadow-2xl hover:bg-red-700 transition-all hover:scale-110 active:scale-95"
-          title="Delete Article"
-        >
-          <Trash2 size={24} />
-        </button>
-      </div>
-
+    <div className="mt-16 min-h-screen max-w-5xl bg-white dark:bg-gray-950 relative mx-auto">
       {/* Hero Image */}
-      <div className="relative w-full h-96 md:h-[500px] overflow-hidden">
+      <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-md">
         <Image
           src={content.coverImage}
           alt={content.title}
@@ -190,14 +120,9 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white px-4 text-center">
-            {content.title}
-          </h1>
-        </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="mx-auto px-6 py-12">
         <div className="mb-8">
           <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-sm font-semibold rounded-full uppercase tracking-wider">
             {content.category.name}
@@ -219,12 +144,11 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         </article>
 
         {/* Comment Form */}
-        <div className="bg-gray-50 dark:bg-gray-900/50 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="mt-32 bg-gray-50 dark:bg-gray-900/50 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
           <h3 className="text-xl font-semibold mb-6">Leave a Comment</h3>
           <form onSubmit={handleSubmitComment} className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <input
-                type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleFormChange}

@@ -15,13 +15,12 @@ import {
   HiOutlineStar,
   HiOutlineCurrencyDollar,
 } from "react-icons/hi2";
-import { Book, BookStatus } from "@/app/[locale]/(admin)/dashboard/store/page";
 import Image from "next/image";
 
 interface Props {
-  book: Book;
+  book: any;
   onClose: () => void;
-  onUpdateStatus: (id: number, status: BookStatus) => void;
+  onUpdateStatus: (id: number, status: any) => void;
   initialMode?: "approve" | "reject";
 }
 

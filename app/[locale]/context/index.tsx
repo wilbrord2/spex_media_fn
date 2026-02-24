@@ -1,7 +1,7 @@
 "use client";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { toast } from "sonner";
-import {User} from "@/app/actions/auth";
+import { User } from "@/app/actions/auth";
 
 // --- App Context ---
 interface AppContextValue {
@@ -20,20 +20,20 @@ export function useAppContext() {
 }
 
 // --- Cart Context ---
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  price: number;
+export interface CartBook {
+  id?: number;
+  title?: string;
+  author?: string;
+  price?: number;
   oldPrice?: number;
-  category: string;
-  image: string;
-  rating: number;
+  category?: string;
+  image?: string;
+  rating?: number;
   badge?: string;
   badgeColor?: string;
 }
 
-export interface CartItem extends Book {
+export interface CartItem extends CartBook {
   quantity: number;
 }
 
@@ -41,7 +41,7 @@ interface CartContextValue {
   cartItems: CartItem[];
   totalQuantity: number;
   totalPrice: number;
-  addToCart: (item: Book) => void;
+  addToCart: (item: CartBook) => void;
   removeFromCart: (itemId: number) => void;
   updateQuantity: (itemId: number, quantity: number) => void;
   clearCart: () => void;
@@ -58,7 +58,7 @@ export function useCartContext() {
 const CartProvider = ({ children }: PropsWithChildren) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const addToCart = (item: Book) => {
+  const addToCart = (item: Partial<CartBook>) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.id === item.id);
 
@@ -91,7 +91,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.price! * item.quantity,
     0,
   );
 
@@ -112,7 +112,10 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-function ContextProvider({ children, initialUser }: PropsWithChildren & { initialUser: User | null }) {
+function ContextProvider({
+  children,
+  initialUser,
+}: PropsWithChildren & { initialUser: User | null }) {
   const [activeModalId, setActiveModalId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("Dashboard");
   const [profile, setProfile] = useState<User | null>(initialUser);

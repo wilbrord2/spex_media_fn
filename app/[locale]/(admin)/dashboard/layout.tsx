@@ -1,24 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
-  // HiOutlineViewColumns,
-  // HiOutlineClipboardDocumentCheck,
-  // HiOutlineUsers,
-  // HiOutlineWallet,
-  // HiOutlineTag,
   HiOutlineShoppingBag,
-  HiOutlineCalendar,
   HiOutlineArrowLeftOnRectangle,
   HiOutlineShieldCheck,
   HiBars3BottomLeft,
   HiOutlineDocumentText,
+  HiOutlineUsers,
 } from "react-icons/hi2";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { ThemeSwitchButton } from "../../components/switch/themeSwitcher";
 import { useAppContext } from "../../context";
+import { logout } from "@/app/actions/auth";
+import { toast } from "sonner";
 
 export default function AdminLayout({
   children,
@@ -27,54 +24,58 @@ export default function AdminLayout({
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const { theme } = useTheme();
-  const { profile } = useAppContext();
+  const { profile, setProfile } = useAppContext();
 
-  // const adminNav = [
-  //   {
-  //     name: "Marketplace Overview",
-  //     icon: <HiOutlineViewColumns />,
-  //     href: "/admin",
-  //   },
-  //   {
-  //     name: "Content Moderation",
-  //     icon: <HiOutlineClipboardDocumentCheck />,
-  //     href: "/admin/moderation",
-  //   },
-  //   {
-  //     name: "Author Management",
-  //     icon: <HiOutlineUsers />,
-  //     href: "/admin/authors",
-  //   },
-  //   {
-  //     name: "Financial Reports",
-  //     icon: <HiOutlineWallet />,
-  //     href: "/admin/finance",
-  //   },
-  //   {
-  //     name: "Global Pricing Rules",
-  //     icon: <HiOutlineTag />,
-  //     href: "/admin/pricing",
-  //   },
-  // ];
+  const handleLogout = () => {
+    setProfile(null);
+    toast.success("Successfully logged out!");
+    logout();
+  };
+  const role = profile?.role?.toUpperCase();
 
-  const ecosystemNav = [
-    {
-      name: "Book Store",
-      icon: <HiOutlineShoppingBag />,
-      href: "/dashboard/store",
-    },
-    {
-      name: "Events Manager",
-      icon: <HiOutlineCalendar />,
-      href: "/dashboard/events",
-    },
-    {
-      name: "Nexus Magazine",
-      icon: <HiOutlineDocumentText />,
-      href: "/dashboard/magazine",
-    },
-  ];
+  // 1. Define Navigation with Role Access
+  const ecosystemNav = useMemo(() => {
+    const items = [
+      {
+        name: "Content Creators",
+        icon: <HiOutlineUsers />,
+        href: "/dashboard/authors",
+        roles: ["ADMIN"],
+      },
+      {
+        name: "Inama Magazine",
+        icon: <HiOutlineDocumentText />,
+        href: "/dashboard/magazine",
+        roles: ["ADMIN", "CONTENT_PROVIDER"],
+      },
+      {
+        name: "Inama Books",
+        icon: <HiOutlineShoppingBag />,
+        href: "/dashboard/store",
+        roles: ["ADMIN"],
+      },
+    ];
+
+    return items.filter((item) => item.roles.includes(role || "ADMIN"));
+  }, [role]);
+
+  // 2. Security: Redirect if user hits an unauthorized route
+  useEffect(() => {
+    if (!role) return;
+
+    const restrictedRoutes = {
+      CONTENT_PROVIDER: ["/dashboard/store", "/dashboard/authors"],
+    };
+
+    const userRestricted =
+      restrictedRoutes[role as keyof typeof restrictedRoutes];
+
+    if (userRestricted?.some((route) => pathname.startsWith(route))) {
+      router.push("/dashboard/magazine");
+    }
+  }, [pathname, role, router]);
 
   return (
     <div className="flex h-screen w-full bg-background text-foreground overflow-hidden font-sans">
@@ -101,41 +102,18 @@ export default function AdminLayout({
                 <div className="bg-primary/15 flex items-center justify-center rounded-lg size-10 text-primary shrink-0">
                   <HiOutlineShieldCheck size={24} />
                 </div>
-                <div className="flex flex-col min-w-0">
+                <Link href={`/`} className="flex flex-col min-w-0">
                   <h1 className="text-sidebar-foreground text-sm font-bold leading-tight truncate">
-                    Nexus Media
+                    Inama Media
                   </h1>
                   <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-wider">
-                    Admin Dashboard
+                    {role?.replace("_", " ")} Mode
                   </p>
-                </div>
+                </Link>
               </div>
 
               {/* Navigation Sections */}
               <nav className="flex flex-col gap-1">
-                {/* {adminNav.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${
-                        isActive
-                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
-                          : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent"
-                      }`}
-                    >
-                      <span className="text-lg shrink-0">{item.icon}</span>
-                      <span className="text-sm font-medium">{item.name}</span>
-                    </Link>
-                  );
-                })} */}
-
-                <div className="my-4 border-t border-sidebar-border mx-2" />
-                {/* <div className="px-3 py-2 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em]">
-                  Ecosystem
-                </div> */}
-
                 {ecosystemNav.map((item) => {
                   const isActive = pathname === item.href;
                   return (
@@ -157,32 +135,32 @@ export default function AdminLayout({
             </div>
 
             <div className="space-y-2">
-              <div className="mt-4 flex items-center gap-2 font-bold">
+              <div className="mt-4 flex items-center gap-2 font-bold px-3">
                 <ThemeSwitchButton />
-                <div className="hidden md:inline">
-                  {theme === "dark" ? "Dark" : "Light"} Theme
-                </div>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">
+                  {theme} Mode
+                </span>
               </div>
 
               {/* Profile Section */}
               <div className="flex items-center gap-3 p-3 rounded-lg bg-sidebar-accent/30 border border-sidebar-border my-2">
-                <div className="size-9 rounded-full bg-muted shrink-0 flex items-center justify-center">
-                  {profile?.name.split(" ")[0][0]}
+                <div className="size-9 rounded-full bg-primary/10 text-primary shrink-0 flex items-center justify-center font-bold">
+                  {profile?.name ? profile.name[0].toUpperCase() : "U"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sidebar-foreground text-sm font-bold truncate">
                     {profile?.name}
                   </p>
-                  <p className="text-muted-foreground text-[10px] font-bold  truncate">
+                  <p className="text-muted-foreground text-[10px] font-bold truncate">
                     {profile?.email}
                   </p>
                 </div>
-                <Link
-                  href={`/auth`}
+                <button
+                  onClick={handleLogout}
                   className="text-muted-foreground hover:text-destructive p-2 transition-colors"
                 >
                   <HiOutlineArrowLeftOnRectangle size={20} />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -191,7 +169,6 @@ export default function AdminLayout({
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        {/* Mobile Header (Visible only on small screens) */}
         <header className="lg:hidden flex items-center justify-between py-2 px-4 border-b bg-background/80 backdrop-blur-md z-30">
           <div className="flex items-center gap-3">
             <button
@@ -201,15 +178,11 @@ export default function AdminLayout({
               <HiBars3BottomLeft size={24} />
             </button>
             <span className="font-bold text-sm tracking-tight">
-              Nexus Media
+              Inama Media
             </span>
           </div>
-          {/* <div className="size-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <LuUser />
-          </div> */}
         </header>
 
-        {/* Scrollable Children */}
         <main className="flex-1 overflow-y-auto hide-scrollbar scroll-smooth relative">
           {children}
         </main>

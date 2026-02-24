@@ -3,7 +3,7 @@
 import PdfViewer from "@/app/[locale]/components/model/PdfViewer";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext, Suspense } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import {
   FiArrowRight,
@@ -15,8 +15,13 @@ import {
   FiSmartphone,
   FiTruck,
   FiZoomIn,
+  FiLoader,
 } from "react-icons/fi";
 import { toast } from "sonner";
+import { useParams } from "next/navigation";
+import { Book, getBookById } from "@/app/actions/book";
+import { CartContext } from "@/app/[locale]/context";
+import { CartBook } from "@/app/[locale]/context";
 
 // --- Types & Constants ---
 type BookFormat = "platform" | "digital" | "physical";
@@ -29,45 +34,84 @@ interface FormatOption {
   icon: React.ReactNode;
 }
 
-const FORMATS: FormatOption[] = [
-  {
-    id: "platform",
-    title: "Read on Platform",
-    description: "Instant access via Nexus Reader.",
-    price: 9.99,
-    icon: <FiSmartphone size={20} />,
-  },
-  {
-    id: "digital",
-    title: "Digital Download",
-    description: "PDF & EPUB (DRM-Free).",
-    price: 14.99,
-    icon: <FiDownload size={20} />,
-  },
-  {
-    id: "physical",
-    title: "Physical Book",
-    description: "Hardcover. Ships in 3 days.",
-    price: 24.99,
-    icon: <FiTruck size={20} />,
-  },
-];
+const NexusBookDetailsContent: React.FC = () => {
+  const params = useParams();
+  const bookId = Number(params.bookId);
+  const { addToCart } = useContext(CartContext);
 
-const NexusBookDetails: React.FC = () => {
   // --- States ---
+  const [book, setBook] = useState<Partial<Book> | null>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedFormat, setSelectedFormat] = useState<BookFormat>("platform");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
+  // --- Fetch API Data ---
+  useEffect(() => {
+    console.log(bookId);
+
+    const fetchBook = async () => {
+      setLoading(true);
+      const data = await getBookById(bookId);
+
+      if (data) {
+        setBook(data);
+      }
+      setLoading(false);
+    };
+    if (bookId) fetchBook();
+  }, [bookId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <FiLoader className="animate-spin text-primary" size={32} />
+      </div>
+    );
+  }
+
+  if (!book) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-foreground/40">Book not found.</p>
+      </div>
+    );
+  }
+
+  // --- Map API Prices to Formats ---
+  const FORMATS: FormatOption[] = [
+    {
+      id: "platform",
+      title: "Read on Platform",
+      description: "Instant access via Nexus Reader.",
+      price: book.priceReadOnPlatform || 9.99,
+      icon: <FiSmartphone size={20} />,
+    },
+    {
+      id: "digital",
+      title: "Digital Download",
+      description: "PDF & EPUB (DRM-Free).",
+      price: book.priceDigitalDownload || 14.99,
+      icon: <FiDownload size={20} />,
+    },
+    {
+      id: "physical",
+      title: "Physical Book",
+      description: "Hardcover. Ships in 3 days.",
+      price: book.pricePhysicalBook || 24.99,
+      icon: <FiTruck size={20} />,
+    },
+  ];
+
   const activeFormatData = FORMATS.find((f) => f.id === selectedFormat);
-  const pdfUrl = "/books/book1.pdf";
+  const pdfUrl = book.manuscript || "/books/book1.pdf";
 
   const handleShare = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (navigator.share) {
       try {
-        await navigator.share({ title: "The Future of Digital Media", url });
+        await navigator.share({ title: book.title, url });
       } catch (err) {
         if ((err as Error).name !== "AbortError") copyToClipboard(url);
       }
@@ -98,11 +142,13 @@ const NexusBookDetails: React.FC = () => {
         activeFormatPrice={activeFormatData?.price}
       />
 
-      {/* --- Main Page Layout --- */}
       <main className="relative w-full overflow-x-hidden">
         {/* Ambient Background Blur */}
         <div className="absolute top-0 left-0 right-0 h-[600px] overflow-hidden -z-10 pointer-events-none">
-          <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800')] bg-cover bg-center blur-[100px] opacity-10 dark:opacity-20 scale-110" />
+          <div
+            className="w-full h-full bg-cover bg-center blur-[100px] opacity-10 dark:opacity-20 scale-110"
+            style={{ backgroundImage: `url(${book.coverImage})` }}
+          />
           <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/80 to-background" />
         </div>
 
@@ -117,22 +163,22 @@ const NexusBookDetails: React.FC = () => {
             </Link>
             <span>/</span>
             <Link
-              href="/service/store?category=Non-Fiction#browse-catalog"
+              href={`/service/store?category=${book.category?.name}#browse-catalog`}
               className="hover:text-primary transition-colors"
             >
-              Non-Fiction
+              {book.category?.name || "Uncategorized"}
             </Link>
             <span>/</span>
-            <span className="text-foreground">The Future of Digital Media</span>
+            <span className="text-foreground">{book.title}</span>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-2">
-            {/* Left Column: Cover & Preview CTA */}
+            {/* Left Column */}
             <div className="lg:col-span-4 xl:col-span-3 flex flex-col items-center lg:items-start gap-6">
               <div className="relative group w-full max-w-[320px] aspect-2/3 rounded-2xl shadow-2xl overflow-hidden bg-foreground/5 border border-foreground/5 transition-transform duration-500 hover:scale-[1.02]">
                 <Image
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800"
-                  alt="Book Cover"
+                  src={book.coverImage!}
+                  alt={book.title!}
                   fill
                   className="object-cover"
                   priority
@@ -148,9 +194,7 @@ const NexusBookDetails: React.FC = () => {
               </div>
 
               <button
-                onClick={() => {
-                  setIsPreviewOpen(true);
-                }}
+                onClick={() => setIsPreviewOpen(true)}
                 className="flex w-full max-w-[320px] items-center justify-center rounded-xl h-14 bg-foreground/5 border border-foreground/10 text-foreground gap-3 hover:bg-foreground/10 transition-all group shadow-sm"
               >
                 <FiEye className="text-primary group-hover:scale-110 transition-transform" />
@@ -165,7 +209,7 @@ const NexusBookDetails: React.FC = () => {
                   label="Share"
                   onClick={handleShare}
                 />
-                <ActionButton
+                {/* <ActionButton
                   icon={
                     <FiHeart
                       fill={isInWishlist ? "currentColor" : "none"}
@@ -174,15 +218,15 @@ const NexusBookDetails: React.FC = () => {
                   }
                   label="Wishlist"
                   onClick={handleWishlist}
-                />
+                /> */}
               </div>
             </div>
 
-            {/* Right Column: Details & Checkout */}
+            {/* Right Column */}
             <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-8">
               <div className="flex flex-col gap-4 border-b border-foreground/10 pb-8">
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9]">
-                  The Future of Digital Media
+                  {book.title}
                 </h1>
 
                 <div className="flex flex-wrap items-center gap-6 mt-2">
@@ -192,29 +236,40 @@ const NexusBookDetails: React.FC = () => {
                       href="#"
                       className="text-primary font-bold hover:underline text-lg"
                     >
-                      Sarah Jenkins
+                      {book.authorName}
                     </a>
                   </div>
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
-                    Best Seller
-                  </span>
+                  {book.numberOfBooksInStock! > 50 && (
+                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">
+                      Best Seller
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className="flex text-amber-500 gap-0.5">
-                    {[1, 2, 3, 4].map((i) => (
-                      <FaStar key={i} />
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={
+                          i < Math.floor(book.averageRating || 5)
+                            ? ""
+                            : "opacity-20"
+                        }
+                      />
                     ))}
-                    <FaStarHalfAlt />
+                    {(book.averageRating || 5) % 1 !== 0 && <FaStarHalfAlt />}
                   </div>
-                  <span className="text-sm font-bold">4.6</span>
+                  <span className="text-sm font-bold">
+                    {book.averageRating || "5.0"}
+                  </span>
                   <span className="text-sm text-foreground/40">
-                    (128 reviews)
+                    ({book.ratings?.length || 0} reviews)
                   </span>
                 </div>
               </div>
 
-              {/* Synopsis with Expandable Text */}
+              {/* Synopsis */}
               <div className="flex flex-col gap-3 max-w-3xl">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">
                   Synopsis
@@ -222,26 +277,9 @@ const NexusBookDetails: React.FC = () => {
                 <div
                   className={`text-foreground/60 leading-relaxed text-base transition-all duration-300 ${isExpanded ? "" : "line-clamp-3"}`}
                 >
-                  <p>
-                    An in-depth look at how ecosystems like Nexus are changing
-                    the landscape of modern publishing. Sarah Jenkins explores
-                    the intersection of traditional storytelling and immersive
-                    digital experiences.
-                  </p>
-                  {isExpanded && (
-                    <div className="mt-4 space-y-4 animate-in fade-in duration-500">
-                      <p>
-                        In this groundbreaking work, Jenkins delves deep into
-                        the mechanisms of digital transformation and its impact
-                        on how stories are told and consumed.
-                      </p>
-                      <p>
-                        Whether you&apos;re a content creator, publisher, or
-                        simply passionate about the future of storytelling, this
-                        book offers invaluable perspectives.
-                      </p>
-                    </div>
-                  )}
+                  <div
+                    dangerouslySetInnerHTML={{ __html: book.description! }}
+                  />
                 </div>
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
@@ -254,7 +292,7 @@ const NexusBookDetails: React.FC = () => {
                 </button>
               </div>
 
-              {/* Format Selection Cards */}
+              {/* Format Selection */}
               <div className="flex flex-col gap-4">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">
                   Select Format
@@ -281,24 +319,42 @@ const NexusBookDetails: React.FC = () => {
                     ${activeFormatData?.price}
                   </p>
                 </div>
-                <button className="w-full sm:w-auto px-12 h-16 bg-primary text-primary-foreground font-black rounded-2xl shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                <button
+                  onClick={() =>
+                    addToCart({
+                      ...book,
+                      image: book.coverImage,
+                      price: activeFormatData?.price,
+                    } as CartBook)
+                  }
+                  className="w-full sm:w-auto px-12 h-16 bg-primary text-primary-foreground font-black rounded-2xl shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 cursor-pointer"
+                >
                   Add to Cart <FiArrowRight />
                 </button>
               </div>
 
-              {/* Specifications Grid */}
+              {/* Specifications */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-foreground/10">
-                <Spec label="Publisher" value="Nexus Press" />
-                <Spec label="Released" value="Oct 24, 2023" />
-                <Spec label="Pages" value="342" />
-                <Spec label="Language" value="English" />
+                <Spec
+                  label="Publisher"
+                  value={book.authorName! || "Nexus Press"}
+                />
+                <Spec
+                  label="Released"
+                  value={new Date(book.createdAt!).toLocaleDateString()}
+                />
+                <Spec
+                  label="Stock"
+                  value={book.numberOfBooksInStock!.toString()}
+                />
+                <Spec label="Language" value={book.language || "English"} />
               </div>
 
-              {/* More from Author */}
-              <div className="mt-12 border-t border-foreground/10 pt-12">
+              {/* More from Author Placeholder */}
+              {/* <div className="mt-12 border-t border-foreground/10 pt-12">
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-2xl font-black tracking-tight">
-                    More from Sarah Jenkins
+                    More from {book.authorName}
                   </h3>
                   <Link
                     href="#"
@@ -307,20 +363,13 @@ const NexusBookDetails: React.FC = () => {
                     View Profile <FiArrowRight size={14} />
                   </Link>
                 </div>
-
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   <AuthorBookCard
-                    title="Modern UX Design"
-                    category="Technology"
-                    image="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800"
+                    title={book.title!}
+                    category={book.category?.name || "General"}
+                    image={book.coverImage!}
                   />
-                  <AuthorBookCard
-                    title="The Code of Ethics"
-                    category="Philosophy"
-                    image="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800"
-                  />
-
-                  {/* Magazine Cross-Promo */}
+                  
                   <Link
                     href="/review"
                     className="group flex flex-col gap-3 col-span-2 md:col-span-2"
@@ -342,14 +391,13 @@ const NexusBookDetails: React.FC = () => {
                           Defining the Digital Shelf
                         </h4>
                         <p className="text-xs text-foreground/50 line-clamp-2 leading-relaxed">
-                          Sarah discusses her latest book and the future of
-                          writing.
+                          {book.authorName} discusses the future of writing.
                         </p>
                       </div>
                     </div>
                   </Link>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -358,8 +406,7 @@ const NexusBookDetails: React.FC = () => {
   );
 };
 
-// --- Helper Components ---
-
+// --- Helper Components remain unchanged ---
 const ActionButton = ({
   icon,
   label,
@@ -461,4 +508,16 @@ const Spec = ({ label, value }: { label: string; value: string }) => (
   </div>
 );
 
-export default NexusBookDetails;
+export default function NexusBookDetails() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <FiLoader className="animate-spin text-primary" size={32} />
+        </div>
+      }
+    >
+      <NexusBookDetailsContent />
+    </Suspense>
+  );
+}

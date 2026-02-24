@@ -22,7 +22,7 @@ function DynamicToaster() {
   return (
     <Toaster
       richColors
-      position="bottom-right"
+      position="top-center"
       theme={theme as "light" | "dark" | "system"}
     />
   );

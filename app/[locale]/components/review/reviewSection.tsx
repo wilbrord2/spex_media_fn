@@ -12,6 +12,9 @@ export default function ArticlesSection() {
   const [active, setActive] = useState("All");
   const [loading, setLoading] = useState(true);
 
+  const [page, setPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   useEffect(() => {
     async function loadData() {
       const [contentData, categoryData] = await Promise.all([
@@ -25,10 +28,23 @@ export default function ArticlesSection() {
     loadData();
   }, []);
 
+  const loadMore = async () => {
+    setLoadingMore(true);
+    const nextPage = page + 1;
+    const contentData = await getContentList(nextPage);
+
+    if (contentData?.contentList?.length) {
+      setArticles((prev) => [...prev, ...contentData.contentList]);
+      setPage(nextPage);
+    }
+
+    setLoadingMore(false);
+  };
+
   const filtered =
     active === "All"
       ? articles
-      : articles.filter((item) => item.category.name === active);
+      : articles.filter((item) => item.category?.name === active);
 
   if (loading) return <div className="text-center py-16">Loading...</div>;
 
@@ -79,13 +95,19 @@ export default function ArticlesSection() {
             description={""}
             title={item.title}
             img={item.coverImage}
-            name={"Unknown Author"} // Or author name if available
+            name={item.authorName || "Unknown Author"}
           />
         ))}
       </div>
 
+      {/* Load More */}
       <div className="flex justify-center">
-        <RedirectionBtn title="Load More Articles" link="#" />
+        <div onClick={loadMore}>
+          <RedirectionBtn
+            title={loadingMore ? "Loading..." : "Load More Articles"}
+            link="#"
+          />
+        </div>
       </div>
     </section>
   );
