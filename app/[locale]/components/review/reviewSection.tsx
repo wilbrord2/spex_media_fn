@@ -17,12 +17,12 @@ export default function ArticlesSection() {
 
   useEffect(() => {
     async function loadData() {
-      const [contentData, categoryData] = await Promise.all([
+      const [contentData] = await Promise.all([
         getContentList(1),
         // getCategories(),
       ]);
       if (contentData) setArticles(contentData.contentList);
-      if (categoryData) setCategories(categoryData);
+      // if (categoryData) setCategories(categoryData);
       setLoading(false);
     }
     loadData();

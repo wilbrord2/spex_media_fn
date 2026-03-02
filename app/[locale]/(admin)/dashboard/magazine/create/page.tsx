@@ -56,22 +56,22 @@ export default function CreateContentPage() {
     },
   });
 
-  useEffect(() => {
-    async function fetchCategories() {
-      const cats = await getCategories();
-      if (cats) {
-        setCategories(cats);
-        if (cats.length > 0) {
-          setFormData((prev) => ({
-            ...prev,
-            categoryId: cats[0].id.toString(),
-          }));
-        }
-      }
-      setLoading(false);
-    }
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchCategories() {
+  //     const cats = await getCategories();
+  //     if (cats) {
+  //       setCategories(cats);
+  //       if (cats.length > 0) {
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           categoryId: cats[0].id.toString(),
+  //         }));
+  //       }
+  //     }
+  //     setLoading(false);
+  //   }
+  //   fetchCategories();
+  // }, []);
 
   const addImagePair = () => {
     setFormData({
