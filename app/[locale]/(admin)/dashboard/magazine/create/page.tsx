@@ -56,22 +56,22 @@ export default function CreateContentPage() {
     },
   });
 
-  // useEffect(() => {
-  //   async function fetchCategories() {
-  //     const cats = await getCategories();
-  //     if (cats) {
-  //       setCategories(cats);
-  //       if (cats.length > 0) {
-  //         setFormData((prev) => ({
-  //           ...prev,
-  //           categoryId: cats[0].id.toString(),
-  //         }));
-  //       }
-  //     }
-  //     setLoading(false);
-  //   }
-  //   fetchCategories();
-  // }, []);
+  useEffect(() => {
+    async function fetchCategories() {
+      const cats = await getCategories();
+      if (cats) {
+        setCategories(cats.items);
+        if (cats.totalItems > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            categoryId: cats.items[0].id.toString(),
+          }));
+        }
+      }
+      setLoading(false);
+    }
+    fetchCategories();
+  }, []);
 
   const addImagePair = () => {
     setFormData({
@@ -134,7 +134,7 @@ export default function CreateContentPage() {
     const result = await createContent(submitData);
     if (!(result as any).error) {
       toast.success("Article created!");
-      router.push(`/review`);
+      router.push(`/dashboard/magazine`);
     } else {
       toast.error("Creation failed");
     }
@@ -164,7 +164,7 @@ export default function CreateContentPage() {
               }
             />
           </div>
-          {/* <div className="space-y-2">
+          <div className="space-y-2">
             <label className="text-sm font-bold">Category</label>
             <select
               className="w-full p-3 rounded-md border dark:bg-gray-800 dark:border-gray-700 outline-none"
@@ -179,7 +179,7 @@ export default function CreateContentPage() {
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
         </div>
 
         <div className="space-y-2">

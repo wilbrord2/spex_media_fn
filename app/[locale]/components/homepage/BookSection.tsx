@@ -54,18 +54,34 @@ const BookSection = () => {
         title="Featured Books from Our Store"
         description="Explore our curated collection of books on business, leadership, and marketing from influential authors."
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
-        {loading ? (
-          Array.from({ length: 4 }).map((_, i) => <BookSkeleton key={i} />)
-        ) : error ? (
-          <div className="col-span-full text-center py-10 text-foreground/50 font-bold uppercase tracking-widest text-xs">
-            Failed to load books. Please try again later.
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <BookSkeleton key={i} />
+          ))}
+        </div>
+      ) : error ? (
+        <div className="col-span-full text-center py-10 text-foreground/50 font-bold uppercase tracking-widest text-xs">
+          Failed to load books. Please try again later.
+        </div>
+      ) : books.length === 0 ? (
+        <div className="flex flex-col items-center space-y-4 text-center py-10">
+          <p className="text-lg text-gray-600">
+            No featured books available right now — check back soon for fresh
+            recommendations!
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+            {books.map((book) => (
+              <BookCard book={book} key={book.id} />
+            ))}
           </div>
-        ) : (
-          books.map((book) => <BookCard book={book} key={book.id} />)
-        )}
-      </div>
-      <RedirectionBtn title="Visit Our Book Store" link="/service/store" />
+          <RedirectionBtn title="Visit Our Book Store" link="/service/store" />
+        </>
+      )}
     </div>
   );
 };

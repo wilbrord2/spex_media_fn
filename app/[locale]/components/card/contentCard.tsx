@@ -53,11 +53,7 @@ const ContentCard = ({
             </span>{" "}
             <span className="flex items-center gap-1">
               <CiCalendar size={20} />
-              {new Date(date).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
+              {new Date(date).toLocaleString()}
             </span>
           </div>
         </div>

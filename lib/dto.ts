@@ -45,6 +45,15 @@ export interface Category {
   updatedAt: string;
 }
 
+export interface CategoryListRes {
+  items: Category[];
+  page: number;
+  take: number;
+  totalItems: number;
+  pageCount: number;
+  hasNextPage: boolean;
+}
+
 export interface ContentItem {
   id: number;
   title: string;

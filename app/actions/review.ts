@@ -13,6 +13,7 @@ import {
   RatingInput,
   RatingRes,
   AdminReviewInput,
+  CategoryListRes,
 } from "@/lib/dto";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -30,24 +31,29 @@ async function getAuthHeader(): Promise<Record<string, string>> {
 // scopes: 'public' for general feed, 'author' for private dashboard
 export async function getContentList(
   page: number = 1,
-  scope: "public" | "author" = "public",
+  scope: "public" | "author" | "admin" = "public",
 ): Promise<ContentListRes | null> {
   // 1. Determine the endpoint based on scope
   const endpoint =
-    scope === "author" ? "/content/content-by-author" : "/content";
+    scope === "author"
+      ? "/content/content-by-author"
+      : scope === "admin"
+        ? "/admin/content"
+        : "/content";
 
   // 2. Only get Auth headers if it's the author's private list
-  const headers = scope === "author" ? await getAuthHeader() : {};
+  const headers =
+    scope === "author" || scope === "admin" ? await getAuthHeader() : {};
 
   try {
-    const res = await fetch(`${API_BASE_URL}${endpoint}?page=${page}`, {
+    const res = await fetch(`${API_BASE_URL}${endpoint}?page=${page}&take=5`, {
       headers,
-      next: { tags: [scope === "author" ? "author-content" : "content-list"] },
-      cache: scope === "author" ? "no-store" : "force-cache",
     });
 
     if (!res.ok) return null;
-    return await res.json();
+    const contentRes = await res.json();
+    console.log({ contentRes });
+    return contentRes;
   } catch (error) {
     console.error(`Error fetching ${scope} content:`, error);
     return null;
@@ -57,8 +63,8 @@ export async function getContentList(
 export async function getContentById(id: number): Promise<ContentItem | null> {
   const headers = await getAuthHeader();
   const res = await fetch(`${API_BASE_URL}/content/${id}`, {
-    next: { tags: [`content-${id}`] },
     headers,
+    cache: "no-store",
   });
 
   const result = await res.json();
@@ -142,7 +148,7 @@ export async function deleteContent(
 
 export async function getComments(id: number): Promise<CommentRes[]> {
   const res = await fetch(`${API_BASE_URL}/content/${id}/comments`, {
-    next: { tags: [`comments-${id}`] },
+    cache: "no-store",
   });
   return res.ok ? await res.json() : [];
 }
@@ -174,7 +180,7 @@ export async function postComment(
 
 export async function getRatings(id: number): Promise<RatingRes[]> {
   const res = await fetch(`${API_BASE_URL}/content/${id}/ratings`, {
-    next: { tags: [`ratings-${id}`] },
+    cache: "no-store",
   });
   return res.ok ? await res.json() : [];
 }
@@ -194,21 +200,26 @@ export async function postRating(
 
 // --- 4. ADMIN CATEGORIES ---
 
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(
+  page: number = 1,
+): Promise<CategoryListRes | null> {
   const headers = await getAuthHeader();
-  const res = await fetch(`${API_BASE_URL}/admin/content-categories`, {
-    headers,
-    next: { tags: ["categories"] },
-  });
+  const res = await fetch(
+    `${API_BASE_URL}/admin/content-categories?take=5&page=${page}`,
+    {
+      headers,
+    },
+  );
   const categories = await res.json();
   console.log(categories);
-  return res.ok ? categories : [];
+  return res.ok ? categories : null;
 }
 
 export async function getCategoryById(id: number): Promise<Category | null> {
   const headers = await getAuthHeader();
   const res = await fetch(`${API_BASE_URL}/admin/content-categories/${id}`, {
     headers,
+    cache: "no-store",
   });
   return res.ok ? await res.json() : null;
 }
@@ -259,6 +270,7 @@ export async function getAnalytics(id: number): Promise<AnalyticsRes | null> {
   const headers = await getAuthHeader();
   const res = await fetch(`${API_BASE_URL}/content/${id}/analytics`, {
     headers,
+    cache: "no-store",
   });
   return res.ok ? await res.json() : null;
 }
@@ -324,7 +336,10 @@ export async function addContentCategory(data: {
   try {
     const res = await fetch(`${API_BASE_URL}/admin/content-categories`, {
       method: "POST",
-      headers: await getAuthHeader(),
+      headers: {
+        ...(await getAuthHeader()),
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
 

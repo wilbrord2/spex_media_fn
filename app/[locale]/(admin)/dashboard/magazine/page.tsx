@@ -23,6 +23,7 @@ import {
   HiXMark,
   HiCheck,
   HiOutlineXCircle,
+  HiOutlineInbox,
 } from "react-icons/hi2";
 import Image from "next/image";
 import {
@@ -46,10 +47,22 @@ export default function MagazineDashboard() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageInfo, setPageInfo] = useState({ totalContents: 0, pageCount: 0 });
+  const [pageInfo, setPageInfo] = useState({
+    totalContents: 0,
+    pageCount: 0,
+    hasNextPage: false,
+  });
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+  const [deleteCatConfirmId, setDeleteCatConfirmId] = useState<number | null>(
+    null,
+  );
 
   const [categories, setCategories] = useState<any[]>([]);
+  const [catPage, setCatPage] = useState(1);
+  const [catPageInfo, setCatPageInfo] = useState({
+    pageCount: 0,
+    hasNextPage: false,
+  });
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [catForm, setCatForm] = useState({ name: "", description: "" });
   const [catLoading, setCatLoading] = useState(false);
@@ -64,9 +77,9 @@ export default function MagazineDashboard() {
       const [contentRes, catsRes] = await Promise.all([
         getContentList(
           currentPage,
-          role === "CONTENT_PROVIDER" ? "author" : "public",
+          role === "CONTENT_PROVIDER" ? "author" : "admin",
         ),
-        getCategories(),
+        getCategories(catPage),
       ]);
 
       if (contentRes) {
@@ -74,13 +87,20 @@ export default function MagazineDashboard() {
         setPageInfo({
           totalContents: contentRes.totalContents,
           pageCount: contentRes.pageCount,
+          hasNextPage: !!contentRes.hasNextPage,
         });
       }
-      if (catsRes) setCategories(catsRes);
+      if (catsRes) {
+        setCategories(catsRes.items || []);
+        setCatPageInfo({
+          pageCount: catsRes.pageCount || 1,
+          hasNextPage: !!catsRes.hasNextPage,
+        });
+      }
     } finally {
       setLoading(false);
     }
-  }, [currentPage, role]);
+  }, [currentPage, catPage, role]);
 
   useEffect(() => {
     loadData();
@@ -95,34 +115,34 @@ export default function MagazineDashboard() {
       toast.success("Category created");
       setCatForm({ name: "", description: "" });
       setIsAddingCategory(false);
-      const updated = await getCategories();
-      setCategories(updated || []);
+      loadData();
     } else {
       toast.error(result.message[0] || "Failed to create category");
     }
     setCatLoading(false);
   };
 
-  const handleDeleteCategory = async (id: number) => {
-    const success = await deleteContentCategory(id);
+  const confirmDeleteCategory = async () => {
+    if (!deleteCatConfirmId) return;
+    const success = await deleteContentCategory(deleteCatConfirmId);
     if (success) {
       toast.success("Category removed");
-      setCategories(categories.filter((c) => c.id !== id));
+      setCategories(categories.filter((c) => c.id !== deleteCatConfirmId));
+    } else {
+      toast.error("Failed to delete category");
     }
+    setDeleteCatConfirmId(null);
   };
 
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
-
     const result = await deleteContent(deleteConfirmId);
-
     if (result.success) {
       toast.success(result.message);
       setArticles(articles.filter((a) => a.id !== deleteConfirmId));
     } else {
       toast.error(result.message);
     }
-
     setDeleteConfirmId(null);
   };
 
@@ -243,90 +263,108 @@ export default function MagazineDashboard() {
           </div>
 
           <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
-            <div className="divide-y divide-border min-h-[300px]">
-              {loading
-                ? Array.from({ length: 4 }).map((_, i) => (
-                    <SkeletonRow key={i} />
-                  ))
-                : filteredArticles.map((article) => (
-                    <div
-                      key={article.id}
-                      className="p-4 md:p-5 hover:bg-accent/5 transition-all group"
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-start gap-4">
-                          <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-border shrink-0 bg-accent shadow-sm">
-                            <Image
-                              src={article.coverImage}
-                              fill
-                              className="object-cover"
-                              alt=""
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <h3 className="font-black text-sm md:text-base leading-tight group-hover:text-primary transition-colors line-clamp-2">
-                              {article.title}
-                            </h3>
-                            <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
-                              <span className="text-[10px] text-muted-foreground font-bold uppercase flex items-center gap-1">
-                                <HiOutlineClock className="text-primary" />{" "}
-                                {new Date(
-                                  article.createdAt,
-                                ).toLocaleDateString()}
-                              </span>
-                              <StatusBadge status={article.status} />
-                            </div>
-                          </div>
+            <div className="divide-y divide-border min-h-[300px] flex flex-col">
+              {loading ? (
+                Array.from({ length: 4 }).map((_, i) => <SkeletonRow key={i} />)
+              ) : filteredArticles.length > 0 ? (
+                filteredArticles.map((article) => (
+                  <div
+                    key={article.id}
+                    className="p-4 md:p-5 hover:bg-accent/5 transition-all group"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-border shrink-0 bg-accent shadow-sm">
+                          <Image
+                            src={article.coverImage}
+                            fill
+                            className="object-cover"
+                            alt=""
+                          />
                         </div>
-                        <div className="flex items-center gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-border/50 justify-between sm:justify-end">
-                          <button
-                            onClick={() => setSelectedArticle(article)}
-                            className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-md cursor-pointer hover:bg-primary/90 transition-all"
-                          >
-                            {isAdmin &&
-                            ["PENDING_REVIEW", "PENDING"].includes(
-                              article.status,
-                            )
-                              ? "Review"
-                              : "Preview"}
-                          </button>
-                          {isAdmin && (
-                            <button
-                              onClick={() => {
-                                setDeleteConfirmId(article.id);
-                              }}
-                              className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-500/20"
-                            >
-                              <HiOutlineTrash size={18} />
-                            </button>
-                          )}
+                        <div className="space-y-1">
+                          <h3 className="font-black text-sm md:text-base leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                            {article.title}
+                          </h3>
+                          <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
+                            <span className="text-[10px] text-muted-foreground font-bold uppercase flex items-center gap-1">
+                              <HiOutlineClock className="text-primary" />{" "}
+                              {new Date(article.createdAt).toLocaleDateString()}
+                            </span>
+                            <StatusBadge status={article.status} />
+                          </div>
                         </div>
                       </div>
+                      <div className="flex items-center gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-border/50 justify-between sm:justify-end">
+                        <button
+                          onClick={() => setSelectedArticle(article)}
+                          className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-md cursor-pointer hover:bg-primary/90 transition-all"
+                        >
+                          {isAdmin &&
+                          ["PENDING_REVIEW", "PENDING"].includes(article.status)
+                            ? "Review"
+                            : "Preview"}
+                        </button>
+                        {isAdmin && (
+                          <button
+                            onClick={() => {
+                              setDeleteConfirmId(article.id);
+                            }}
+                            className="p-2.5 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-500/20"
+                          >
+                            <HiOutlineTrash size={18} />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  ))}
+                  </div>
+                ))
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-4">
+                  <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-muted-foreground/40">
+                    <HiOutlineInbox size={32} />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-black uppercase text-sm tracking-tight">
+                      No articles found
+                    </h3>
+                    <p className="text-muted-foreground text-xs max-w-[200px] mx-auto">
+                      Start building your magazine by creating your first entry.
+                    </p>
+                  </div>
+                  <Link
+                    href="/dashboard/magazine/create"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform"
+                  >
+                    <HiOutlinePlus size={14} /> Create First Article
+                  </Link>
+                </div>
+              )}
             </div>
 
-            <div className="p-4 border-t border-border flex items-center justify-between bg-accent/5">
-              <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">
-                Page {currentPage} of {pageInfo.pageCount}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  disabled={currentPage === 1 || loading}
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                  className="p-2 rounded-xl bg-card border border-border hover:bg-primary hover:text-white disabled:opacity-20 transition-all"
-                >
-                  <HiChevronLeft size={18} />
-                </button>
-                <button
-                  disabled={currentPage === pageInfo.pageCount || loading}
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                  className="p-2 rounded-xl bg-card border border-border hover:bg-primary hover:text-white disabled:opacity-20 transition-all"
-                >
-                  <HiChevronRight size={18} />
-                </button>
+            {filteredArticles.length > 0 && (
+              <div className="p-4 border-t border-border flex items-center justify-between bg-accent/5">
+                <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">
+                  Page {currentPage} of {pageInfo.pageCount}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    disabled={currentPage === 1 || loading}
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                    className="p-2 rounded-xl bg-card border border-border hover:bg-primary hover:text-white disabled:opacity-20 transition-all"
+                  >
+                    <HiChevronLeft size={18} />
+                  </button>
+                  <button
+                    disabled={!pageInfo.hasNextPage || loading}
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                    className="p-2 rounded-xl bg-card border border-border hover:bg-primary hover:text-white disabled:opacity-20 transition-all"
+                  >
+                    <HiChevronRight size={18} />
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -343,6 +381,68 @@ export default function MagazineDashboard() {
                 <HiOutlinePlus size={16} />
               </button>
             )}
+          </div>
+          <div className="bg-card border border-border rounded-2xl overflow-hidden divide-y divide-border">
+            <div className="min-h-[200px]">
+              {categories.length === 0 ? (
+                <div className="p-10 text-center">
+                  <p className="text-[10px] font-bold uppercase text-muted-foreground">
+                    No categories
+                  </p>
+                </div>
+              ) : (
+                categories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="p-4 flex items-center justify-between group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <HiOutlineTag size={16} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-black uppercase tracking-tight">
+                          {cat.name}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground line-clamp-1">
+                          {cat.description}
+                        </p>
+                      </div>
+                    </div>
+                    {isAdmin && (
+                      <button
+                        onClick={() => setDeleteCatConfirmId(cat.id)}
+                        className="p-2 text-muted-foreground hover:text-rose-500 cursor-pointer transition-all"
+                      >
+                        <HiOutlineTrash size={16} />
+                      </button>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="p-3 border-t border-border flex items-center justify-between bg-accent/5">
+              <span className="text-[9px] font-black uppercase text-muted-foreground tracking-widest">
+                Pg {catPage} / {catPageInfo.pageCount}
+              </span>
+              <div className="flex gap-1.5">
+                <button
+                  disabled={catPage === 1 || loading}
+                  onClick={() => setCatPage((p) => p - 1)}
+                  className="p-1.5 rounded-lg bg-card border border-border hover:bg-primary hover:text-white disabled:opacity-20 transition-all"
+                >
+                  <HiChevronLeft size={14} />
+                </button>
+                <button
+                  disabled={!catPageInfo.hasNextPage || loading}
+                  onClick={() => setCatPage((p) => p + 1)}
+                  className="p-1.5 rounded-lg bg-card border border-border hover:bg-primary hover:text-white disabled:opacity-20 transition-all"
+                >
+                  <HiChevronRight size={14} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -416,6 +516,37 @@ export default function MagazineDashboard() {
               </button>
               <button
                 onClick={confirmDelete}
+                className="flex-1 py-3 rounded-xl bg-rose-500 text-white text-xs font-black uppercase"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {deleteCatConfirmId && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-card p-6 rounded-2xl w-full max-w-sm border border-border text-center">
+            <HiOutlineExclamationTriangle
+              className="mx-auto text-rose-500 mb-4"
+              size={48}
+            />
+            <h3 className="font-black uppercase text-sm mb-2 tracking-widest">
+              Remove Category?
+            </h3>
+            <p className="text-muted-foreground text-xs mb-6">
+              This action cannot be undone. All linked articles may lose this
+              category assignment.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setDeleteCatConfirmId(null)}
+                className="flex-1 py-3 rounded-xl bg-accent text-xs font-black uppercase"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteCategory}
                 className="flex-1 py-3 rounded-xl bg-rose-500 text-white text-xs font-black uppercase"
               >
                 Delete

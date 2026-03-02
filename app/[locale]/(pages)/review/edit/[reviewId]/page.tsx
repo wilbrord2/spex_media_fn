@@ -92,7 +92,7 @@ export default function EditContentPage({
           editor.commands.setContent(article.content);
         }
       }
-      if (cats) setCategories(cats);
+      if (cats) setCategories(cats.items);
       setLoading(false);
     }
     fetchData();

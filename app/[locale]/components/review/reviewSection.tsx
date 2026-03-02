@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import ContentCard from "../card/contentCard";
 import RedirectionBtn from "../Buttons/redirectionBtn";
-import { getContentList, getCategories } from "@/app/actions/review";
+import { getContentList } from "@/app/actions/review";
 import { ContentItem, Category } from "@/lib/dto";
 
 export default function ArticlesSection() {
@@ -17,12 +17,32 @@ export default function ArticlesSection() {
 
   useEffect(() => {
     async function loadData() {
-      const [contentData] = await Promise.all([
-        getContentList(1),
-        // getCategories(),
-      ]);
-      if (contentData) setArticles(contentData.contentList);
-      // if (categoryData) setCategories(categoryData);
+      const [contentData] = await Promise.all([getContentList(1)]);
+      if (contentData) {
+        setArticles(contentData.contentList);
+
+        // Extract unique categories from articles
+        const uniqueCategories: Category[] = [];
+        const seen = new Set<number>();
+
+        contentData.contentList.forEach((item: ContentItem) => {
+          if (!seen.has(item.category.id)) {
+            seen.add(item.category.id);
+            uniqueCategories.push(item.category);
+          }
+        });
+
+        // Prepend "All" category
+        const allCategory: Category = {
+          id: 0,
+          name: "All",
+          description: "Show all articles regardless of category",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        setCategories([allCategory, ...uniqueCategories]);
+      }
       setLoading(false);
     }
     loadData();
@@ -58,17 +78,7 @@ export default function ArticlesSection() {
 
       {/* Category Buttons */}
       <div className="flex justify-center gap-3 flex-wrap mb-10">
-        <button
-          onClick={() => setActive("All")}
-          className={`px-4 py-2 rounded-full text-sm border transition ${
-            active === "All"
-              ? "bg-primary text-white"
-              : "bg-gray-100 dark:bg-gray-700"
-          }`}
-        >
-          All
-        </button>
-        {/* {categories.map((cat) => (
+        {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setActive(cat.name)}
@@ -80,35 +90,43 @@ export default function ArticlesSection() {
           >
             {cat.name}
           </button>
-        ))} */}
+        ))}
       </div>
 
       {/* Articles Grid */}
       <div className="grid md:grid-cols-3 gap-8">
-        {filtered.map((item) => (
-          <ContentCard
-            id={item.id}
-            key={item.id}
-            url={`/review/${item.id}`}
-            category={item.category?.name}
-            date={new Date(item.createdAt).toLocaleDateString()}
-            description={""}
-            title={item.title}
-            img={item.coverImage}
-            name={item.authorName || "Unknown Author"}
-          />
-        ))}
+        {filtered.length > 0 ? (
+          filtered.map((item) => (
+            <ContentCard
+              id={item.id}
+              key={item.id}
+              url={`/review/${item.id}`}
+              category={item.category?.name}
+              date={new Date(item.createdAt).toLocaleDateString()}
+              description={""}
+              title={item.title}
+              img={item.coverImage}
+              name={item.authorName || "Unknown Author"}
+            />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-10 text-gray-600">
+            No articles available yet — check back soon for fresh insights!
+          </div>
+        )}
       </div>
 
       {/* Load More */}
-      <div className="flex justify-center">
-        <div onClick={loadMore}>
-          <RedirectionBtn
-            title={loadingMore ? "Loading..." : "Load More Articles"}
-            link="#"
-          />
+      {filtered.length > 0 && (
+        <div className="flex justify-center">
+          <div onClick={loadMore}>
+            <RedirectionBtn
+              title={loadingMore ? "Loading..." : "Load More Articles"}
+              link="#"
+            />
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

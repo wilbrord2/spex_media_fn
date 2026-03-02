@@ -26,7 +26,7 @@ export default function AddBookSlideOver({
     if (isOpen) {
       const loadCats = async () => {
         const data = await getCategories();
-        if (data) setCategories(data);
+        if (data) setCategories(data.items);
       };
       loadCats();
     }

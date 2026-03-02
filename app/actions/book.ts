@@ -1,5 +1,6 @@
 "use server";
 
+import { CategoryListRes } from "@/lib/dto";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -56,7 +57,7 @@ export interface BookResponse {
  */
 export async function getAdminBooks(): Promise<BookResponse | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/books`, {
+    const response = await fetch(`${API_BASE_URL}/books?take=5`, {
       cache: "no-store",
     });
     if (!response.ok) return null;
@@ -207,15 +208,20 @@ export async function toggleBookStatus(id: number, isPublished: boolean) {
   }
 }
 
-export async function getCategories() {
+export async function getCategories(
+  page: number = 1,
+): Promise<CategoryListRes | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/admin/book-categories`, {
-      headers: await getAuthHeader(),
-      next: { tags: ["categories"] },
-    });
-    return res.ok ? await res.json() : [];
+    const res = await fetch(
+      `${API_BASE_URL}/admin/book-categories?take=5&page=${page}`,
+      {
+        headers: await getAuthHeader(),
+        next: { tags: ["categories"] },
+      },
+    );
+    return res.ok ? await res.json() : null;
   } catch (error) {
-    return [];
+    return null;
   }
 }
 
