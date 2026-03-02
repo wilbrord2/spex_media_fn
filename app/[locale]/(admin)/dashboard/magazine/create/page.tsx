@@ -164,7 +164,7 @@ export default function CreateContentPage() {
               }
             />
           </div>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <label className="text-sm font-bold">Category</label>
             <select
               className="w-full p-3 rounded-md border dark:bg-gray-800 dark:border-gray-700 outline-none"
@@ -179,7 +179,7 @@ export default function CreateContentPage() {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
         </div>
 
         <div className="space-y-2">

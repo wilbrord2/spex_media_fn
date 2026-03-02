@@ -19,7 +19,7 @@ export default function ArticlesSection() {
     async function loadData() {
       const [contentData, categoryData] = await Promise.all([
         getContentList(1),
-        getCategories(),
+        // getCategories(),
       ]);
       if (contentData) setArticles(contentData.contentList);
       if (categoryData) setCategories(categoryData);
@@ -68,7 +68,7 @@ export default function ArticlesSection() {
         >
           All
         </button>
-        {categories.map((cat) => (
+        {/* {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setActive(cat.name)}
@@ -80,7 +80,7 @@ export default function ArticlesSection() {
           >
             {cat.name}
           </button>
-        ))}
+        ))} */}
       </div>
 
       {/* Articles Grid */}
