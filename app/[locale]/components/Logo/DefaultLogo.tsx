@@ -5,14 +5,18 @@ import Link from "next/link";
 export default function Logo({
   withTagline = false,
   descriptor,
+  logoStyles,
+  taglineStyles,
 }: {
   withTagline?: boolean;
   descriptor?: string;
+  logoStyles?: string;
+  taglineStyles?: string;
 }) {
   return (
     <Link
       href="/"
-      className="flex flex-col items-start relative text-[#0D1B2A] dark:text-white text-xl font-bold tracking-tight py-1"
+      className={`flex flex-col items-start relative text-[#0D1B2A] dark:text-white text-xl font-bold tracking-tight py-1 ${logoStyles || ""}`}
     >
       {/* Logo Row */}
       <div className="flex items-baseline-last relative">
@@ -28,12 +32,14 @@ export default function Logo({
         </span>
 
         {/* nama */}
-        <span className="leading-[0.85] text-2xl">nama {descriptor}</span>
+        <span className="leading-[0.85]">nama {descriptor}</span>
       </div>
 
       {/* Tagline */}
       {withTagline && (
-        <div className="leading-relaxed text-xs italic text-[#1B4965] dark:text-[#5FA8D3]">
+        <div
+          className={`leading-relaxed text-xs italic text-[#1B4965] dark:text-[#5FA8D3] ${taglineStyles || ""}`}
+        >
           information to business insights!
         </div>
       )}

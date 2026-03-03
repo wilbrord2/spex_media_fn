@@ -1,14 +1,28 @@
 "use client";
 import React, { useState } from "react";
 import Headline from "../text/headline";
+import { subscribeToNewsletter } from "../../../actions/auth";
+import { toast } from "sonner";
 
 const NewsletterSection = () => {
   const [email, setEmail] = useState("");
-  const handleSubscribe = () => {
-    // Handle subscription logic here
-    console.log(`Subscribed with email: ${email}`);
-    setEmail("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!email) return toast.error("Please enter an email address");
+
+    setLoading(true);
+    const res = await subscribeToNewsletter(email);
+
+    if (res.success) {
+      toast.success("Subscribed successfully!");
+      setEmail("");
+    } else {
+      toast.error(res.error || "Something went wrong");
+    }
+    setLoading(false);
   };
+
   return (
     <div className="lg:px-8 px-4 py-6 lg:py-16 bg-slate-200 dark:bg-gray-900 space-y-8 flex flex-col items-center justify-center rounded-lg">
       <Headline
@@ -19,16 +33,18 @@ const NewsletterSection = () => {
         <div className="flex items-center border border-primary rounded-md overflow-hidden">
           <input
             type="email"
+            disabled={loading}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="px-4 py-2 w-4/5  focus:outline-none"
+            className="px-4 py-2 w-4/5 focus:outline-none disabled:bg-gray-100"
           />
           <button
             onClick={handleSubscribe}
-            className="px-4 py-3 bg-primary text-sm font-bold text-white  hover:bg-primary/80 cursor-pointer"
+            disabled={loading}
+            className="px-4 py-3 bg-primary text-sm font-bold text-white hover:bg-primary/80 cursor-pointer disabled:opacity-70"
           >
-            Subscribe
+            {loading ? "Subscribing..." : "Subscribe"}
           </button>
         </div>
         <p className="text-gray-600 text-sm">

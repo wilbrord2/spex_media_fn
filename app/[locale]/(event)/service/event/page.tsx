@@ -52,7 +52,7 @@ const EVENTS: Event[] = [
   },
   {
     id: 2,
-    title: "Nexus Annual Book Fair",
+    title: "Inama Annual Book Fair",
     description:
       "Join us in New York or online for a celebration of literature, featuring over 100 authors.",
     date: "Nov 02",
@@ -197,7 +197,7 @@ const EventManagementServiceContent: React.FC = () => {
                 Upcoming Events
               </h2>
               <p className="text-foreground/60 text-base">
-                Connect with the Nexus community through workshops and panels.
+                Connect with the Inama community through workshops and panels.
               </p>
             </div>
             <div className="text-sm text-foreground/40 font-medium">

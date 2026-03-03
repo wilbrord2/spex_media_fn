@@ -14,25 +14,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "nexus",
+  title: "Inama",
   description:
-    "nexus Media & Communications Inc. is a pan-African media and communications company bringing brands and stories to life online. We design and develop engaging corporate websites that seamlessly integrate with dynamic digital platforms. Our flagship online publication, Business Weekly Review, delivers authoritative business insights and multimedia features, including YouTube video inserts, to connect audiences with Africa’s fast-growing business landscape.",
+    "Inama Media & Communications Inc. is a pan-African media and communications company bringing brands and stories to life online. We design and develop engaging corporate websites that seamlessly integrate with dynamic digital platforms. Our flagship online publication, Business Weekly Review, delivers authoritative business insights and multimedia features, including YouTube video inserts, to connect audiences with Africa’s fast-growing business landscape.",
 
   alternates: {
-    canonical: "https://nexusmedia.com",
+    canonical: "https://ianama.rw",
   },
 
   openGraph: {
-    title: "nexus Media & Communications Inc.",
+    title: "Inama Media & Communications Inc.",
     description:
       "Pan-African media company powering brands online through corporate websites, digital platforms, and Business Weekly Review magazine.",
-    url: "https://nexusmedia.com",
-    siteName: "nexus Media",
+    url: "https://ianama.rw",
+    siteName: "Inama Media",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "nexus Media & Communications Inc.",
+    title: "Inama Media & Communications Inc.",
     description:
       "Driving Africa’s digital media future with Business Weekly Review, corporate websites, and multimedia storytelling.",
   },

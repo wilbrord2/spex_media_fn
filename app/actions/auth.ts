@@ -196,3 +196,66 @@ export async function verifyEmail(
 
   return data;
 }
+
+/**
+ * POST /api/v1/subscribers
+ * Public: Allows users to subscribe to the newsletter
+ */
+export async function subscribeToNewsletter(
+  email: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/subscribers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (response.ok) {
+      return { success: true };
+    }
+
+    const errData = await response.json().catch(() => ({}));
+    return {
+      success: false,
+      error: errData.message || "Subscription failed. Please try again.",
+    };
+  } catch (error) {
+    return { success: false, error: "Connection error" };
+  }
+}
+
+/**
+ * GET /api/v1/subscribers
+ * Protected: Admin only access to view subscriber list
+ */
+export async function getSubscribers(
+  page: number = 1,
+  take: number = 5,
+): Promise<{
+  items: Array<{ id: number; email: string; createdAt: string }>;
+  page: number;
+  take: number;
+  totalItems: number;
+  pageCount: number;
+  hasNextPage: boolean;
+} | null> {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/subscribers?page=${page}&take=${take}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch Subscribers Error:", error);
+    return null;
+  }
+}

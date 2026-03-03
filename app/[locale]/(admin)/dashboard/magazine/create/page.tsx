@@ -118,7 +118,7 @@ export default function CreateContentPage() {
     const submitData = new FormData();
     submitData.append("title", formData.title);
     submitData.append("content", formData.content);
-    submitData.append("categoryId", "1");
+    submitData.append("categoryId", formData.categoryId);
     submitData.append("link", formData.link);
     submitData.append(
       "imageDescriptions",

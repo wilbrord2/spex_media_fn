@@ -9,10 +9,14 @@ const ServicePage = () => {
     <main className="text-gray-900 dark:text-gray-100">
       <Pageheader
         title="Our Services"
-        description="Discover the diverse services offered by Nexus Media Group, including Publishing, Event Management, and our Bookstore, all designed to deliver exceptional content, commerce, and experiences across Africa."
+        description="Discover the diverse services offered by Inama Media Group, including Publishing, Event Management, and our Bookstore, all designed to deliver exceptional content, commerce, and experiences across Africa."
         quickAction={
           <div className="w-full">
-            <WhiteBtn title="Signup" link="#" className="bg-red-900 text-white hover:bg-red-700" />
+            <WhiteBtn
+              title="Signup"
+              link="#"
+              className="bg-red-900 text-white hover:bg-red-700"
+            />
           </div>
         }
       />
@@ -22,7 +26,7 @@ const ServicePage = () => {
             Explore Our Core Services
           </h1>
           <p className="text-gray-700 dark:text-gray-300 max-w-3xl">
-            At Nexus Media Group, we pride ourselves on offering a comprehensive
+            At Inama Media Group, we pride ourselves on offering a comprehensive
             suite of services designed to meet the diverse needs of our clients
             and audiences across Africa. Our core services include:
           </p>

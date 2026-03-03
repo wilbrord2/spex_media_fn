@@ -53,7 +53,7 @@ export default function ArticleDetailSlideOver({
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center bg-black/40 backdrop-blur-sm md:p-5 ">
-      <div className="w-full max-w-5xl bg-background h-full shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300 md:rounded-2xl overflow-hidden">
+      <div className="w-full max-w-[1500px] bg-background h-full shadow-2xl flex flex-col animate-in slide-in-from-bottom duration-300 md:rounded-2xl overflow-hidden">
         {/* Header */}
         <div className="px-5 py-3 border-b border-border flex items-center justify-between bg-card">
           <h2 className="text-lg font-black uppercase tracking-tight">

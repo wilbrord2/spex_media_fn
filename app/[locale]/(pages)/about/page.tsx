@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
 import RedirectionBtn from "../../components/Buttons/redirectionBtn";
 import aboutus from "@/public/images/aboutus.jpeg";
-import logo from "@/public/logo/nexuslogo.png";
+import Logo from "@/app/[locale]/components/Logo/DefaultLogo";
 import InfoCard from "../../components/card/infocard";
 import { GiSpiralLollipop } from "react-icons/gi";
 import { GoEye } from "react-icons/go";
@@ -11,22 +12,46 @@ import StatItem from "../../components/text/stati";
 import { PiUsersThreeDuotone } from "react-icons/pi";
 import { TeamData } from "@/app/constants";
 import TeamCard from "../../components/card/teamcard";
+import { getContentList } from "@/app/actions/review";
+import { getAdminBooks } from "@/app/actions/book";
 
 const AboutPage = () => {
+  const [storiesCount, setStoriesCount] = React.useState(0);
+  const [booksCount, setBooksCount] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const stories = await getContentList();
+        const books = await getAdminBooks();
+        setStoriesCount(stories?.totalContents || 0);
+        setBooksCount(books?.books?.length || 0);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="">
       {/* top section */}
       <div className="grid grid-cols-1 p-4 md:grid-cols-2 max-w-4xl mx-auto gap-8 py-16 items-center justify-between">
         <div className="space-y-2">
-          <h1 className="text-lg font-medium uppercase">About us</h1>
-          <h2 className="text-4xl font-bold text-primary">
-            nexus Media & Communications Inc.
-          </h2>
+          <h1 className="text-4xl font-medium uppercase">
+            About <span className="font-bold text-primary">Inama</span>
+          </h1>
+
           <p className="text-gray-600 pb-6">
             Championing Africa's Business Renaissance Through Authentic
             Narratives
           </p>
-          <RedirectionBtn title="Register your Business" link="/signup" />
+          <RedirectionBtn title="Register your Business" link="/auth" />
         </div>
         <div>
           <img
@@ -39,18 +64,18 @@ const AboutPage = () => {
       {/* our story */}
       <div className="bg-slate-50 dark:bg-background py-16 px-8 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 w-full items-center justify-between max-width-container">
-          <div>
-            <img
-              src={logo.src}
-              alt="nexus Media & Communications Inc. Logo"
-              className="w-full h-auto mx-auto md:mx-0"
+          <div className="m-auto">
+            <Logo
+              withTagline
+              logoStyles="text-5xl!"
+              taglineStyles="text-2xl!"
             />
           </div>
           <div className="space-y-4 text-center">
             <h2 className="text-3xl font-semibold text-primary">Our Story</h2>
             <div className="text-gray-700 dark:text-gray-300 space-y-4">
               <p>
-                Founded in the heart of Africa's fastest-growing economy, nexus
+                Founded in the heart of Africa's fastest-growing economy, inama
                 Media & Communications Inc. emerged from a simple yet powerful
                 recognition: Africa's business narrative was being told by
                 others, often missing the nuance, context, and authentic voice
@@ -65,7 +90,7 @@ const AboutPage = () => {
               </p>
               <p>
                 {" "}
-                Today, nexus Media stands as the premier platform for
+                Today, inama Media stands as the premier platform for
                 pan-African business journalism, strategic communications, and
                 executive advisory services, trusted by Fortune 500 companies,
                 emerging African champions, and policy makers across the
@@ -144,7 +169,7 @@ const AboutPage = () => {
 
           {/* Subtitle */}
           <p className="max-w-3xl mx-auto mt-6 text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-            Meet the visionaries and experts driving nexus Media's mission to
+            Meet the visionaries and experts driving inama Media's mission to
             elevate African business narratives on the global stage.
           </p>
 
@@ -176,7 +201,7 @@ const AboutPage = () => {
 
           {/* Paragraph */}
           <p className="max-w-3xl mx-auto mt-6 text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-            Since our inception, nexus Media has been recognized for excellence
+            Since our inception, inama Media has been recognized for excellence
             in journalism, strategic communications, and our contribution to
             shaping positive African business narratives. Our work has been
             featured in leading international publications and has influenced
@@ -185,9 +210,21 @@ const AboutPage = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16">
-            <StatItem value={500} label="Stories Published" />
-            <StatItem value={50} label="Client Partnerships" />
-            <StatItem value={25} label="Countries Covered" />
+            {/* add a loading skeleton while fetching this data */}
+            {isLoading ? (
+              [1, 2, 3].map((i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="h-10 w-24 bg-gray-200 dark:bg-gray-800 mx-auto rounded-lg"></div>
+                  <div className="h-4 w-32 bg-gray-100 dark:bg-gray-900 mx-auto rounded mt-2"></div>
+                </div>
+              ))
+            ) : (
+              <>
+                <StatItem value={storiesCount} label="Stories Published" />
+                <StatItem value={booksCount} label="Books Published" />
+                <StatItem value={3} label="Events Organized" />
+              </>
+            )}
           </div>
         </div>
       </section>

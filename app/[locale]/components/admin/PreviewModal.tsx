@@ -42,7 +42,7 @@ export default function PreviewModal({
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-300">
-      <div className="bg-card border border-border w-full max-w-5xl max-h-[95vh] sm:max-h-[90vh] rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden scale-in text-foreground">
+      <div className="bg-card border border-border w-full max-w-[1500px] max-h-[95vh] sm:max-h-[90vh] rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden scale-in text-foreground">
         {/* Header */}
         <div className="px-4 sm:px-8 py-4 sm:py-5 border-b border-border flex items-center justify-between bg-muted/30">
           <div className="flex items-center gap-3 overflow-hidden">

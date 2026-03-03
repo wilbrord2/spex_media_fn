@@ -32,6 +32,7 @@ async function getAuthHeader(): Promise<Record<string, string>> {
 export async function getContentList(
   page: number = 1,
   scope: "public" | "author" | "admin" = "public",
+  categoryId?: number,
 ): Promise<ContentListRes | null> {
   // 1. Determine the endpoint based on scope
   const endpoint =
@@ -46,13 +47,15 @@ export async function getContentList(
     scope === "author" || scope === "admin" ? await getAuthHeader() : {};
 
   try {
-    const res = await fetch(`${API_BASE_URL}${endpoint}?page=${page}&take=5`, {
-      headers,
-    });
+    const res = await fetch(
+      `${API_BASE_URL}${endpoint}?page=${page}&take=5${categoryId ? `&categoryId=${categoryId}` : ""}`,
+      {
+        headers,
+      },
+    );
 
     if (!res.ok) return null;
     const contentRes = await res.json();
-    console.log({ contentRes });
     return contentRes;
   } catch (error) {
     console.error(`Error fetching ${scope} content:`, error);
@@ -111,8 +114,6 @@ export async function deleteContent(
       method: "DELETE",
       headers,
     });
-
-    console.log(`Delete Content Status: ${res.status}`);
 
     if (res.ok) {
       revalidatePath("/dashboard/magazine");
@@ -211,7 +212,6 @@ export async function getCategories(
     },
   );
   const categories = await res.json();
-  console.log(categories);
   return res.ok ? categories : null;
 }
 
@@ -228,14 +228,12 @@ export async function createCategory(
   data: CategoryInput,
 ): Promise<Category | { error: boolean }> {
   const headers = await getAuthHeader();
-  console.log(data);
 
   const res = await fetch(`${API_BASE_URL}/admin/content-categories`, {
     method: "POST",
     headers: { ...headers, "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  console.log(`Create Category Status: ${res.status}`);
   if (res.ok) safeRevalidate("categories");
   return res.ok ? await res.json() : { error: true };
 }
@@ -352,10 +350,6 @@ export async function addContentCategory(data: {
     } else {
       responseBody = await res.text();
     }
-
-    console.log("Add Content Category Request:", data);
-    console.log("Status:", res.status);
-    console.log("Response:", responseBody);
 
     if (!res.ok) {
       // Backend error (4xx / 5xx)

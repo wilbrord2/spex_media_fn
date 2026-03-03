@@ -351,19 +351,23 @@ export const ADVERTISING_PACKAGES = [
 
 export const PARTNERS = [
   {
-    name: "Nexus Media",
-    logoUrl: "/public/logo/nexuslogo.png",
+    name: "Google",
+    logoUrl:
+      "https://www.gstatic.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
   },
   {
-    name: "Partner 2",
-    logoUrl: undefined,
+    name: "Microsoft",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png",
   },
   {
-    name: "Partner 3",
-    logoUrl: undefined,
+    name: "Coca-Cola",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/512px-Coca-Cola_logo.svg.png",
   },
   {
-    name: "Partner 4",
-    logoUrl: undefined,
+    name: "Amazon",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/512px-Amazon_logo.svg.png",
   },
 ];

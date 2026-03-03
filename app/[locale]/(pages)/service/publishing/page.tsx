@@ -34,12 +34,12 @@ const PublishingServiceContent = () => {
           </div>
         }
       />
-      <div className="max-width-container mx-auto space-y-8 px-8 py-16">
+      <div className="container mx-auto space-y-8 px-8 py-16 ">
         <header className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+          <h1 className="text-3xl  font-extrabold mb-4 text-center">
             Discover Our Publishing Excellence
           </h1>
-          <p className="text-gray-700 dark:text-gray-300 max-w-3xl">
+          <p className="text-gray-700 dark:text-gray-300 ">
             Our Media Publishing Service is committed to producing content that
             resonates with diverse audiences across Africa. From in-depth
             analyses of current affairs to captivating lifestyle features, we
@@ -48,9 +48,11 @@ const PublishingServiceContent = () => {
         </header>
 
         {/* how to get started with us  */}
-        <div className="grid md:grid-cols-2 gap-8 items-start">
+        <div className="">
           <div>
-            <h2 className="text-2xl font-bold mb-4">How to Get Started</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              How to Get Started
+            </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
               Working with our publishing team is quick and straightforward. We
               provide an end-to-end service from editorial planning to
@@ -78,20 +80,12 @@ const PublishingServiceContent = () => {
               Ongoing weekly publishing.
             </p>
           </div>
-
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-blue-200 dark:border-gray-700 p-6 shadow-sm">
-            <h3 className="font-semibold mb-3">Request Starter Pack</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Tell us about your goals and we’ll propose a tailored plan.
-            </p>
-            <StartWithUsForm />
-          </div>
         </div>
 
         {/* advertising */}
         <section className="bg-gray-50 dark:bg-gray-900/40 py-12">
           <div className="max-width-container mx-auto px-6">
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold mb-6 text-center">
               Advertising & Sponsored Content
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
@@ -153,8 +147,8 @@ const PublishingServiceContent = () => {
 
         {/* our partners */}
         <section className="bg-gray-50 dark:bg-gray-900/40 py-12">
-          <div className="max-width-container mx-auto px-6">
-            <h2 className="text-2xl font-bold mb-6">Our Partners</h2>
+          <div className="max-width-container mx-auto px-6 text-center">
+            <h2 className="text-2xl font-bold mb-6 ">Our Partners</h2>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
               We collaborate with broadcasters, research institutions and
               commercial partners to amplify reach.

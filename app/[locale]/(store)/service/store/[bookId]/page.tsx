@@ -4,7 +4,7 @@ import PdfViewer from "@/app/[locale]/components/model/PdfViewer";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState, useContext, Suspense } from "react";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import {
   FiArrowRight,
   FiChevronDown,
@@ -16,10 +16,12 @@ import {
   FiTruck,
   FiZoomIn,
   FiLoader,
+  FiSend,
+  FiMessageSquare,
 } from "react-icons/fi";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
-import { Book, getBookById } from "@/app/actions/book";
+import { Book, getBookById, rateBook, commentOnBook } from "@/app/actions/book";
 import { CartContext } from "@/app/[locale]/context";
 import { CartBook } from "@/app/[locale]/context";
 
@@ -47,44 +49,70 @@ const NexusBookDetailsContent: React.FC = () => {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  // --- Fetch API Data ---
+  // New API States
+  const [userRating, setUserRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [isRating, setIsRating] = useState(false);
+  const [comment, setComment] = useState("");
+  const [isCommenting, setIsCommenting] = useState(false);
+
+  const fetchBook = async () => {
+    const data = await getBookById(bookId);
+    if (data) setBook(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    console.log(bookId);
-
-    const fetchBook = async () => {
-      setLoading(true);
-      const data = await getBookById(bookId);
-
-      if (data) {
-        setBook(data);
-      }
-      setLoading(false);
-    };
     if (bookId) fetchBook();
   }, [bookId]);
 
-  if (loading) {
+  // --- Handlers ---
+  const handleRate = async (rating: number) => {
+    setIsRating(true);
+    const res = await rateBook(bookId, rating);
+    if (res.success) {
+      toast.success("Thank you for your rating!");
+      setUserRating(rating);
+      fetchBook(); // Refresh average
+    } else {
+      toast.error(res.error || "Failed to rate");
+    }
+    setIsRating(false);
+  };
+
+  const handleComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+    setIsCommenting(true);
+    const res = await commentOnBook(bookId, comment);
+    if (res.success) {
+      toast.success("Comment posted");
+      setComment("");
+      fetchBook(); // Refresh comments list
+    } else {
+      toast.error(res.error || "Failed to post comment");
+    }
+    setIsCommenting(false);
+  };
+
+  if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <FiLoader className="animate-spin text-primary" size={32} />
       </div>
     );
-  }
-
-  if (!book) {
+  if (!book)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-foreground/40">Book not found.</p>
       </div>
     );
-  }
 
-  // --- Map API Prices to Formats ---
   const FORMATS: FormatOption[] = [
     {
       id: "platform",
       title: "Read on Platform",
-      description: "Instant access via Nexus Reader.",
+      description: "Instant access via Inama Reader.",
       price: book.priceReadOnPlatform || 9.99,
       icon: <FiSmartphone size={20} />,
     },
@@ -120,18 +148,10 @@ const NexusBookDetailsContent: React.FC = () => {
     }
   };
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string) =>
     navigator.clipboard
       .writeText(text)
       .then(() => toast.success("Link copied to clipboard!"));
-  };
-
-  const handleWishlist = () => {
-    setIsInWishlist(!isInWishlist);
-    toast.success(
-      isInWishlist ? "Removed from wishlist" : "Added to wishlist!",
-    );
-  };
 
   return (
     <div className="bg-background text-foreground min-h-screen font-sans selection:bg-primary/30 pb-20">
@@ -143,7 +163,6 @@ const NexusBookDetailsContent: React.FC = () => {
       />
 
       <main className="relative w-full overflow-x-hidden">
-        {/* Ambient Background Blur */}
         <div className="absolute top-0 left-0 right-0 h-[600px] overflow-hidden -z-10 pointer-events-none">
           <div
             className="w-full h-full bg-cover bg-center blur-[100px] opacity-10 dark:opacity-20 scale-110"
@@ -152,8 +171,7 @@ const NexusBookDetailsContent: React.FC = () => {
           <div className="absolute inset-0 bg-linear-to-b from-transparent via-background/80 to-background" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          {/* Breadcrumbs */}
+        <div className="max-w-[1500px] mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <nav className="flex flex-wrap gap-2 py-4 mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground/30">
             <Link
               href="/service/store"
@@ -173,7 +191,6 @@ const NexusBookDetailsContent: React.FC = () => {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-2">
-            {/* Left Column */}
             <div className="lg:col-span-4 xl:col-span-3 flex flex-col items-center lg:items-start gap-6">
               <div className="relative group w-full max-w-[320px] aspect-2/3 rounded-2xl shadow-2xl overflow-hidden bg-foreground/5 border border-foreground/5 transition-transform duration-500 hover:scale-[1.02]">
                 <Image
@@ -209,26 +226,14 @@ const NexusBookDetailsContent: React.FC = () => {
                   label="Share"
                   onClick={handleShare}
                 />
-                {/* <ActionButton
-                  icon={
-                    <FiHeart
-                      fill={isInWishlist ? "currentColor" : "none"}
-                      color={isInWishlist ? "#ff6b6b" : "currentColor"}
-                    />
-                  }
-                  label="Wishlist"
-                  onClick={handleWishlist}
-                /> */}
               </div>
             </div>
 
-            {/* Right Column */}
             <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-8">
               <div className="flex flex-col gap-4 border-b border-foreground/10 pb-8">
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9]">
                   {book.title}
                 </h1>
-
                 <div className="flex flex-wrap items-center gap-6 mt-2">
                   <div className="flex items-center gap-2">
                     <span className="text-foreground/40 text-sm">By</span>
@@ -258,10 +263,10 @@ const NexusBookDetailsContent: React.FC = () => {
                         }
                       />
                     ))}
-                    {(book.averageRating || 5) % 1 !== 0 && <FaStarHalfAlt />}
+                    {(book.averageRating || 0) % 1 !== 0 && <FaStarHalfAlt />}
                   </div>
                   <span className="text-sm font-bold">
-                    {book.averageRating || "5.0"}
+                    {book.averageRating || "0.0"}
                   </span>
                   <span className="text-sm text-foreground/40">
                     ({book.ratings?.length || 0} reviews)
@@ -269,7 +274,6 @@ const NexusBookDetailsContent: React.FC = () => {
                 </div>
               </div>
 
-              {/* Synopsis */}
               <div className="flex flex-col gap-3 max-w-3xl">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">
                   Synopsis
@@ -292,7 +296,6 @@ const NexusBookDetailsContent: React.FC = () => {
                 </button>
               </div>
 
-              {/* Format Selection */}
               <div className="flex flex-col gap-4">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">
                   Select Format
@@ -309,7 +312,6 @@ const NexusBookDetailsContent: React.FC = () => {
                 </div>
               </div>
 
-              {/* Bottom CTA Bar */}
               <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-3xl bg-foreground/3 border border-foreground/5 shadow-inner">
                 <div className="flex-1">
                   <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest mb-1">
@@ -333,11 +335,10 @@ const NexusBookDetailsContent: React.FC = () => {
                 </button>
               </div>
 
-              {/* Specifications */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t border-foreground/10">
                 <Spec
                   label="Publisher"
-                  value={book.authorName! || "Nexus Press"}
+                  value={book.authorName! || "Inama Press"}
                 />
                 <Spec
                   label="Released"
@@ -350,54 +351,116 @@ const NexusBookDetailsContent: React.FC = () => {
                 <Spec label="Language" value={book.language || "English"} />
               </div>
 
-              {/* More from Author Placeholder */}
-              {/* <div className="mt-12 border-t border-foreground/10 pt-12">
-                <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-2xl font-black tracking-tight">
-                    More from {book.authorName}
-                  </h3>
-                  <Link
-                    href="#"
-                    className="text-primary font-bold text-sm hover:underline flex items-center gap-1"
-                  >
-                    View Profile <FiArrowRight size={14} />
-                  </Link>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                  <AuthorBookCard
-                    title={book.title!}
-                    category={book.category?.name || "General"}
-                    image={book.coverImage!}
-                  />
-                  
-                  <Link
-                    href="/review"
-                    className="group flex flex-col gap-3 col-span-2 md:col-span-2"
-                  >
-                    <div className="w-full h-full min-h-[180px] bg-foreground/3 rounded-2xl overflow-hidden relative border border-foreground/5 flex flex-row transition-all hover:border-primary/30">
-                      <div className="w-1/3 relative">
-                        <Image
-                          src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800"
-                          alt="Interview"
-                          fill
-                          className="object-cover"
-                        />
+              {/* COMMUNITY: RATING & COMMENTS SECTION */}
+              <div className="mt-12 pt-12 border-t border-foreground/10 grid grid-cols-1 xl:grid-cols-12 gap-12">
+                {/* Left: Rating & Submit Comment */}
+                <div className="xl:col-span-5 space-y-8">
+                  <div>
+                    <h3 className="text-xl font-black uppercase tracking-tighter mb-4">
+                      Rate this Work
+                    </h3>
+                    <div className="flex items-center gap-4 bg-foreground/3 p-6 rounded-2xl border border-foreground/5">
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            disabled={isRating}
+                            onMouseEnter={() => setHoverRating(star)}
+                            onMouseLeave={() => setHoverRating(0)}
+                            onClick={() => handleRate(star)}
+                            className="text-2xl transition-all hover:scale-125 disabled:opacity-50"
+                          >
+                            {star <= (hoverRating || userRating) ? (
+                              <FaStar className="text-amber-500" />
+                            ) : (
+                              <FaRegStar className="text-foreground/20" />
+                            )}
+                          </button>
+                        ))}
                       </div>
-                      <div className="flex-1 p-6 flex flex-col justify-center">
-                        <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-2">
-                          Nexus Magazine
-                        </span>
-                        <h4 className="text-lg font-bold group-hover:text-primary transition-colors mb-2 leading-tight">
-                          Defining the Digital Shelf
-                        </h4>
-                        <p className="text-xs text-foreground/50 line-clamp-2 leading-relaxed">
-                          {book.authorName} discusses the future of writing.
+                      <span className="text-[10px] font-black uppercase text-foreground/40 tracking-widest">
+                        {isRating
+                          ? "Saving..."
+                          : userRating > 0
+                            ? "Your Rating"
+                            : "Tap to rate"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-black uppercase tracking-tighter mb-4">
+                      Leave a Thought
+                    </h3>
+                    <form onSubmit={handleComment} className="relative">
+                      <textarea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="What did you think of this book?"
+                        className="w-full bg-foreground/3 border border-foreground/5 rounded-2xl p-4 text-sm font-medium focus:ring-1 ring-primary min-h-[120px] transition-all"
+                      />
+                      <button
+                        type="submit"
+                        disabled={isCommenting || !comment.trim()}
+                        className="absolute bottom-4 right-4 bg-primary text-white p-3 rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:grayscale"
+                      >
+                        {isCommenting ? (
+                          <FiLoader className="animate-spin" />
+                        ) : (
+                          <FiSend />
+                        )}
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                {/* Right: Comments List */}
+                <div className="xl:col-span-7">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-black uppercase tracking-tighter">
+                      Reader Reviews
+                    </h3>
+                    <span className="text-[10px] font-black px-3 py-1 bg-foreground/5 rounded-full uppercase tracking-widest">
+                      {book.comments?.length || 0} Comments
+                    </span>
+                  </div>
+
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                    {book.comments?.length === 0 ? (
+                      <div className="py-20 text-center border-2 border-dashed border-foreground/5 rounded-3xl">
+                        <FiMessageSquare
+                          className="mx-auto text-foreground/10 mb-2"
+                          size={32}
+                        />
+                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
+                          Be the first to comment
                         </p>
                       </div>
-                    </div>
-                  </Link>
+                    ) : (
+                      book.comments
+                        ?.map((c, i) => (
+                          <div
+                            key={i}
+                            className="bg-foreground/2 p-5 rounded-2xl border border-foreground/5 hover:border-foreground/10 transition-all"
+                          >
+                            <div className="flex justify-between items-start mb-2">
+                              <p className="text-sm font-black uppercase tracking-tight">
+                                {c.fullName || "Inama Reader"}
+                              </p>
+                              <span className="text-[9px] font-black text-foreground/20 uppercase">
+                                Verified Member
+                              </span>
+                            </div>
+                            <p className="text-sm text-foreground/60 leading-relaxed font-medium italic">
+                              "{c.comment}"
+                            </p>
+                          </div>
+                        ))
+                        .reverse()
+                    )}
+                  </div>
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
@@ -406,7 +469,7 @@ const NexusBookDetailsContent: React.FC = () => {
   );
 };
 
-// --- Helper Components remain unchanged ---
+// --- Helper Components ---
 const ActionButton = ({
   icon,
   label,
@@ -468,35 +531,6 @@ const FormatCard = ({
       <span className="text-lg font-black">${format.price}</span>
     </div>
   </div>
-);
-
-const AuthorBookCard = ({
-  title,
-  category,
-  image,
-}: {
-  title: string;
-  category: string;
-  image: string;
-}) => (
-  <a className="group flex flex-col gap-3" href="#">
-    <div className="w-full aspect-2/3 bg-foreground/5 rounded-2xl overflow-hidden relative border border-foreground/5">
-      <Image
-        src={image}
-        alt={title}
-        fill
-        className="object-cover group-hover:scale-105 transition-transform duration-500"
-      />
-    </div>
-    <div>
-      <h4 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-1">
-        {title}
-      </h4>
-      <p className="text-[9px] font-black text-foreground/30 uppercase tracking-widest mt-1">
-        {category}
-      </p>
-    </div>
-  </a>
 );
 
 const Spec = ({ label, value }: { label: string; value: string }) => (

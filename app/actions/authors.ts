@@ -57,8 +57,6 @@ export async function getAuthorsList({
     sortingOptions: sortingOptions,
   });
 
-  console.log({ queryParams });
-
   try {
     const response = await fetch(
       `${API_BASE_URL}/admin/list-available-signups?${queryParams}`,
@@ -71,7 +69,6 @@ export async function getAuthorsList({
         cache: "no-store",
       },
     );
-    console.log(response);
 
     if (!response.ok) throw new Error("Failed to fetch authors");
 

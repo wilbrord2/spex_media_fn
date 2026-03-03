@@ -82,7 +82,7 @@ const InsightPage = () => {
           {/* Left: Header Content */}
           <div className="text-white text-center lg:text-left flex flex-col justify-center gap-6">
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-              Nexus Insights
+              Inama Insights
             </h1>
             <p className="text-lg leading-relaxed text-white/90">
               Dedicated to decoding the complexities of African business. We
@@ -171,7 +171,7 @@ const InsightPage = () => {
       </div>
 
       {/* General Insights Grid */}
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-[1500px] mx-auto px-4 md:px-8 py-8 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filtered.map((item, index) => (
           <Link
             key={index}

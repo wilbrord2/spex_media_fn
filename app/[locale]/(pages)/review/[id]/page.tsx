@@ -110,7 +110,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
     );
 
   return (
-    <div className="mt-16 min-h-screen max-w-5xl bg-white dark:bg-gray-950 relative mx-auto">
+    <div className="mt-16 min-h-screen max-w-[1500px] bg-white dark:bg-gray-950 relative mx-auto">
       {/* Hero Image */}
       <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-md">
         <Image

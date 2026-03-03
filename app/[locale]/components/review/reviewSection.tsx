@@ -3,55 +3,56 @@
 import { useState, useEffect } from "react";
 import ContentCard from "../card/contentCard";
 import RedirectionBtn from "../Buttons/redirectionBtn";
-import { getContentList } from "@/app/actions/review";
+import { getContentList, getCategories } from "@/app/actions/review";
 import { ContentItem, Category } from "@/lib/dto";
 
 export default function ArticlesSection() {
   const [articles, setArticles] = useState<ContentItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [active, setActive] = useState("All");
+  const [active, setActive] = useState<number | null>(null); // Stores Category ID, null means "All"
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
 
+  // Initial Load: Categories only
   useEffect(() => {
-    async function loadData() {
-      const [contentData] = await Promise.all([getContentList(1)]);
+    async function loadInitialData() {
+      const categoriesData = await getCategories();
+      if (categoriesData) {
+        setCategories(categoriesData?.items || []);
+      }
+    }
+    loadInitialData();
+  }, []);
+
+  // Fetch articles whenever Category or Page changes
+  useEffect(() => {
+    async function fetchContent() {
+      setLoading(true);
+      // Params: page, role ("public"), categoryId (active)
+      const contentData = await getContentList(
+        1,
+        "public",
+        active || undefined,
+      );
       if (contentData) {
-        setArticles(contentData.contentList);
-
-        // Extract unique categories from articles
-        const uniqueCategories: Category[] = [];
-        const seen = new Set<number>();
-
-        contentData.contentList.forEach((item: ContentItem) => {
-          if (!seen.has(item.category.id)) {
-            seen.add(item.category.id);
-            uniqueCategories.push(item.category);
-          }
-        });
-
-        // Prepend "All" category
-        const allCategory: Category = {
-          id: 0,
-          name: "All",
-          description: "Show all articles regardless of category",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-
-        setCategories([allCategory, ...uniqueCategories]);
+        setArticles(contentData.contentList || []);
+        setPage(1); // Reset page to 1 on category change
       }
       setLoading(false);
     }
-    loadData();
-  }, []);
+    fetchContent();
+  }, [active]);
 
   const loadMore = async () => {
     setLoadingMore(true);
     const nextPage = page + 1;
-    const contentData = await getContentList(nextPage);
+    const contentData = await getContentList(
+      nextPage,
+      "public",
+      active || undefined,
+    );
 
     if (contentData?.contentList?.length) {
       setArticles((prev) => [...prev, ...contentData.contentList]);
@@ -61,16 +62,12 @@ export default function ArticlesSection() {
     setLoadingMore(false);
   };
 
-  const filtered =
-    active === "All"
-      ? articles
-      : articles.filter((item) => item.category?.name === active);
-
-  if (loading) return <div className="text-center py-16">Loading...</div>;
+  if (loading && page === 1)
+    return <div className="text-center py-16">Loading...</div>;
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 md:px-8 py-16 space-y-8 dark:bg-background">
-      <h2 className="text-center text-2xl font-bold mb-2">Latest Articles</h2>
+      <h2 className="text-center text-3xl font-bold mb-4">Articles</h2>
       <p className="text-center mb-8">
         Stay informed with our comprehensive coverage of African business
         sectors
@@ -78,12 +75,22 @@ export default function ArticlesSection() {
 
       {/* Category Buttons */}
       <div className="flex justify-center gap-3 flex-wrap mb-10">
+        <button
+          onClick={() => setActive(null)}
+          className={`px-4 py-2 rounded-full text-sm border transition ${
+            active === null
+              ? "bg-primary text-white"
+              : "bg-gray-100 dark:bg-gray-700"
+          }`}
+        >
+          All
+        </button>
         {categories.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => setActive(cat.name)}
+            onClick={() => setActive(cat.id)}
             className={`px-4 py-2 rounded-full text-sm border transition ${
-              active === cat.name
+              active === cat.id
                 ? "bg-primary text-white"
                 : "bg-gray-100 dark:bg-gray-700"
             }`}
@@ -95,8 +102,8 @@ export default function ArticlesSection() {
 
       {/* Articles Grid */}
       <div className="grid md:grid-cols-3 gap-8">
-        {filtered.length > 0 ? (
-          filtered.map((item) => (
+        {articles.length > 0 ? (
+          articles.map((item) => (
             <ContentCard
               id={item.id}
               key={item.id}
@@ -117,7 +124,7 @@ export default function ArticlesSection() {
       </div>
 
       {/* Load More */}
-      {filtered.length > 0 && (
+      {articles.length > 0 && (
         <div className="flex justify-center">
           <div onClick={loadMore}>
             <RedirectionBtn

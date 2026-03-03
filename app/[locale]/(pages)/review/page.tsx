@@ -5,6 +5,7 @@ import { VideoData } from "@/app/constants";
 import VideoCard from "../../components/card/videoCard";
 import ArticlesSection from "../../components/review/reviewSection";
 import { FiLoader } from "react-icons/fi";
+import Link from "next/link";
 
 const BusinessReviewContent = () => {
   return (
@@ -24,15 +25,16 @@ const BusinessReviewContent = () => {
               analysis, market insights, and exclusive interviews with
               continental leaders.
             </p>
-            <div className="gap-4 flex flex-wrap">
-              <RedirectionRedBtn title="Subscribe Now" link="#" />
-              <RedirectionRedBtn title="Register Now" link="#" />
+            <div className="flex flex-wrap">
+              <button className="cursor-pointer w-fit px-6 py-3 bg-white backdrop-blur-sm text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition-colors duration-150">
+                <Link href={`/auth`}>Register now</Link>
+              </button>
             </div>
           </div>
 
           <div className="max-lg:hidden bg-white dark:bg-card space-y-3 w-[50%]  group hover:rotate-0 duration-300 rotate-4 flex flex-col items-center justify-center p-8 rounded-2xl shadow-lg">
             <div className="text-center">
-              <h2 className="text-3xl font-semibold mb-4">nexus</h2>
+              <h2 className="text-3xl font-semibold mb-4">Inama</h2>
               <p>BUSINESS WEEKLY REVIEW</p>
               <span>January 12-21, 2025 | issue#46 </span>
             </div>
@@ -65,7 +67,7 @@ const BusinessReviewContent = () => {
           {/* Title */}
           <div className="flex items-center justify-center gap-2 mb-3">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <h2 className="text-3xl font-bold">nexus TV</h2>
+            <h2 className="text-3xl font-bold">Inama TV</h2>
           </div>
 
           <p className="max-w-2xl mx-auto mb-10">

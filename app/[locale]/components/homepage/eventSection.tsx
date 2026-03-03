@@ -6,7 +6,7 @@ import EventCard, { Event } from "../card/EventCard";
 const eventsData: Event[] = [
   {
     id: 1,
-    title: "Annual Nexus Leadership Summit",
+    title: "Annual Inama Leadership Summit",
     description:
       "Join industry leaders and visionaries to discuss the future of business in Africa.",
     image: "/images/chooseus.jpeg",

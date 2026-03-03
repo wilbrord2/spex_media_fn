@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { HiOutlineXMark, HiOutlineCloudArrowUp } from "react-icons/hi2";
 import { addBook } from "@/app/actions/book";
-import { getCategories } from "@/app/actions/review";
+import { getCategories } from "@/app/actions/book";
 import { toast } from "sonner";
 
 interface Props {
@@ -106,11 +106,11 @@ export default function AddBookSlideOver({
                   className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 >
                   <option value="">Select...</option>
-                  {/* {categories.map((cat) => (
+                  {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
                     </option>
-                  ))} */}
+                  ))}
                 </select>
               </div>
 

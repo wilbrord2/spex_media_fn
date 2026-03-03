@@ -111,7 +111,7 @@ export default function AuthPage() {
         setProfile(user);
       }
 
-      toast.success("Account verified! Welcome to Nexus.");
+      toast.success("Account verified! Welcome to Inama.");
       router.push("/");
       return res;
     },
@@ -155,7 +155,7 @@ export default function AuthPage() {
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black leading-[0.85] tracking-tighter uppercase text-white">
                 ONE ACCOUNT.
                 <br />
-                <span className="text-primary">ALL OF NEXUS.</span>
+                <span className="text-primary">ALL OF INAMA.</span>
               </h1>
               <p className="text-muted-foreground text-sm font-medium max-w-sm leading-relaxed">
                 Seamlessly access the Magazine, explore the Bookstore, and
@@ -292,7 +292,7 @@ export default function AuthPage() {
                         <input
                           name="address"
                           type="text"
-                          placeholder="Nexus St"
+                          placeholder="Inama St"
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
                           className="w-full bg-background border border-border rounded-xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm font-medium shadow-sm"
@@ -430,7 +430,7 @@ export default function AuthPage() {
             )}
             <footer className="text-center">
               <p className="text-muted-foreground text-[10px] font-bold leading-relaxed uppercase tracking-tighter">
-                By accessing Nexus, you agree to our{" "}
+                By accessing Inama, you agree to our{" "}
                 <Link href="#" className="text-primary hover:underline">
                   Terms of Service
                 </Link>{" "}

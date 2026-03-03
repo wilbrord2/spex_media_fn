@@ -28,7 +28,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import {
   deleteBook,
-  getAdminBooks,
+  getAllAdminBooks,
   getCategories,
   addCategory,
   deleteCategory,
@@ -93,8 +93,8 @@ export default function BooksDashboard() {
   const loadInitialData = useCallback(async () => {
     setLoading(true);
     try {
-      const booksRes = await getAdminBooks();
-      if (booksRes) setBooks(booksRes.books || []);
+      const booksRes = await getAllAdminBooks();
+      if (booksRes) setBooks(booksRes || []);
       await loadCategoryPage(1);
     } catch (err) {
       toast.error("Failed to load dashboard data");

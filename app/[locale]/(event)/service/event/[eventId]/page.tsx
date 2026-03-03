@@ -129,7 +129,7 @@ const EventDetails: React.FC = () => {
     <div className="bg-background text-foreground min-h-screen font-sans selection:bg-primary/30">
       {/* Preview Mode Banner */}
       {/* <div className="w-full bg-amber-500/10 border-b border-amber-500/20">
-        <div className="max-w-7xl mx-auto py-3 px-4 text-center">
+        <div className="max-w-[1500px] mx-auto py-3 px-4 text-center">
           <p className="text-amber-600 dark:text-amber-500 text-sm font-bold flex items-center justify-center gap-2">
             <FiEye className="text-base" />
             PREVIEW MODE: This event is currently unpublished.
@@ -137,7 +137,7 @@ const EventDetails: React.FC = () => {
         </div>
       </div> */}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* --- Hero Section --- */}
         <section className="relative w-full rounded-3xl overflow-hidden min-h-[450px] flex flex-col justify-end mb-12 group shadow-2xl">
           <Image
@@ -192,7 +192,7 @@ const EventDetails: React.FC = () => {
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
                   <CheckItem text="AI tools for content generation" />
                   <CheckItem text="Network with 500+ professionals" />
-                  <CheckItem text="Exclusive Nexus after-party" />
+                  <CheckItem text="Exclusive Inama after-party" />
                   <CheckItem text="Hands-on design workshops" />
                 </div>
               </div>
@@ -320,7 +320,7 @@ const EventDetails: React.FC = () => {
                     <FiArrowRight />
                   </button>
                   <p className="text-center text-[10px] font-bold text-foreground/30 mt-6 uppercase tracking-widest">
-                    Secure checkout by Nexus Pay
+                    Secure checkout by Inama Pay
                   </p>
                 </div>
 

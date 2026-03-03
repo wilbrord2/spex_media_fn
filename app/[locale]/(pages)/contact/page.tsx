@@ -17,7 +17,7 @@ const ContactUsPage = () => {
       <div className="my-10 w-full bg-linear-to-br from-slate-900 via-slate-800 to-red-900">
         <div className="container mx-auto text-center w-full flex flex-col justify-center items-center h-full gap-4 p-16 text-white">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            Connect With Nexus
+            Connect With Inama
           </h1>
           <p className="text-white/90 max-w-3xl mx-auto text-lg">
             We&apos;re always looking for new voices and strategic partners to
@@ -44,23 +44,22 @@ const ContactSection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
   };
 
   const contactMethods = [
     {
       title: "General Inquiries",
-      value: "hello@nexusmedia.com",
+      value: "hello@inama.rw",
       icon: <FiMail className="text-primary" size={22} />,
     },
     {
       title: "Editorial",
-      value: "editorial@nexusmedia.com",
+      value: "editorial@inama.rw",
       icon: <FiMail className="text-primary" size={22} />,
     },
     {
       title: "Advertising",
-      value: "advertising@nexusmedia.com",
+      value: "advertising@inama.rw",
       icon: <FiMail className="text-primary" size={22} />,
     },
     {
@@ -77,7 +76,7 @@ const ContactSection = () => {
 
   return (
     <div className="bg-[#f8fafc] dark:bg-slate-900/50 min-h-screen w-full flex items-center justify-center py-12 px-4 md:px-8">
-      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+      <div className="max-w-[1500px] w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
         {/* Left Column: Get in Touch */}
         <div className="flex flex-col">
           <h2 className="text-3xl font-bold text-foreground mb-6">

@@ -37,7 +37,7 @@ const BusinesReviewSection = ({ reviews }: BusinesReviewSectionProps) => {
                 img={review.coverImage}
                 category={review.category.name}
                 name={review.authorName || "Unknown Author"}
-                date={new Date(review.createdAt).toLocaleDateString()}
+                date={review.createdAt}
               />
             ))}
           </div>

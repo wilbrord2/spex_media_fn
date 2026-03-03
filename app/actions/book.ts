@@ -61,7 +61,25 @@ export async function getAdminBooks(): Promise<BookResponse | null> {
       cache: "no-store",
     });
     if (!response.ok) return null;
-    return await response.json();
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function getAllAdminBooks(): Promise<Book[] | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/books`, {
+      headers: {
+        ...(await getAuthHeader()),
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+
+    return data;
   } catch (error) {
     return null;
   }
@@ -73,14 +91,16 @@ export async function getAdminBooks(): Promise<BookResponse | null> {
 export async function addBook(
   formData: FormData,
 ): Promise<{ success: boolean; data?: Book; error?: string }> {
+  const token = (await cookies()).get("auth_token")?.value;
+  if (!token) {
+    return { success: false, error: "Unauthorized" };
+  }
   try {
-    console.log(formData);
-
     const response = await fetch(`${API_BASE_URL}/admin/books`, {
       method: "POST",
       body: formData, // title, authorName, categoryId, etc.
+      headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(response);
 
     if (response.ok) {
       const data = await response.json();
@@ -249,5 +269,71 @@ export async function deleteCategory(id: number) {
     return res.ok;
   } catch (error) {
     return false;
+  }
+}
+
+/**
+ * POST /api/v1/books/{id}/ratings
+ * @param id - The book ID
+ * @param rating - Number (e.g., 5)
+ */
+export async function rateBook(
+  id: number,
+  rating: number,
+): Promise<{ success: boolean; data?: { rating: number }; error?: string }> {
+  try {
+    const headers = await getAuthHeader();
+    const response = await fetch(`${API_BASE_URL}/books/${id}/ratings`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ rating }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      revalidatePath(`/service/store/${id}`); // Refresh the specific book page
+      return { success: true, data };
+    }
+
+    const errData = await response.json().catch(() => ({}));
+    return {
+      success: false,
+      error: errData.message || "Failed to submit rating",
+    };
+  } catch (error) {
+    return { success: false, error: "Connection error" };
+  }
+}
+
+/**
+ * POST /api/v1/books/{id}/comments
+ * @param id - The book ID
+ * @param comment - The string content of the comment
+ */
+export async function commentOnBook(
+  id: number,
+  comment: string,
+): Promise<{ success: boolean; data?: { comment: string }; error?: string }> {
+  try {
+    const headers = await getAuthHeader();
+    const response = await fetch(`${API_BASE_URL}/books/${id}/comments`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ comment }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      revalidatePath(`/service/store/${id}`);
+      return { success: true, data };
+    }
+
+    const errData = await response.json().catch(() => ({}));
+    return {
+      success: false,
+      error: errData.message || "Failed to submit comment",
+    };
+  } catch (error) {
+    return { success: false, error: "Connection error" };
   }
 }
