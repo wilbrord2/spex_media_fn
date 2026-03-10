@@ -282,10 +282,9 @@ export async function rateBook(
   rating: number,
 ): Promise<{ success: boolean; data?: { rating: number }; error?: string }> {
   try {
-    const headers = await getAuthHeader();
     const response = await fetch(`${API_BASE_URL}/books/${id}/ratings`, {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rating }),
     });
 
@@ -294,6 +293,7 @@ export async function rateBook(
       revalidatePath(`/service/store/${id}`); // Refresh the specific book page
       return { success: true, data };
     }
+    console.log({ response });
 
     const errData = await response.json().catch(() => ({}));
     return {
@@ -315,10 +315,9 @@ export async function commentOnBook(
   comment: string,
 ): Promise<{ success: boolean; data?: { comment: string }; error?: string }> {
   try {
-    const headers = await getAuthHeader();
     const response = await fetch(`${API_BASE_URL}/books/${id}/comments`, {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ comment }),
     });
 

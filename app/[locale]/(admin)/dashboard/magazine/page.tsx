@@ -149,9 +149,7 @@ export default function MagazineDashboard() {
   const stats = useMemo(
     () => ({
       total: pageInfo.totalContents,
-      published: articles.filter((a) =>
-        ["PUBLISHED", "APPROVED"].includes(a.status),
-      ).length,
+      published: articles.filter((a) => a.status === "PUBLISHED").length,
       drafts: articles.filter((a) =>
         ["DRAFT", "PENDING_REVIEW"].includes(a.status),
       ).length,
@@ -246,7 +244,8 @@ export default function MagazineDashboard() {
                 onChange={setStatusFilter}
                 options={[
                   { label: "All Status", value: "ALL" },
-                  { label: "Published", value: "APPROVED" },
+                  { label: "Published", value: "PUBLISHED" },
+                  { label: "Approved", value: "APPROVED" },
                   { label: "Drafts", value: "PENDING_REVIEW" },
                   { label: "Rejected", value: "REJECTED" },
                 ]}
@@ -298,12 +297,18 @@ export default function MagazineDashboard() {
                       <div className="flex items-center gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-border/50 justify-between sm:justify-end">
                         <button
                           onClick={() => setSelectedArticle(article)}
-                          className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-md cursor-pointer hover:bg-primary/90 transition-all"
+                          className={`flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-white text-[10px] font-black uppercase tracking-widest shadow-md cursor-pointer transition-all ${
+                            isAdmin && article.status === "APPROVED"
+                              ? "bg-indigo-600 hover:bg-indigo-700"
+                              : "bg-primary hover:bg-primary/90"
+                          }`}
                         >
                           {isAdmin &&
                           ["PENDING_REVIEW", "PENDING"].includes(article.status)
                             ? "Review"
-                            : "Preview"}
+                            : isAdmin && article.status === "APPROVED"
+                              ? "Publish"
+                              : "Preview"}
                         </button>
                         {isAdmin && (
                           <button
@@ -653,7 +658,7 @@ function StatusBadge({ status }: { status: string }) {
     DRAFT: "text-blue-500 bg-blue-500/10 border-blue-500/20",
     PENDING_REVIEW: "text-amber-500 bg-amber-500/10 border-amber-500/20",
     REJECTED: "text-rose-500 bg-rose-500/10 border-rose-500/20",
-    APPROVED: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
+    APPROVED: "text-indigo-500 bg-indigo-500/10 border-indigo-500/20",
     PENDING: "text-amber-500 bg-amber-500/10 border-amber-500/20",
   };
   return (

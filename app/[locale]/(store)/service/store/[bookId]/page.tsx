@@ -187,7 +187,9 @@ const NexusBookDetailsContent: React.FC = () => {
               {book.category?.name || "Uncategorized"}
             </Link>
             <span>/</span>
-            <span className="text-foreground">{book.title}</span>
+            <span className="text-foreground">
+              {book.title?.slice(0, 15)}...
+            </span>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-2">
@@ -231,7 +233,7 @@ const NexusBookDetailsContent: React.FC = () => {
 
             <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-8">
               <div className="flex flex-col gap-4 border-b border-foreground/10 pb-8">
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9]">
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] max-w-4xl">
                   {book.title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-6 mt-2">
@@ -253,24 +255,32 @@ const NexusBookDetailsContent: React.FC = () => {
 
                 <div className="flex items-center gap-3">
                   <div className="flex text-amber-500 gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar
-                        key={i}
-                        className={
-                          i < Math.floor(book.averageRating || 5)
-                            ? ""
-                            : "opacity-20"
-                        }
-                      />
-                    ))}
-                    {(book.averageRating || 0) % 1 !== 0 && <FaStarHalfAlt />}
+                    {[...Array(5)].map((_, i) => {
+                      const rating = book.averageRating || 0;
+                      const index = i + 1;
+
+                      return (
+                        <span key={i}>
+                          {rating >= index ? (
+                            <FaStar />
+                          ) : rating >= index - 0.5 ? (
+                            <FaStarHalfAlt />
+                          ) : (
+                            <FaStar className="opacity-20" />
+                          )}
+                        </span>
+                      );
+                    })}
                   </div>
-                  <span className="text-sm font-bold">
-                    {book.averageRating || "0.0"}
-                  </span>
-                  <span className="text-sm text-foreground/40">
-                    ({book.ratings?.length || 0} reviews)
-                  </span>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-bold tabular-nums">
+                      {Number(book.averageRating || 0).toFixed(1)}
+                    </span>
+                    <span className="text-sm text-foreground/40">
+                      {book.ratings?.length || 0} Review(s)
+                    </span>
+                  </div>
                 </div>
               </div>
 

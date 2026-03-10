@@ -29,7 +29,9 @@ export default function ArticleDetailSlideOver({
 
   const isAdmin = profile?.role?.toUpperCase() !== "CONTENT_PROVIDER";
 
-  const handleReview = async (status: "APPROVED" | "REJECTED") => {
+  const handleReview = async (
+    status: "APPROVED" | "REJECTED" | "PUBLISHED",
+  ) => {
     if (!feedback && status === "REJECTED") {
       toast.info("Please provide a reason for rejection.");
       return;
@@ -44,7 +46,7 @@ export default function ArticleDetailSlideOver({
     if (success) {
       onActionSuccess?.();
       onClose();
-      toast.success("Article reviewed successfully.");
+      toast.success(`Article ${status.toLowerCase()} successfully.`);
     } else {
       toast.error("Failed to update article status.");
     }
@@ -100,34 +102,59 @@ export default function ArticleDetailSlideOver({
             <div dangerouslySetInnerHTML={{ __html: article.content }} />
           </div>
 
-          {/* Admin Editorial Feedback Area */}
-          {isAdmin && article.status === "PENDING_REVIEW" && (
+          {/* Admin Editorial Actions */}
+          {isAdmin && (
             <div className="mt-8 p-6 bg-accent/20 rounded-2xl border border-border space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-widest">
-                Editorial Decision
-              </h3>
-              <textarea
-                placeholder="Provide feedback to the author (required for rejection)..."
-                className="w-full bg-background border border-border rounded-xl p-3 text-sm min-h-[120px] outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-              />
-              <div className="flex gap-3">
-                <button
-                  disabled={isSubmitting}
-                  onClick={() => handleReview("APPROVED")}
-                  className="flex-1 bg-emerald-500 text-white py-3 rounded-xl font-bold text-xs uppercase shadow-lg shadow-emerald-500/20 hover:opacity-90 disabled:opacity-50"
-                >
-                  {isSubmitting ? "Processing..." : "Approve & Publish"}
-                </button>
-                <button
-                  disabled={isSubmitting}
-                  onClick={() => handleReview("REJECTED")}
-                  className="flex-1 bg-rose-500 text-white py-3 rounded-xl font-bold text-xs uppercase shadow-lg shadow-rose-500/20 hover:opacity-90 disabled:opacity-50"
-                >
-                  Reject
-                </button>
-              </div>
+              {/* Approval/Rejection Step */}
+              {article.status === "PENDING_REVIEW" && (
+                <>
+                  <h3 className="text-xs font-black uppercase tracking-widest">
+                    Editorial Decision
+                  </h3>
+                  <textarea
+                    placeholder="Provide feedback to the author (required for rejection)..."
+                    className="w-full bg-background border border-border rounded-xl p-3 text-sm min-h-[120px] outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                  />
+                  <div className="flex gap-3">
+                    <button
+                      disabled={isSubmitting}
+                      onClick={() => handleReview("APPROVED")}
+                      className="flex-1 bg-emerald-500 text-white py-3 rounded-xl font-bold text-xs uppercase shadow-lg shadow-emerald-500/20 hover:opacity-90 disabled:opacity-50"
+                    >
+                      {isSubmitting ? "Processing..." : "Approve"}
+                    </button>
+                    <button
+                      disabled={isSubmitting}
+                      onClick={() => handleReview("REJECTED")}
+                      className="flex-1 bg-rose-500 text-white py-3 rounded-xl font-bold text-xs uppercase shadow-lg shadow-rose-500/20 hover:opacity-90 disabled:opacity-50"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Publish Step */}
+              {article.status === "APPROVED" && (
+                <div className="space-y-4">
+                  <h3 className="text-xs font-black uppercase tracking-widest text-emerald-600">
+                    Ready to Publish
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    This article has been approved. You can now publish it to
+                    make it live.
+                  </p>
+                  <button
+                    disabled={isSubmitting}
+                    onClick={() => handleReview("PUBLISHED")}
+                    className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-xs uppercase shadow-lg shadow-indigo-500/20 hover:opacity-90 disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Publishing..." : "Publish Article Now"}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

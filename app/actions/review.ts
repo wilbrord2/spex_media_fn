@@ -292,7 +292,7 @@ export async function adminReviewContent(
 
 export async function reviewArticle(
   id: number,
-  data: { status: "APPROVED" | "REJECTED"; comment: string },
+  data: { status: "PUBLISHED" | "APPROVED" | "REJECTED"; comment: string },
 ) {
   try {
     const token = (await cookies()).get("auth_token")?.value;
