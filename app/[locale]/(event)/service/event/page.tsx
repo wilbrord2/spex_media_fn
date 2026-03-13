@@ -17,138 +17,84 @@ import {
 import NewsletterSection from "@/app/[locale]/components/homepage/newsletter";
 import RedirectionBtn from "@/app/[locale]/components/Buttons/redirectionBtn";
 import Link from "next/link";
-
-// --- Types ---
-interface Event {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  type: "Virtual" | "Hybrid" | "In-Person";
-  image: string;
-  location?: string;
-  speakers?: string[];
-  category: string;
-  when: string;
-  badges?: { label: string; color: string }[];
-}
-
-// --- Mock Data ---
-const EVENTS: Event[] = [
-  {
-    id: 1,
-    title: "Global Publishing Trends 2024",
-    description:
-      "Discover the latest shifts in the publishing industry with insights from top editors and agents.",
-    date: "Oct 25",
-    time: "2:00 PM EST",
-    type: "Virtual",
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800",
-    category: "Publishing",
-    when: "Upcoming",
-    speakers: ["/spk1.jpg", "/spk2.jpg"],
-  },
-  {
-    id: 2,
-    title: "Inama Annual Book Fair",
-    description:
-      "Join us in New York or online for a celebration of literature, featuring over 100 authors.",
-    date: "Nov 02",
-    time: "10:00 AM EST",
-    type: "Hybrid",
-    location: "Javits Center, NYC",
-    image:
-      "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=800",
-    category: "Literature",
-    when: "Upcoming",
-  },
-  {
-    id: 3,
-    title: "Code & Content: The AI Revolution",
-    description:
-      "A technical deep dive into how large language models are reshaping content creation.",
-    date: "Nov 15",
-    time: "1:00 PM EST",
-    type: "Virtual",
-    image:
-      "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=800",
-    category: "Technology",
-    when: "Upcoming",
-    speakers: ["Dr. Alan Grant"],
-  },
-];
+import { getEvents, Event, EventsResponse } from "@/app/actions/event";
+import { getEventCategories } from "@/app/actions/event";
+import { Category } from "@/lib/dto";
 
 const EventManagementServiceContent: React.FC = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q") || "";
 
-  const [dateFilter, setDateFilter] = useState("Any Date");
-  const [typeFilter, setTypeFilter] = useState("All Types");
-  const [categoryFilter, setCategoryFilter] = useState("All Categories");
+  const [eventsData, setEventsData] = useState<EventsResponse | null>(null);
+  const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [dateFilter, setDateFilter] = useState<string>("AllTime");
+  const [typeFilter, setTypeFilter] = useState<string>("All Types");
+  const [categoryFilter, setCategoryFilter] =
+    useState<string>("All Categories");
 
   useEffect(() => {
-    if (window.location.hash === "#upcoming-events") {
-      const element = document.getElementById("upcoming-events");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+    const loadInitialData = async () => {
+      const catRes = await getEventCategories(1, 50);
+      if (catRes.success && catRes.data) {
+        setCategories(catRes.data.items);
       }
-    }
+    };
+    loadInitialData();
   }, []);
 
-  const isEventThisWeek = (event: Event) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize today to start of day
+  const fetchFilteredEvents = async (page: number, isLoadMore: boolean) => {
+    if (isLoadMore) setLoadingMore(true);
+    else setLoading(true);
 
-    const eventDate = new Date(event.date + " " + today.getFullYear());
-    eventDate.setHours(0, 0, 0, 0); // Normalize eventDate to start of day
+    const params: any = {
+      take: 9,
+      page: page,
+      presetTimeFrame:
+        dateFilter === "Any Date" ? "AllTime" : dateFilter.replace(" ", ""),
+    };
 
-    const firstDayOfWeek = new Date(today);
-    firstDayOfWeek.setDate(today.getDate() - today.getDay()); // Sunday (0-6 where 0 is Sunday)
+    if (typeFilter !== "All Types") {
+      params.eventType = typeFilter.replace("-", "");
+    }
 
-    const lastDayOfWeek = new Date(firstDayOfWeek);
-    lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); // Saturday
-    return eventDate >= firstDayOfWeek && eventDate <= lastDayOfWeek;
+    const res = await getEvents(params);
+    if (res?.success && res.data) {
+      setEventsData(res.data);
+      setAllEvents((prev) =>
+        isLoadMore
+          ? [...prev, ...(res.data?.events || [])]
+          : res.data?.events || [],
+      );
+    }
+    setLoading(false);
+    setLoadingMore(false);
   };
 
-  const isEventThisMonth = (event: Event) => {
-    const today = new Date();
-    const eventDate = new Date(event.date + " " + today.getFullYear());
-    return (
-      eventDate.getMonth() === today.getMonth() &&
-      eventDate.getFullYear() === today.getFullYear()
-    );
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchFilteredEvents(1, false);
+  }, [dateFilter, typeFilter, searchQuery]);
+
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    fetchFilteredEvents(nextPage, true);
   };
 
-  const filteredEvents = EVENTS.filter((event) => {
-    const matchesSearch =
-      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (event.speakers &&
-        event.speakers.some((speaker) =>
-          speaker.toLowerCase().includes(searchQuery.toLowerCase()),
-        ));
-
-    const matchesDate =
-      dateFilter === "Any Date" ||
-      (dateFilter === "This Week" && isEventThisWeek(event)) ||
-      (dateFilter === "This Month" && isEventThisMonth(event));
-
-    const matchesType = typeFilter === "All Types" || event.type === typeFilter;
-
-    // This is a placeholder for category filtering as the mock data doesn't have a category field.
-    // In a real app, 'event' would have a category property.
-    const matchesCategory =
-      categoryFilter === "All Categories" || event.category === categoryFilter;
-
-    return matchesSearch && matchesDate && matchesType && matchesCategory;
-  });
+  const displayEvents = allEvents.filter(
+    (e) =>
+      e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      e.description.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <div className="bg-background text-foreground min-h-screen font-sans pb-20">
-      <main className=" max-w-[1440px] mx-auto px-4 md:px-10 py-5 flex flex-col gap-12">
-        {/* --- Hero Section --- */}
+      <main className="max-w-[1440px] mx-auto px-4 md:px-10 py-5 flex flex-col gap-12">
         <section className="relative w-full rounded-2xl overflow-hidden min-h-[400px] md:min-h-[480px] flex flex-col justify-end p-8 md:p-12 bg-foreground/95 group">
           <div className="absolute inset-0 z-0">
             <Image
@@ -189,7 +135,6 @@ const EventManagementServiceContent: React.FC = () => {
           </div>
         </section>
 
-        {/* --- Page Heading & Filters --- */}
         <section id="upcoming-events" className="flex flex-col gap-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-foreground/10 pb-6">
             <div className="flex flex-col gap-2">
@@ -202,29 +147,37 @@ const EventManagementServiceContent: React.FC = () => {
             </div>
             <div className="text-sm text-foreground/40 font-medium">
               Showing{" "}
-              <span className="text-foreground">{filteredEvents.length}</span>{" "}
-              of <span className="text-foreground">{EVENTS.length}</span> events
+              <span className="text-foreground">{displayEvents.length}</span> of{" "}
+              <span className="text-foreground">
+                {eventsData?.totalEvents || 0}
+              </span>{" "}
+              events
             </div>
           </div>
 
-          {/* Toolbar */}
           <div className="flex flex-col lg:flex-row gap-4 justify-end">
             <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
               <FilterSelect
                 icon={<FiCalendar />}
-                options={["Any Date", "This Week", "This Month"]}
+                options={[
+                  "Any Date",
+                  "Today",
+                  "This Week",
+                  "This Month",
+                  "This Year",
+                ]}
                 selectedValue={dateFilter}
                 onChange={setDateFilter}
               />
               <FilterSelect
                 icon={<FiVideo />}
-                options={["All Types", "Virtual", "Hybrid"]}
+                options={["All Types", "Virtual", "Hybrid", "In-Person"]}
                 selectedValue={typeFilter}
                 onChange={setTypeFilter}
               />
               <FilterSelect
                 icon={<FiGrid />}
-                options={["All Categories", "Tech & AI", "Design"]}
+                options={["All Categories", ...categories.map((c) => c.name)]}
                 selectedValue={categoryFilter}
                 onChange={setCategoryFilter}
               />
@@ -232,108 +185,132 @@ const EventManagementServiceContent: React.FC = () => {
           </div>
         </section>
 
-        {/* --- Event Grid --- */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredEvents.length === 0 ? (
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative min-h-[400px]">
+          {loading ? (
+            <div className="col-span-full flex justify-center py-20">
+              <FiLoader className="animate-spin text-primary" size={40} />
+            </div>
+          ) : displayEvents.length === 0 ? (
             <div className="col-span-full py-20 text-center text-foreground/40">
               <p className="text-lg">No events found matching your criteria.</p>
             </div>
           ) : (
-            filteredEvents.map((event) => (
+            displayEvents.map((event) => (
               <EventCard key={event.id} event={event} />
             ))
           )}
         </section>
 
-        {/* Load More button */}
-        <div className="flex justify-center mb-8">
-          <RedirectionBtn title="Load More Articles" link="#" />
-        </div>
+        {eventsData?.hasNextPage && (
+          <div className="flex justify-center mb-8">
+            <button
+              className="cursor-pointer"
+              onClick={handleLoadMore}
+              disabled={loadingMore}
+            >
+              <RedirectionBtn
+                title={loadingMore ? "Loading..." : "Load More Events"}
+                link="#"
+              />
+            </button>
+          </div>
+        )}
 
-        {/* --- Newsletter --- */}
         <NewsletterSection />
       </main>
     </div>
   );
 };
 
-// --- Sub-components ---
+const EventCard = ({ event }: { event: Event }) => {
+  const eventDate = new Date(event.createdAt).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+  const eventTime = new Date(event.createdAt).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-const EventCard = ({ event }: { event: Event }) => (
-  <article className="group flex flex-col bg-foreground/2 rounded-2xl border border-foreground/5 overflow-hidden hover:border-primary/30 transition-all duration-300">
-    <div className="relative aspect-video overflow-hidden">
-      <Image
-        src={event.image}
-        alt={event.title}
-        fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-      />
-      <div className="absolute top-4 right-4">
-        <span className="px-3 py-1.5 rounded-lg bg-background/80 backdrop-blur-md text-[10px] font-black uppercase tracking-widest flex items-center gap-2 border border-foreground/10">
-          {event.type === "Virtual" ? (
-            <FiWifi className="text-green-500" />
-          ) : (
-            <FiUsers className="text-primary" />
-          )}
-          {event.type}
-        </span>
+  return (
+    <article className="group flex flex-col bg-foreground/2 rounded-2xl border border-foreground/5 overflow-hidden hover:border-primary/30 transition-all duration-300">
+      <div className="relative aspect-video overflow-hidden">
+        <Image
+          src={
+            event.coverImage ||
+            "https://images.unsplash.com/photo-1540575467063-178a50c2df87"
+          }
+          alt={event.title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute top-4 right-4">
+          <span className="px-3 py-1.5 rounded-lg bg-background/80 backdrop-blur-md text-[10px] font-black uppercase tracking-widest flex items-center gap-2 border border-foreground/10">
+            {event.eventType === "Virtual" ? (
+              <FiWifi className="text-green-500" />
+            ) : (
+              <FiUsers className="text-primary" />
+            )}
+            {event.eventType}
+          </span>
+        </div>
       </div>
-    </div>
-    <div className="p-6 flex flex-col flex-1">
-      <div className="flex items-center gap-2 text-primary text-[10px] font-black uppercase tracking-widest mb-3">
-        <span>{event.date}</span>
-        <span className="size-1 rounded-full bg-foreground/10"></span>
-        <span>{event.time}</span>
-      </div>
-      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors leading-tight">
-        {event.title}
-      </h3>
-      <p className="text-foreground/50 text-sm line-clamp-2 mb-6">
-        {event.description}
-      </p>
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-center gap-2 text-primary text-[10px] font-black uppercase tracking-widest mb-3">
+          <span>{eventDate}</span>
+          <span className="size-1 rounded-full bg-foreground/10"></span>
+          <span>{eventTime}</span>
+        </div>
+        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors leading-tight">
+          {event.title}
+        </h3>
+        <p className="text-foreground/50 text-sm line-clamp-2 mb-6">
+          {event.description}
+        </p>
 
-      <div className="mt-auto flex flex-col gap-5 pt-5 border-t border-foreground/5">
-        {event.location ? (
-          <div className="flex items-center gap-2 text-foreground/40 text-xs font-bold">
-            <FiMapPin className="text-primary" /> {event.location}
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <div className="flex -space-x-2">
-              {[1, 2].map((i) => (
-                <div
-                  key={i}
-                  className="size-7 rounded-full border-2 border-background bg-foreground/10"
-                />
-              ))}
+        <div className="mt-auto flex flex-col gap-5 pt-5 border-t border-foreground/5">
+          {event.location ? (
+            <div className="flex items-center gap-2 text-foreground/40 text-xs font-bold">
+              <FiMapPin className="text-primary" /> {event.location}
             </div>
-            <span className="text-[10px] font-bold text-foreground/30">
-              +3 Speakers
-            </span>
-          </div>
-        )}
-        <Link
-          href={`/service/event/${event.id}`}
-          className="w-full h-11 rounded-xl bg-foreground/5 hover:bg-primary hover:text-primary-foreground transition-all font-bold text-sm flex items-center justify-center gap-2"
-        >
-          View Details <FiArrowRight />
-        </Link>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {event.speakers?.slice(0, 3).map((s) => (
+                  <div
+                    key={s.id}
+                    className="size-7 rounded-full border-2 border-background bg-foreground/10 overflow-hidden relative"
+                  >
+                    <Image
+                      src={s.profilePicture || "/avatar.png"}
+                      alt={s.fullName}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+              {event.speakers && event.speakers.length > 0 && (
+                <span className="text-[10px] font-bold text-foreground/30">
+                  {event.speakers.length} Speaker
+                  {event.speakers.length > 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+          )}
+          <Link
+            href={`/service/event/${event.id}`}
+            className="w-full h-11 rounded-xl bg-foreground/5 hover:bg-primary hover:text-primary-foreground transition-all font-bold text-sm flex items-center justify-center gap-2"
+          >
+            View Details <FiArrowRight />
+          </Link>
+        </div>
       </div>
-    </div>
-  </article>
-);
+    </article>
+  );
+};
 
-const FilterSelect = ({
-  icon,
-  options,
-  selectedValue,
-  onChange,
-}: {
-  icon: React.ReactNode;
-  options: string[];
-  selectedValue: string;
-  onChange: (value: string) => void;
-}) => (
+const FilterSelect = ({ icon, options, selectedValue, onChange }: any) => (
   <div className="relative group">
     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-primary pointer-events-none">
       {icon}
@@ -343,8 +320,8 @@ const FilterSelect = ({
       value={selectedValue}
       onChange={(e) => onChange(e.target.value)}
     >
-      {options.map((opt) => (
-        <option key={opt} className="bg-background">
+      {options.map((opt: string) => (
+        <option key={opt} value={opt} className="bg-background">
           {opt}
         </option>
       ))}

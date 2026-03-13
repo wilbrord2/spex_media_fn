@@ -56,6 +56,12 @@ export default function AdminLayout({
         href: "/dashboard/store",
         roles: ["ADMIN"],
       },
+      {
+        name: "Inama Events",
+        icon: <HiOutlineShieldCheck />,
+        href: "/dashboard/events",
+        roles: ["ADMIN"],
+      },
     ];
 
     return items.filter((item) => item.roles.includes(role || "ADMIN"));
