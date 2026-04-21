@@ -22,7 +22,7 @@ const CartButton: React.FC<{ onCartIconClick: () => void }> = ({
     >
       <FiShoppingCart size={22} />
       {totalQuantity > 0 && (
-        <span className="absolute -top-1 -right-1 min-w-5 h-5 p-0.5 bg-red-700 border-2 border-background rounded-full flex items-center justify-center text-[10px] font-bold text-white">
+        <span className="absolute -top-1 -right-1 min-w-5 h-5 p-0.5 bg-amber-700 border-2 border-background rounded-full flex items-center justify-center text-[10px] font-bold text-white">
           {totalQuantity}
         </span>
       )}

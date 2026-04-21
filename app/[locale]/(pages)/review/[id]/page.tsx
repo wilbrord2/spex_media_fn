@@ -102,7 +102,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="text-lg">Article not found</div>
         <button
           onClick={() => router.back()}
-          className="px-4 py-2 bg-red-700 text-white rounded-md"
+          className="px-4 py-2 bg-amber-700 text-white rounded-md"
         >
           Go Back
         </button>
@@ -111,6 +111,11 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="mt-16 min-h-screen max-w-[1500px] bg-white dark:bg-gray-950 relative mx-auto">
+      <div className="my-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mt-8">
+          {content.title}
+        </h1>
+      </div>
       {/* Hero Image */}
       <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-md">
         <Image
@@ -124,7 +129,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
 
       <div className="mx-auto px-6 py-12">
         <div className="mb-8">
-          <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-sm font-semibold rounded-full uppercase tracking-wider">
+          <span className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-sm font-semibold rounded-full uppercase tracking-wider">
             {content.category.name}
           </span>
           <span className="ml-4 text-sm text-gray-500 font-medium">
@@ -144,7 +149,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         </article>
 
         {/* Comment Form */}
-        <div className="mt-32 bg-gray-50 dark:bg-gray-900/50 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="mt-32 max-w-2/3 bg-gray-50 dark:bg-gray-900/50 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
           <h3 className="text-xl font-semibold mb-6">Leave a Comment</h3>
           <form onSubmit={handleSubmitComment} className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
@@ -187,7 +192,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 bg-red-700 text-white rounded hover:bg-red-800 disabled:opacity-50 font-bold transition"
+              className="w-full py-3 bg-amber-700 text-white rounded hover:bg-amber-800 disabled:opacity-50 font-bold transition"
             >
               {isSubmitting ? "Posting..." : "Post Comment"}
             </button>
@@ -195,7 +200,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
 
         {/* Recent Comments */}
-        <div className="mt-12 space-y-6">
+        <div className="mt-12 space-y-6 max-w-1/2">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
             Recent Comments ({comments.length})
           </h3>
@@ -250,7 +255,7 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
                     />
                   </div>
                   <div className="p-4">
-                    <span className="inline-block px-2 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded mb-2 uppercase">
+                    <span className="inline-block px-2 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded mb-2 uppercase">
                       {article.category.name}
                     </span>
                     <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">

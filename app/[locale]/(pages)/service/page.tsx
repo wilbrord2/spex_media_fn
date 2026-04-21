@@ -13,9 +13,9 @@ const ServicePage = () => {
         quickAction={
           <div className="w-full">
             <WhiteBtn
-              title="Signup"
-              link="#"
-              className="bg-red-900 text-white hover:bg-red-700"
+              title="Contact Us"
+              link="/contact"
+              className="bg-amber-900 text-white hover:bg-amber-700"
             />
           </div>
         }

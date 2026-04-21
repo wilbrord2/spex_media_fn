@@ -50,6 +50,7 @@ const EventNavbarContent = () => {
 
   return (
     <Navbar
+     brand="Events"
       leftContent={leftContent}
       includeSearchBar={isEventMainPage}
       searchBarPlaceholder="Search events..."

@@ -14,19 +14,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Inama",
+  title: "Inamacom",
   description:
     "Inama Media & Communications Inc. is a pan-African media and communications company bringing brands and stories to life online. We design and develop engaging corporate websites that seamlessly integrate with dynamic digital platforms. Our flagship online publication, Business Weekly Review, delivers authoritative business insights and multimedia features, including YouTube video inserts, to connect audiences with Africa’s fast-growing business landscape.",
 
   alternates: {
-    canonical: "https://ianama.rw",
+    canonical: "https://inamacom.com",
   },
 
   openGraph: {
     title: "Inama Media & Communications Inc.",
     description:
       "Pan-African media company powering brands online through corporate websites, digital platforms, and Business Weekly Review magazine.",
-    url: "https://ianama.rw",
+    url: "https://inamacom.com",
     siteName: "Inama Media",
     type: "website",
   },

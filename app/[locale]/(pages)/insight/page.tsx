@@ -77,7 +77,7 @@ const InsightPage = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="w-full bg-linear-to-br from-slate-900 via-slate-800 to-red-900 py-12 lg:py-20">
+      <div className="w-full bg-linear-to-br from-slate-900 via-slate-800 to-amber-900 py-12 lg:py-20">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Header Content */}
           <div className="text-white text-center lg:text-left flex flex-col justify-center gap-6">
@@ -194,7 +194,7 @@ const InsightPage = () => {
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-red-700 transition">
+                <h3 className="text-xl font-bold mb-2 group-hover:text-amber-700 transition">
                   {item.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">

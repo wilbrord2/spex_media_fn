@@ -23,7 +23,10 @@ const ServiceCard = ({
         </h3>
         <p className="text-gray-600 dark:text-gray-400 mt-1">{description}</p>
       </div>
-      <a href={link} className="text-primary hover:text-secondary group font-bold mt-2 flex items-center gap-2">
+      <a
+        href={link}
+        className="text-primary hover:text-secondary group font-bold mt-2 flex items-center gap-2"
+      >
         {name}
         <FaArrowRightLong className="group-hover:translate-x-2 transition-transform" />
       </a>

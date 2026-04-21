@@ -14,7 +14,7 @@ const BusinesReviewSection = ({ reviews }: BusinesReviewSectionProps) => {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
-    .slice(0, 5);
+    .slice(0, 6);
   const hasReviews = latestReviews.length > 0;
 
   return (
@@ -26,7 +26,7 @@ const BusinesReviewSection = ({ reviews }: BusinesReviewSectionProps) => {
 
       {hasReviews ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
             {reviews.map((review) => (
               <ContentCard
                 url={`/review/${review.id}`}

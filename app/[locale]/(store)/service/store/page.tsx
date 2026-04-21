@@ -556,7 +556,7 @@ const BookCard = ({
           <span className="text-[10px] font-bold text-primary uppercase tracking-wide">
             {book.category}
           </span>
-          <h3 className="font-bold text-sm leading-snug line-clamp-2 group-hover:text-red-700 transition-colors">
+          <h3 className="font-bold text-sm leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors">
             {book.title}
           </h3>
           <p className="text-foreground/50 text-xs">{book.author}</p>
@@ -630,7 +630,7 @@ const BookCard = ({
           {book.category}
         </span>
         <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-bold text-base leading-tight line-clamp-2 flex-1 group-hover:text-red-700 transition-colors">
+          <h3 className="font-bold text-base leading-tight line-clamp-2 flex-1 group-hover:text-amber-700 transition-colors">
             {book.title}
           </h3>
           <button

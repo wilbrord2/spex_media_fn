@@ -19,6 +19,7 @@ export default function ArticlesSection() {
   useEffect(() => {
     async function loadInitialData() {
       const categoriesData = await getCategories();
+      console.log("Fetched Categories:", categoriesData);
       if (categoriesData) {
         setCategories(categoriesData?.items || []);
       }
@@ -66,7 +67,7 @@ export default function ArticlesSection() {
     return <div className="text-center py-16">Loading...</div>;
 
   return (
-    <section className="w-full max-w-6xl mx-auto px-4 md:px-8 py-16 space-y-8 dark:bg-background">
+    <section className="w-full max-w-[1400px] mx-auto px-4  py-16 space-y-8 dark:bg-background">
       <h2 className="text-center text-3xl font-bold mb-4">Articles</h2>
       <p className="text-center mb-8">
         Stay informed with our comprehensive coverage of African business

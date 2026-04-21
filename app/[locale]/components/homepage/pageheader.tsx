@@ -10,7 +10,7 @@ const Pageheader = ({
   quickAction?: ReactNode;
 }) => {
   return (
-    <div className="bg-linear-to-br from-slate-900 via-slate-800  to-red-900 lg:h-[50vh]">
+    <div className="bg-linear-to-br from-slate-900 via-slate-800  to-amber-900 lg:h-[50vh]">
       <div className="max-width-container mx-auto text-center w-full flex flex-col justify-center items-center h-full gap-4 p-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
           {title}

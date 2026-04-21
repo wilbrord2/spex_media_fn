@@ -178,7 +178,7 @@ export default function EditContentPage({
             <input
               type="text"
               required
-              className="w-full p-3 rounded-md border dark:bg-gray-800 dark:border-gray-700 outline-none focus:ring-2 focus:ring-red-600"
+              className="w-full p-3 rounded-md border dark:bg-gray-800 dark:border-gray-700 outline-none focus:ring-2 focus:ring-amber-600"
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
@@ -245,7 +245,7 @@ export default function EditContentPage({
                 onClick={() =>
                   editor?.chain().focus().toggleHeading({ level: 1 }).run()
                 }
-                className={`px-2 py-1 rounded font-bold ${editor?.isActive("heading", { level: 1 }) ? "bg-red-700 text-white" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`px-2 py-1 rounded font-bold ${editor?.isActive("heading", { level: 1 }) ? "bg-amber-700 text-white" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 H1
               </button>
@@ -254,7 +254,7 @@ export default function EditContentPage({
                 onClick={() =>
                   editor?.chain().focus().toggleHeading({ level: 2 }).run()
                 }
-                className={`px-2 py-1 rounded font-bold ${editor?.isActive("heading", { level: 2 }) ? "bg-red-700 text-white" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`px-2 py-1 rounded font-bold ${editor?.isActive("heading", { level: 2 }) ? "bg-amber-700 text-white" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 H2
               </button>
@@ -263,7 +263,7 @@ export default function EditContentPage({
                 onClick={() =>
                   editor?.chain().focus().toggleHeading({ level: 3 }).run()
                 }
-                className={`px-2 py-1 rounded font-bold ${editor?.isActive("heading", { level: 3 }) ? "bg-red-700 text-white" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`px-2 py-1 rounded font-bold ${editor?.isActive("heading", { level: 3 }) ? "bg-amber-700 text-white" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 H3
               </button>
@@ -271,21 +271,21 @@ export default function EditContentPage({
               <button
                 type="button"
                 onClick={() => editor?.chain().focus().toggleBold().run()}
-                className={`p-2 rounded ${editor?.isActive("bold") ? "bg-red-100 text-red-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`p-2 rounded ${editor?.isActive("bold") ? "bg-amber-100 text-amber-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 <Bold size={18} />
               </button>
               <button
                 type="button"
                 onClick={() => editor?.chain().focus().toggleItalic().run()}
-                className={`p-2 rounded ${editor?.isActive("italic") ? "bg-red-100 text-red-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`p-2 rounded ${editor?.isActive("italic") ? "bg-amber-100 text-amber-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 <Italic size={18} />
               </button>
               <button
                 type="button"
                 onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-                className={`p-2 rounded ${editor?.isActive("blockquote") ? "bg-red-100 text-red-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`p-2 rounded ${editor?.isActive("blockquote") ? "bg-amber-100 text-amber-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 <Quote size={18} />
               </button>
@@ -293,7 +293,7 @@ export default function EditContentPage({
               <button
                 type="button"
                 onClick={() => editor?.chain().focus().toggleBulletList().run()}
-                className={`p-2 rounded ${editor?.isActive("bulletList") ? "bg-red-100 text-red-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`p-2 rounded ${editor?.isActive("bulletList") ? "bg-amber-100 text-amber-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 <List size={18} />
               </button>
@@ -302,7 +302,7 @@ export default function EditContentPage({
                 onClick={() =>
                   editor?.chain().focus().toggleOrderedList().run()
                 }
-                className={`p-2 rounded ${editor?.isActive("orderedList") ? "bg-red-100 text-red-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                className={`p-2 rounded ${editor?.isActive("orderedList") ? "bg-amber-100 text-amber-600" : "hover:bg-gray-200 dark:hover:bg-gray-700"}`}
               >
                 <ListOrdered size={18} />
               </button>
@@ -329,7 +329,7 @@ export default function EditContentPage({
             <button
               type="button"
               onClick={addImagePair}
-              className="bg-red-50 dark:bg-red-900/20 text-red-600 px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1 hover:bg-red-100 transition"
+              className="bg-amber-50 dark:bg-amber-900/20 text-amber-600 px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1 hover:bg-amber-100 transition"
             >
               <Plus size={16} /> Add Image
             </button>
@@ -378,7 +378,7 @@ export default function EditContentPage({
                 <button
                   type="button"
                   onClick={() => removePair(index)}
-                  className="absolute -top-2 -right-2 bg-white dark:bg-gray-800 shadow-md p-1.5 rounded-full text-red-500 hover:scale-110 transition"
+                  className="absolute -top-2 -right-2 bg-white dark:bg-gray-800 shadow-md p-1.5 rounded-full text-amber-500 hover:scale-110 transition"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -398,7 +398,7 @@ export default function EditContentPage({
           <button
             type="submit"
             disabled={updating}
-            className="flex-1 py-4 bg-red-700 text-white rounded-xl hover:bg-red-800 transition disabled:opacity-50 font-bold shadow-lg shadow-red-900/20"
+            className="flex-1 py-4 bg-amber-700 text-white rounded-xl hover:bg-amber-800 transition disabled:opacity-50 font-bold shadow-lg shadow-amber-900/20"
           >
             {updating ? "Saving Changes..." : "Update"}
           </button>

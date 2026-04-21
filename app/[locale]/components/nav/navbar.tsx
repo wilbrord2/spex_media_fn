@@ -89,13 +89,13 @@ const DesktopNavLinks: React.FC<{
               >
                 {item.label}
               </Link>
-              <div className="absolute left-0 mt-2 w-56 bg-background rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transform translate-y-1 group-hover:translate-y-0 transition-all z-50 border border-foreground/10">
+              <div className="absolute left-0 mt-2 w-60 bg-background rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transform translate-y-1 group-hover:translate-y-0 transition-all z-50 border border-foreground/10">
                 <div className="flex flex-col py-1">
                   {item.submenu.map((subitem) => (
                     <Link
                       key={subitem.href}
                       href={subitem.href}
-                      className="px-4 py-2 text-sm text-foreground hover:text-primary hover:bg-foreground/5 transition-colors"
+                      className="px-4 py-2 text-sm text-foreground hover:font-bold hover:text-primary hover:bg-foreground/5 transition-colors"
                     >
                       {subitem.label}
                     </Link>
@@ -206,8 +206,8 @@ const NavbarContent: React.FC<NavbarContentProps> = ({
       label: t("services"),
       href: "/service",
       submenu: [
-        { label: "Media and Publishing", href: "/service/publishing" },
-        { label: "Book Store", href: "/service/store" },
+        { label: "Business Media & Communications", href: "/service/publishing" },
+        { label: "Publishing & Book Store", href: "/service/store" },
         { label: "Event Management", href: "/service/event" },
       ],
     },
@@ -355,7 +355,7 @@ const Navbar = (props: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <NavbarContent {...props} isOpen={isOpen} setIsOpen={setIsOpen}>
+    <NavbarContent brand="Media" {...props} isOpen={isOpen} setIsOpen={setIsOpen}>
       {props.children}
     </NavbarContent>
   );

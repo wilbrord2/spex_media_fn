@@ -30,7 +30,7 @@ export function HeroSection() {
         <CarouselContent className="flex w-full max-w-full">
           {BusinesReviewData.map((data, index) => (
             <CarouselItem key={index} className="w-full">
-              <div className="relative flex h-[80vh] w-full items-center justify-center rounded-xl">
+              <div className="relative flex h-[80vh] xl:h-[70vh] 2xl:h-[55vh] w-full items-center justify-center rounded-xl">
                 <Image
                   src={data.img}
                   alt={data.title}
@@ -38,10 +38,10 @@ export function HeroSection() {
                   fill
                 />
                 <div className="absolute inset-0 bg-black/60 text-center flex flex-col items-center justify-center p-8 space-y-4">
-                  <h2 className="text-3xl md:text-5xl max-w-2xl font-bold text-white drop-shadow-lg">
+                  <h2 className="text-3xl md:text-5xl max-w-6xl font-bold text-white drop-shadow-lg">
                     {data.title}
                   </h2>
-                  <p className="hidden md:block text-lg md:text-xl max-w-3xl font-medium text-white drop-shadow-lg">
+                  <p className="hidden lg:block text-lg md:text-xl max-w-3xl font-medium text-white drop-shadow-lg">
                     {data.description}
                   </p>
                 </div>
@@ -50,7 +50,7 @@ export function HeroSection() {
           ))}
         </CarouselContent>
 
-        <div className="absolute bottom-10 smax-sm:mx-4 sm:bottom-18 sm:left-1/2 sm:-translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center">
+        <div className="absolute bottom-10 sm:left-1/2 sm:-translate-x-1/2 z-20 flex gap-4 max-sm:flex-wrap justify-center items-center">
           <motion.button
             whileTap={{ scale: 0.85 }}
             className="cursor-pointer w-full px-6 py-3 bg-white backdrop-blur-sm text-primary font-semibold rounded-md shadow-md hover:bg-primary hover:text-white transition-colors duration-150 mx-6"

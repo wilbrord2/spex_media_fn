@@ -32,7 +32,7 @@ export default function Logo({
         </span>
 
         {/* nama */}
-        <span className="leading-[0.85]">nama {descriptor}</span>
+        <span className="leading-[0.85]">namacom {descriptor}</span>
       </div>
 
       {/* Tagline */}

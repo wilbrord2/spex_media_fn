@@ -135,8 +135,11 @@ const PdfViewer: React.FC<PdfViewerProps> = ({
           )}
 
           {hasError ? (
-            <div className="m-auto text-center p-8 border border-red-500/20 rounded-2xl max-w-sm">
-              <FiAlertCircle className="text-red-500 mx-auto mb-4" size={40} />
+            <div className="m-auto text-center p-8 border border-amber-500/20 rounded-2xl max-w-sm">
+              <FiAlertCircle
+                className="text-amber-500 mx-auto mb-4"
+                size={40}
+              />
               <p className="text-sm font-bold">Failed to load manuscript.</p>
               <button
                 onClick={() => window.location.reload()}

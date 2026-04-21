@@ -43,7 +43,7 @@ const MainServiceCard = ({
             <span className="text-xs text-gray-500 dark:text-gray-400">
               Learn more about this service
             </span>
-            <div className="ml-4 inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white rounded-full px-3 py-2 text-sm font-semibold transition-transform transform group-hover:translate-x-1">
+            <div className="ml-4 inline-flex items-center gap-2 bg-amber-700 hover:bg-amber-800 text-white rounded-full px-3 py-2 text-sm font-semibold transition-transform transform group-hover:translate-x-1">
               <span>Explore</span>
               <FaArrowRightLong />
             </div>

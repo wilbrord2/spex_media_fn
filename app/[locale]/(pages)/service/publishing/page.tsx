@@ -17,14 +17,14 @@ const PublishingServiceContent = () => {
   return (
     <main className="text-gray-900 dark:text-gray-100 space-y-8">
       <Pageheader
-        title="Media Publishing Service"
-        description="Explore our Media Publishing Service, dedicated to delivering high-quality content that informs, entertains, and engages audiences across Africa. Our publishing arm focuses on producing a diverse range of media, including digital articles, magazines, and multimedia content that reflects the rich cultural tapestry of the continent."
+        title="Business Media & Communications"
+        description="A leading pan-African business media company delivering news, articles, and insights through our digital magazine."
         quickAction={
           <div className="w-full flex flex-col md:flex-row gap-4">
             <WhiteBtn
               title="Weekly Business Review"
               link="/review"
-              className="bg-red-900 text-white hover:bg-red-700"
+              className="bg-amber-900 text-white hover:bg-amber-700"
             />
             <WhiteBtn
               title="Our Insights"

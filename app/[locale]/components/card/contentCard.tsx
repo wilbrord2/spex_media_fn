@@ -27,37 +27,51 @@ const ContentCard = ({
   return (
     <Link href={`${url}`}>
       <motion.div
-        whileTap={{ scale: 0.95 }}
-        className="group cursor-pointer relative w-full  border rounded-lg shadow-md hover:shadow-xl transition-shadow duration-500"
+        whileTap={{ scale: 0.98 }}
+        whileHover={{ y: -4 }}
+        className="group cursor-pointer relative w-full h-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-500 bg-white dark:bg-slate-800"
       >
-        <div className="overflow-hidden rounded-t-md">
+        {/* Image Container with Aspect Ratio */}
+        <div className="relative w-full aspect-video overflow-hidden bg-gray-100 dark:bg-gray-900">
           <Image
             src={img}
             alt={title}
-            className="w-full h-48 object-cover  group-hover:scale-105 transition-transform duration-500"
-            width={400}
-            height={192}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            priority={false}
           />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-linear-to-b from-black/0 via-black/0 to-black/20 group-hover:from-black/10 transition-all duration-500" />
         </div>
-        <div className="absolute top-2 left-2 bg-primary group-hover:bg-secondary text-sm text-white mb-2 py-1 px-2 font-semibold rounded-full">
+
+        {/* Category Badge */}
+        <div className="absolute top-3 left-3 bg-primary group-hover:bg-secondary text-xs text-white py-1.5 px-3 font-semibold rounded-full shadow-md transition-colors duration-300 z-10">
           {category}
         </div>
-        <div className=" p-4 flex flex-col gap-3 h-32">
-          <h2 className="text-xl font-semibold mb-2 dark:text-gray-300 text-primary dark:group-hover:text-primary group-hover:text-secondary transition-colors duration-500 line-clamp-2 flex-1">
+
+        {/* Content Container */}
+        <div className="p-5 flex flex-col justify-between min-h-48 gap-3">
+          {/* Title */}
+          <h2 className="text-2xl group-hover:text-secondary font-bold leading-tight dark:text-gray-100 text-gray-900 dark:group-hover:text-secondary transition-colors duration-500 shrink-0">
             {title}
           </h2>
-          <div className="text-xs text-gray-500 flex items-center justify-between">
-            <span className="mr-4 flex items-baseline gap-1">
-              <FaRegUser size={15} />
-              {name}
-            </span>{" "}
-            <span className="flex items-center gap-1">
-              <CiCalendar size={20} />
-              {new Date(date).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
+
+          {/* Meta Information */}
+          <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700 mt-auto">
+            <span className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+              <FaRegUser size={14} className="text-primary" />
+              <span className="font-medium truncate">{name}</span>
+            </span>
+            <span className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+              <CiCalendar size={16} className="text-primary shrink-0" />
+              <span className="font-medium">
+                {new Date(date).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
             </span>
           </div>
         </div>

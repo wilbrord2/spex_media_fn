@@ -34,7 +34,7 @@ const RightModal = ({
           >
             <button
               onClick={closeModal}
-              className="text-red-500 font-bold px-2 py-2 rounded"
+              className="text-amber-500 font-bold px-2 py-2 rounded"
             >
               <IoClose size={20} />
             </button>

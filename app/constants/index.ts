@@ -82,24 +82,24 @@ export const ServiceData = [
 export const MainSercivesData = [
   {
     image: Review1,
-    title: "Media & Publishing",
+    title: "Business Media & Communications",
     description:
-      "Weekly business reviews, in-depth articles, newsletters, and editorial services — built for reach and subscription monetization.",
+      "A leading pan-African business media company delivering news, analysis, and insights through our digital magazine, TV channel, and YouTube presence.",
     link: "service/publishing",
+  },
+  {
+    image: Review3,
+    title: "Publishing & Book Store",
+    description:
+      "Publishing a diverse range of business books, reports, and research that provide in-depth analysis and insights into African markets and industries.",
+    link: "service/store",
   },
   {
     image: Review2,
     title: "Event Management",
     description:
-      "End-to-end event planning, management and coverage for conferences, exhibitions, sporting and faith events — virtual, hybrid and physical.",
+      "Organizing high-profile business conferences, summits, and networking events across Africa that bring together industry leaders, policymakers, and innovators.",
     link: "service/event",
-  },
-  {
-    image: Review3,
-    title: "Book Store & Self-Publishing",
-    description:
-      "A digital marketplace and self-publishing engine where authors upload manuscripts and readers buy securely across multiple currencies.",
-    link: "service/store",
   },
 ];
 
@@ -338,7 +338,7 @@ export const ADVERTISING_PACKAGES = [
     description:
       "Insert a promoted story into our weekly newsletter with targeted placement.",
     pricing: "From $350",
-    classname: "border-red-500 shadow-red-500/20",
+    classname: "border-amber-500 shadow-amber-500/20",
   },
   {
     title: "Programmatic Ad Slots",

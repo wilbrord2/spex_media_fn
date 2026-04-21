@@ -14,7 +14,7 @@ const ContactUsPage = () => {
   return (
     <div>
       {/* Header */}
-      <div className="my-10 w-full bg-linear-to-br from-slate-900 via-slate-800 to-red-900">
+      <div className="mb-10 lg:py-10 w-full bg-linear-to-br from-slate-900 via-slate-800 to-amber-900">
         <div className="container mx-auto text-center w-full flex flex-col justify-center items-center h-full gap-4 p-16 text-white">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
             Connect With Inama

@@ -209,7 +209,7 @@ export default function AuthPage() {
                           className="w-full bg-background border border-border rounded-xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm font-medium shadow-sm"
                         />
                         {formErrors.email && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.email}
                           </p>
                         )}
@@ -228,7 +228,7 @@ export default function AuthPage() {
                           className="w-full bg-background border border-border rounded-xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm font-medium shadow-sm"
                         />
                         {formErrors.name && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.name}
                           </p>
                         )}
@@ -260,7 +260,7 @@ export default function AuthPage() {
                           </button>
                         </div>
                         {formErrors.password && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.password}
                           </p>
                         )}
@@ -279,7 +279,7 @@ export default function AuthPage() {
                           className="w-full bg-background border border-border rounded-xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm font-medium shadow-sm"
                         />
                         {formErrors.phone && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.phone}
                           </p>
                         )}
@@ -298,7 +298,7 @@ export default function AuthPage() {
                           className="w-full bg-background border border-border rounded-xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm font-medium shadow-sm"
                         />
                         {formErrors.address && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.address}
                           </p>
                         )}
@@ -319,7 +319,7 @@ export default function AuthPage() {
                           className="w-full bg-background border border-border rounded-xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm font-medium shadow-sm"
                         />
                         {formErrors.email && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.email}
                           </p>
                         )}
@@ -351,7 +351,7 @@ export default function AuthPage() {
                           </button>
                         </div>
                         {formErrors.password && (
-                          <p className="text-[9px] text-red-500 font-bold uppercase ml-1">
+                          <p className="text-[9px] text-amber-500 font-bold uppercase ml-1">
                             {formErrors.password}
                           </p>
                         )}

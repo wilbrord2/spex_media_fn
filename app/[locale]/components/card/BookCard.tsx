@@ -47,7 +47,7 @@ const BookCard = ({ book }: { book: Book }) => {
           {book.category}
         </span>
         <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-bold text-base leading-tight line-clamp-2 flex-1 group-hover:text-red-700 transition-colors">
+          <h3 className="font-bold text-base leading-tight line-clamp-2 flex-1 group-hover:text-amber-700 transition-colors">
             {book.title}
           </h3>
           {/* Add to cart button is removed as per instruction */}

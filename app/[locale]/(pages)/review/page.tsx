@@ -10,7 +10,7 @@ import Link from "next/link";
 const BusinessReviewContent = () => {
   return (
     <>
-      <div className="bg-linear-to-br from-slate-900 via-slate-800 to-red-900 lg:h-screen">
+      <div className="bg-linear-to-br from-slate-900 via-slate-800 to-amber-900 lg:h-screen">
         <div className="flex items-center justify-center gap-6 p-10 max-width-container">
           <div className="flex flex-col gap-4">
             <span className="text-white w-fit bg-secondary font-semibold px-4 py-2 rounded-full shadow">
@@ -66,7 +66,7 @@ const BusinessReviewContent = () => {
         <div className="max-w-6xl mx-auto text-center">
           {/* Title */}
           <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
             <h2 className="text-3xl font-bold">Inama TV</h2>
           </div>
 

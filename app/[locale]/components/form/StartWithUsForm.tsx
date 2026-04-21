@@ -15,7 +15,7 @@ export default function StartWithUsForm() {
   >("idle");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -93,7 +93,7 @@ export default function StartWithUsForm() {
       <div className="flex items-center gap-4">
         <button
           type="submit"
-          className="px-6 py-3 bg-primary text-white font-semibold rounded-md hover:bg-red-800 transition"
+          className="px-6 py-3 bg-primary text-white font-semibold rounded-md hover:bg-amber-800 transition"
           disabled={status === "sending"}
         >
           {status === "sending" ? "Sending..." : "Request a Starter Pack"}
@@ -105,7 +105,9 @@ export default function StartWithUsForm() {
           </span>
         )}
         {status === "error" && (
-          <span className="text-red-600">Please fill the required fields.</span>
+          <span className="text-amber-600">
+            Please fill the required fields.
+          </span>
         )}
       </div>
     </form>
