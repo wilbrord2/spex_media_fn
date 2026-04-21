@@ -96,7 +96,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({
   return (
     <div
       ref={viewerRef}
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl ${
+      className={`fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-xl ${
         isFullscreen ? "" : "p-0 md:p-6"
       }`}
     >
