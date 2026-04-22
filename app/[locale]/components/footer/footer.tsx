@@ -11,10 +11,10 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   const quickLinks = [
-    { label: "Privacy Policy", href: "/" },
-    { label: "Terms of Use", href: "/about" },
-    { label: "Careers", href: "/services" },
-    { label: "Advertise With Us", href: "/insights" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms of Use", href: "/terms-of-use" },
+    // { label: "Careers", href: "/careers" },
+    { label: "Advertise With Us", href: "/contact" },
     { label: "Contact Us", href: "/contact" },
   ];
 
@@ -43,9 +43,9 @@ const Footer = () => {
             </h2>
 
             <div className="flex flex-col gap-3 text-sm">
-              {quickLinks.map((link) => (
+              {quickLinks.map((link, index) => (
                 <Link
-                  key={link.href}
+                  key={index}
                   href={link.href}
                   className="text-black/70 dark:text-white/70 
                              hover:text-[#1B4965] dark:hover:text-[#5FA8D3]

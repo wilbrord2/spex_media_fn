@@ -3,7 +3,15 @@ import Review2 from "@/public/images/bnreview2.jpeg";
 import Review3 from "@/public/images/bnreview3.jpeg";
 import Review4 from "@/public/images/bnreview4.jpeg";
 import { LuNewspaper } from "react-icons/lu";
-import { FiMessageSquare } from "react-icons/fi";
+import {
+  FiGlobe,
+  FiMessageCircle,
+  FiMessageSquare,
+  FiShield,
+  FiTrendingUp,
+  FiUsers,
+  FiZap,
+} from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
 import { image } from "motion/react-client";
 import { link } from "fs";
@@ -186,95 +194,6 @@ export interface Article {
   img: string;
 }
 
-export const ArticlesData: Article[] = [
-  {
-    id: 1,
-    title: "Rwanda’s Digital Economy Reaches $2.3B Milestone",
-    description:
-      "Comprehensive analysis of Rwanda’s digital transformation journey and its impact on regional economic growth.",
-    category: "Technology",
-    name: "Dr. Sarah Mukamana",
-    date: "January 15, 2025",
-    img: Review1.src,
-  },
-  {
-    id: 2,
-    title: "East African Banking Sector Transformation",
-    description:
-      "How digital banking innovations are reshaping financial services across East Africa.",
-    category: "Finance",
-    name: "Jean-Baptiste Nziyimana",
-    date: "January 14, 2025",
-    img: Review4.src,
-  },
-  {
-    id: 3,
-    title: "Nigeria’s Fintech Revolution Continues",
-    description:
-      "Deep dive into Nigeria’s fintech ecosystem and its expansion into West African markets.",
-    category: "Finance",
-    name: "Dr. Amina Hassan",
-    date: "January 13, 2025",
-    img: Review2.src,
-  },
-  {
-    id: 4,
-    title: "Agribusiness Innovation Across the Continent",
-    description:
-      "Transformation from Kenya’s vertical farms to Ghana’s agri-tech startups.",
-    category: "Agribusiness",
-    name: "Prof. Kwame Asante",
-    date: "January 12, 2025",
-    img: Review3.src,
-  },
-  {
-    id: 5,
-    title: "Renewable Energy Boom in Southern Africa",
-    description:
-      "Wind and solar energy projects transforming the landscape across Botswana, Namibia, and Zambia.",
-    category: "Energy",
-    name: "Dr. Sarah Mukamana",
-    date: "January 11, 2025",
-    img: Review1.src,
-  },
-  {
-    id: 6,
-    title: "Healthcare Innovation in African Cities",
-    description:
-      "Telemedicine and digital health solutions revolutionizing healthcare delivery across Africa.",
-    category: "Healthcare",
-    name: "Dr. Fatima Al-Rashid",
-    date: "January 10, 2025",
-    img: Review2.src,
-  },
-];
-
-export const CommentData = [
-  {
-    id: 1,
-    name: "John Smith",
-    email: "john@example.com",
-    comment:
-      "Excellent analysis! This provides great insights into the market trends.",
-    date: "January 14, 2025",
-  },
-  {
-    id: 2,
-    name: "Maria Garcia",
-    email: "maria@example.com",
-    comment:
-      "Very informative article. Looking forward to more content like this.",
-    date: "January 13, 2025",
-  },
-  {
-    id: 3,
-    name: "Ahmed Hassan",
-    email: "ahmed@example.com",
-    comment: "Great perspective on African economic growth. Keep it up!",
-    date: "January 12, 2025",
-  },
-];
-
 export const PricingData: PricingCardProps[] = [
   {
     id: "free",
@@ -330,14 +249,14 @@ export const ADVERTISING_PACKAGES = [
     title: "Sponsored Article",
     description:
       "A native article written in collaboration with your brand, published and promoted to our audience.",
-    pricing: "From $500",
+    pricing: "From $50",
     classname: "border-blue-500 shadow-blue-500/20",
   },
   {
     title: "Newsletter Integration",
     description:
       "Insert a promoted story into our weekly newsletter with targeted placement.",
-    pricing: "From $350",
+    pricing: "From $35",
     classname: "border-amber-500 shadow-amber-500/20",
   },
   {
@@ -357,17 +276,154 @@ export const PARTNERS = [
   },
   {
     name: "Microsoft",
-    logoUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png",
+    logoUrl: "https://www.panapress.com/img/logo.png",
   },
   {
     name: "Coca-Cola",
     logoUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/512px-Coca-Cola_logo.svg.png",
+      "https://static.wikia.nocookie.net/the-soda/images/d/d8/Coca-Cola_Logo.png/revision/latest/scale-to-width-down/268?cb=20190817015840",
   },
   {
     name: "Amazon",
     logoUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/512px-Amazon_logo.svg.png",
+      "https://assets.aboutamazon.com/dims4/default/c3ed523/2147483647/strip/true/crop/1260x224+0+0/resize/1215x216!/format/webp/quality/90/?url=https%3A%2F%2Famazon-blogs-brightspot.s3.amazonaws.com%2F03%2Fdb%2Facdae03e4c01989e1e8253b152b5%2Famazon-business-logo-horizontal-rgb-squid-ink-smile-orange.png",
+  },
+];
+
+// How It Works Data
+export const ReadersSteps = [
+  {
+    number: 1,
+    title: "Discover Quality Content",
+    description:
+      "Browse curated business news, analyses, and insights across multiple categories",
+  },
+
+  {
+    number: 2,
+    title: "Engage & Comment",
+    description:
+      "Share your thoughts, ask questions, and participate in our vibrant community",
+  },
+  {
+    number: 3,
+    title: "Stay Updated",
+    description:
+      "Subscribe to newsletters and get the latest articles delivered to your inbox",
+  },
+  // {
+  //   number: 4,
+  //   title: "Create Free Account",
+  //   description:
+  //     "Sign up in seconds to unlock personalized feeds and save your favorite articles",
+  // },
+];
+
+export const AuthorsSteps = [
+  {
+    number: 1,
+    title: "Create Your Account",
+    description:
+      "Sign up and set up your author profile with your bio and credentials",
+  },
+  {
+    number: 2,
+    title: "Start Writing",
+    description:
+      "Use our rich text editor to craft compelling articles with formatting and media",
+  },
+  {
+    number: 3,
+    title: "Submit for Review",
+    description:
+      "Our editorial team reviews your submission to ensure quality and relevance before publication",
+  },
+  {
+    number: 4,
+    title: "Publish & Share",
+    description:
+      "Once approved, your article goes live. Share it across social media and engage with readers through comments",
+  },
+  {
+    number: 5,
+    title: "Track Analytics",
+    description: "Monitor views, engagement, and reader feedback in real-time",
+  },
+];
+
+export const AdvertisersSteps = [
+  {
+    number: 1,
+    title: "Choose Your Package",
+    description:
+      "Select from flexible advertising plans tailored to your budget and goals",
+  },
+  {
+    number: 2,
+    title: "Create Campaign",
+    description:
+      "Work with our team to design targeted ads or sponsored content",
+  },
+  {
+    number: 3,
+    title: "Launch & Monitor",
+    description:
+      "Deploy your campaign and track impressions, clicks, and conversions",
+  },
+  {
+    number: 4,
+    title: "Optimize & Scale",
+    description: "Receive insights and recommendations to maximize your ROI",
+  },
+];
+
+export const PublishingFeatures = [
+  {
+    id: 1,
+    icon: FiZap,
+    iconColor: "text-yellow-500",
+    title: "Rich Text Editor",
+    description:
+      "Powerful yet intuitive editor with formatting, media uploads, and live preview capabilities",
+  },
+  {
+    id: 2,
+    icon: FiMessageCircle,
+    iconColor: "text-blue-500",
+    title: "Comment System",
+    description:
+      "Moderated comments with threading, replies, and community engagement tools",
+  },
+  {
+    id: 3,
+    icon: FiTrendingUp,
+    iconColor: "text-green-500",
+    title: "Advanced Analytics",
+    description:
+      "Real-time dashboards tracking views, engagement, reach, and reader demographics",
+  },
+  {
+    id: 4,
+    icon: FiGlobe,
+    iconColor: "text-amber-500",
+    title: "SEO Optimization",
+    description:
+      "Built-in SEO tools to help your content rank higher and reach more readers",
+  },
+  {
+    id: 5,
+    icon: FiShield,
+    iconColor: "text-red-500",
+    title: "Content Security",
+    description:
+      "Intellectual property protection, copyright management, and content verification",
+  },
+  {
+    id: 6,
+    icon: FiUsers,
+    iconColor: "text-orange-500",
+    title: "Community Tools",
+    description:
+      "Author profiles, follower system, and social sharing to build your audience",
   },
 ];

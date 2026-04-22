@@ -19,7 +19,6 @@ export default function ArticlesSection() {
   useEffect(() => {
     async function loadInitialData() {
       const categoriesData = await getCategories();
-      console.log("Fetched Categories:", categoriesData);
       if (categoriesData) {
         setCategories(categoriesData?.items || []);
       }

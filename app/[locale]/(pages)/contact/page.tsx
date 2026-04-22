@@ -1,5 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   FiMail,
   FiPhone,
@@ -8,7 +11,28 @@ import {
   FiUser,
   FiSend,
   FiMessageSquare,
+  FiAlertCircle,
+  FiCheckCircle,
 } from "react-icons/fi";
+
+// Validation schema
+const contactFormSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must not exceed 100 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z
+    .string()
+    .min(5, "Subject must be at least 5 characters")
+    .max(100, "Subject must not exceed 100 characters"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must not exceed 2000 characters"),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
 
 const ContactUsPage = () => {
   return (
@@ -35,15 +59,61 @@ const ContactUsPage = () => {
 };
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    subject: "",
-    message: "",
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ContactFormData) => {
+    setIsLoading(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitStatus({
+          type: "success",
+          message:
+            result.message ||
+            "Thank you for your message! We will get back to you soon.",
+        });
+        reset();
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message:
+            result.message || "Failed to send message. Please try again later.",
+        });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setSubmitStatus({
+        type: "error",
+        message:
+          "An error occurred while sending your message. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const contactMethods = [
@@ -73,6 +143,15 @@ const ContactSection = () => {
       icon: <FiMapPin className="text-primary" size={22} />,
     },
   ];
+
+  useEffect(() => {
+    if (submitStatus.type) {
+      const timer = setTimeout(() => {
+        setSubmitStatus({ type: null, message: "" });
+      }, 5000); 
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   return (
     <div className="bg-[#f8fafc] dark:bg-slate-900/50 min-h-screen w-full flex items-center justify-center py-12 px-4 md:px-8">
@@ -137,7 +216,43 @@ const ContactSection = () => {
             <h3 className="text-foreground text-2xl font-bold mb-6">
               Send us a message
             </h3>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
+            {/* Status Messages */}
+            {submitStatus.type && (
+              <div
+                className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
+                  submitStatus.type === "success"
+                    ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+                    : "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
+                }`}
+              >
+                {submitStatus.type === "success" ? (
+                  <FiCheckCircle
+                    className="text-green-600 dark:text-green-400 shrink-0 mt-0.5"
+                    size={20}
+                  />
+                ) : (
+                  <FiAlertCircle
+                    className="text-red-600 dark:text-red-400 shrink-0 mt-0.5"
+                    size={20}
+                  />
+                )}
+                <p
+                  className={`text-sm font-medium ${
+                    submitStatus.type === "success"
+                      ? "text-green-800 dark:text-green-300"
+                      : "text-red-800 dark:text-red-300"
+                  }`}
+                >
+                  {submitStatus.message}
+                </p>
+              </div>
+            )}
+
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-6"
+            >
               {/* Name & Email Row */}
               <div className="flex flex-col md:flex-row gap-5">
                 <label className="flex flex-col flex-1">
@@ -148,16 +263,23 @@ const ContactSection = () => {
                     <input
                       type="text"
                       placeholder="Enter your full name"
-                      className="w-full rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none"
-                      onChange={(e) =>
-                        setFormData({ ...formData, fullName: e.target.value })
-                      }
+                      {...register("fullName")}
+                      className={`w-full rounded-lg bg-background border text-foreground placeholder:text-foreground/50 focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none ${
+                        errors.fullName
+                          ? "border-red-500 focus:border-red-500"
+                          : "border-border focus:border-primary"
+                      }`}
                     />
                     <FiUser
                       className="absolute left-3 top-3.5 text-foreground/50"
                       size={20}
                     />
                   </div>
+                  {errors.fullName && (
+                    <span className="text-red-500 text-xs font-medium mt-1">
+                      {errors.fullName.message}
+                    </span>
+                  )}
                 </label>
                 <label className="flex flex-col flex-1">
                   <p className="text-foreground text-sm font-medium leading-normal pb-2">
@@ -167,16 +289,23 @@ const ContactSection = () => {
                     <input
                       type="email"
                       placeholder="Enter your email address"
-                      className="w-full rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none"
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
+                      {...register("email")}
+                      className={`w-full rounded-lg bg-background border text-foreground placeholder:text-foreground/50 focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none ${
+                        errors.email
+                          ? "border-red-500 focus:border-red-500"
+                          : "border-border focus:border-primary"
+                      }`}
                     />
                     <FiMail
                       className="absolute left-3 top-3.5 text-foreground/50"
                       size={20}
                     />
                   </div>
+                  {errors.email && (
+                    <span className="text-red-500 text-xs font-medium mt-1">
+                      {errors.email.message}
+                    </span>
+                  )}
                 </label>
               </div>
 
@@ -189,16 +318,23 @@ const ContactSection = () => {
                   <input
                     type="text"
                     placeholder="What can we help you with?"
-                    className="w-full rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none"
-                    onChange={(e) =>
-                      setFormData({ ...formData, subject: e.target.value })
-                    }
+                    {...register("subject")}
+                    className={`w-full rounded-lg bg-background border text-foreground placeholder:text-foreground/50 focus:ring-1 focus:ring-primary py-3 pl-11 pr-4 text-base transition-colors focus:outline-none ${
+                      errors.subject
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-border focus:border-primary"
+                    }`}
                   />
                   <FiMessageSquare
                     className="absolute left-3 top-3.5 text-foreground/50"
                     size={20}
                   />
                 </div>
+                {errors.subject && (
+                  <span className="text-red-500 text-xs font-medium mt-1">
+                    {errors.subject.message}
+                  </span>
+                )}
               </label>
 
               {/* Message */}
@@ -209,20 +345,28 @@ const ContactSection = () => {
                 <textarea
                   rows={6}
                   placeholder="How can we help you today?"
-                  className="w-full resize-none rounded-lg bg-background border border-border text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary p-4 text-base transition-colors focus:outline-none"
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
+                  {...register("message")}
+                  className={`w-full resize-none rounded-lg bg-background border text-foreground placeholder:text-foreground/50 focus:ring-1 focus:ring-primary p-4 text-base transition-colors focus:outline-none ${
+                    errors.message
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-border focus:border-primary"
+                  }`}
                 />
+                {errors.message && (
+                  <span className="text-red-500 text-xs font-medium mt-1">
+                    {errors.message.message}
+                  </span>
+                )}
               </label>
 
               {/* Submit Button */}
               <div className="flex justify-end pt-2">
                 <button
                   type="submit"
-                  className="flex w-full md:w-auto items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary/90 px-8 py-3 text-white font-bold transition-all transform active:scale-95 shadow-lg shadow-primary/20"
+                  disabled={isLoading}
+                  className="flex w-full md:w-auto items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary/90 disabled:bg-primary/60 disabled:cursor-not-allowed px-8 py-3 text-white font-bold transition-all transform active:scale-95 shadow-lg shadow-primary/20"
                 >
-                  <span>Send Message</span>
+                  <span>{isLoading ? "Sending..." : "Send Message"}</span>
                   <FiSend className="text-sm font-bold" />
                 </button>
               </div>
