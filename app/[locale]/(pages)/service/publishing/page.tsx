@@ -6,11 +6,13 @@ import StartWithUsForm from "../../../components/form/StartWithUsForm";
 import AdvertisingPackageCard from "../../../components/card/AdvertisingPackageCard";
 import PricingCard from "../../../components/card/PricingCard";
 import PartnerCard from "../../../components/card/PartnerCard";
+import FAQItem from "../../../components/faq/FAQItem";
 import {
   AdvertisersSteps,
   ADVERTISING_PACKAGES,
   AuthorsSteps,
   PARTNERS,
+  PRICING_FAQS,
   PricingData,
   PublishingFeatures,
   ReadersSteps,
@@ -368,52 +370,13 @@ const PublishingServiceContent = () => {
                 Pricing FAQ
               </h3>
               <div className="space-y-4">
-                <details className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow">
-                  <summary className="font-semibold text-gray-900 dark:text-white flex justify-between items-center">
-                    Can I change my plan anytime?
-                    <span className="text-primary">+</span>
-                  </summary>
-                  <p className="text-gray-600 dark:text-gray-400 mt-4">
-                    Yes, you can upgrade or downgrade your plan at any time.
-                    Changes take effect at your next billing cycle.
-                  </p>
-                </details>
-
-                <details className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow">
-                  <summary className="font-semibold text-gray-900 dark:text-white flex justify-between items-center">
-                    Do you offer discounts for annual plans?
-                    <span className="text-primary">+</span>
-                  </summary>
-                  <p className="text-gray-600 dark:text-gray-400 mt-4">
-                    Absolutely! Annual plans save you 17% compared to monthly
-                    billing. For larger commitments, we offer custom enterprise
-                    pricing.
-                  </p>
-                </details>
-
-                <details className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow">
-                  <summary className="font-semibold text-gray-900 dark:text-white flex justify-between items-center">
-                    What payment methods do you accept?
-                    <span className="text-primary">+</span>
-                  </summary>
-                  <p className="text-gray-600 dark:text-gray-400 mt-4">
-                    We accept all major credit cards (Visa, Mastercard, American
-                    Express), PayPal, and bank transfers for enterprise
-                    customers.
-                  </p>
-                </details>
-
-                <details className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow">
-                  <summary className="font-semibold text-gray-900 dark:text-white flex justify-between items-center">
-                    Is there an enterprise plan?
-                    <span className="text-primary">+</span>
-                  </summary>
-                  <p className="text-gray-600 dark:text-gray-400 mt-4">
-                    Yes! We offer custom enterprise plans with dedicated
-                    support, advanced features, and custom integrations. Contact
-                    our sales team for details.
-                  </p>
-                </details>
+                {PRICING_FAQS.map((faq) => (
+                  <FAQItem
+                    key={faq.id}
+                    question={faq.question}
+                    answer={faq.answer}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -444,7 +407,7 @@ const PublishingServiceContent = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="bg-linear-to-r from-primary via-amber-600 to-orange-600 rounded-2xl p-12 md:p-16 text-white text-center">
+        <section className="bg-linear-to-r from-primary via-primary to-amber-600 rounded-2xl p-12 md:p-16 text-white text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Ready to Get Started?
           </h2>

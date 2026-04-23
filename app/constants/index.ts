@@ -427,3 +427,30 @@ export const PublishingFeatures = [
       "Author profiles, follower system, and social sharing to build your audience",
   },
 ];
+
+export const PRICING_FAQS = [
+  {
+    id: 1,
+    question: "Can I change my plan anytime?",
+    answer:
+      "Yes, you can upgrade or downgrade your plan at any time. Changes take effect at your next billing cycle.",
+  },
+  {
+    id: 2,
+    question: "Do you offer discounts for annual plans?",
+    answer:
+      "Absolutely! Annual plans save you 17% compared to monthly billing. For larger commitments, we offer custom enterprise pricing.",
+  },
+  {
+    id: 3,
+    question: "What payment methods do you accept?",
+    answer:
+      "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for enterprise customers.",
+  },
+  {
+    id: 4,
+    question: "Is there an enterprise plan?",
+    answer:
+      "Yes! We offer custom enterprise plans with dedicated support, advanced features, and custom integrations. Contact our sales team for details.",
+  },
+];
