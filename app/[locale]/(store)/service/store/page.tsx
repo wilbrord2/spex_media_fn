@@ -518,6 +518,125 @@ const BookStoreServiceContent: React.FC = () => {
           </div>
         </section>
       </main>
+
+      {/* Publishing CTA Section */}
+      <section className="relative py-16 md:py-24 mt-auto overflow-hidden">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-linear-to-r from-primary/5 via-primary/10 to-amber-500/5 opacity-60" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl -z-10" />
+
+        <div className="max-w-[1440px] mx-auto px-4 lg:px-10 relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="flex flex-col justify-center space-y-6">
+              <div className="space-y-3">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-primary font-semibold text-sm uppercase tracking-wider w-fit">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  </span>
+                  For Authors & Publishers
+                </span>
+                <h2 className="text-4xl md:text-5xl font-black leading-tight bg-linear-to-r from-primary to-amber-500 bg-clip-text text-transparent">
+                  Share Your Story
+                </h2>
+              </div>
+
+              <p className="text-foreground/60 text-lg leading-relaxed max-w-md">
+                If you're an author or publisher looking to get your book
+                featured in our store, we'd love to hear from you! We are always
+                on the lookout for compelling stories that resonate with our
+                audience across Africa and beyond.
+              </p>
+
+              <div className="space-y-4 pt-2">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 text-primary shrink-0 mt-1">
+                    <FiCheck size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">
+                      Wide Reach
+                    </h4>
+                    <p className="text-foreground/50 text-sm">
+                      Connect with thousands of readers across Africa
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 text-primary shrink-0 mt-1">
+                    <FiCheck size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">
+                      Professional Support
+                    </h4>
+                    <p className="text-foreground/50 text-sm">
+                      We handle marketing and promotion for you
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 text-primary shrink-0 mt-1">
+                    <FiCheck size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">
+                      Fair Partnerships
+                    </h4>
+                    <p className="text-foreground/50 text-sm">
+                      Transparent terms and competitive compensation
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:scale-105"
+                >
+                  Get in Touch <FiArrowRight size={18} />
+                </Link>
+                {/* <button className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-primary/30 hover:border-primary/60 text-foreground/70 hover:text-foreground font-bold rounded-xl transition-all duration-300 hover:bg-primary/5">
+                  Learn More
+                </button> */}
+              </div>
+            </div>
+
+            {/* Right Visual Element */}
+            <div className="hidden md:flex items-center justify-center">
+              <div className="relative w-80 h-80">
+                {/* Animated background shapes */}
+                <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-amber-500/10 rounded-3xl blur-2xl" />
+
+                {/* Card 1 */}
+                <div className="absolute top-8 left-4 w-48 h-32 bg-linear-to-br from-primary/20 to-primary/5 rounded-2xl border border-primary/30 p-6 shadow-lg transform hover:scale-105 transition-transform duration-300 backdrop-blur-sm">
+                  <div className="text-3xl font-black text-primary mb-2">
+                    {BOOKS.length}+
+                  </div>
+                  <p className="text-sm text-foreground/60">Books Published</p>
+                </div>
+
+                {/* Card 2 */}
+                <div className="absolute bottom-12 right-0 w-48 h-32 bg-linear-to-br from-amber-500/20 to-amber-500/5 rounded-2xl border border-amber-500/30 p-6 shadow-lg transform hover:scale-105 transition-transform duration-300 backdrop-blur-sm">
+                  <div className="text-3xl font-black bg-linear-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent mb-2">
+                    500K+
+                  </div>
+                  <p className="text-sm text-foreground/60">Active Readers</p>
+                </div>
+
+                {/* Decorative circles */}
+                <div className="absolute -top-8 -right-8 w-32 h-32 border-2 border-primary/20 rounded-full opacity-40" />
+                <div className="absolute -bottom-4 -left-4 w-24 h-24 border-2 border-amber-500/20 rounded-full opacity-40" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
