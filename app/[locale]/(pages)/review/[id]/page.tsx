@@ -185,7 +185,12 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
         </div>
       </div>
-
+      <GoogleRectangleAd
+        adSlot={AD_SLOTS.articleTopBanner}
+        width={300}
+        height={250}
+        className="mb-8"
+      />
       {/* Main Content Area */}
       <div className="max-w-4xl mx-auto px-6 md:px-8 py-12 md:py-16">
         {/* Metadata Bar */}

@@ -28,6 +28,7 @@ export default function GoogleRectangleAd({
   return (
     <div className={`flex justify-center my-6 ${className}`}>
       <ins
+        key={adSlot}
         className="adsbygoogle"
         style={{
           display: "inline-block",

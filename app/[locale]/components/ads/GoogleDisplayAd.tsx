@@ -28,6 +28,7 @@ export default function GoogleDisplayAd({
   return (
     <div className={`my-6 ${className}`}>
       <ins
+        key={adSlot}
         className="adsbygoogle"
         style={{ display: fullWidth ? "block" : "inline-block", width: "100%" }}
         data-ad-client={GOOGLE_ADSENSE_CLIENT_ID}
