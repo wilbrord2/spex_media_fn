@@ -22,6 +22,10 @@ import {
 } from "react-icons/fi";
 import { FaFacebook, FaTwitter, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
+import { AD_SLOTS } from "@/app/lib/adsenseConfig";
+import GoogleDisplayAd from "@/app/[locale]/components/ads/GoogleDisplayAd";
+import GoogleRectangleAd from "@/app/[locale]/components/ads/GoogleRectangleAd";
+
 const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
   const contentId = parseInt(id);
@@ -227,6 +231,14 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
           />
         </article>
 
+        {/* Advertisement Section - After Article Content */}
+        <GoogleDisplayAd
+          adSlot={AD_SLOTS.articleMiddle}
+          adFormat="auto"
+          fullWidth={true}
+          className="my-8"
+        />
+
         {/* Social Share Section */}
         <div className="my-12 py-8 px-8 bg-linear-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 rounded-xl border border-amber-200 dark:border-amber-900/30">
           <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -271,6 +283,14 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
             <span className="text-amber-600">{comments.length}</span>
             <span>Comments</span>
           </h2>
+
+          {/* Advertisement Before Comments */}
+          <GoogleDisplayAd
+            adSlot={AD_SLOTS.articleBottom}
+            adFormat="auto"
+            fullWidth={true}
+            className="mb-12"
+          />
 
           {/* Comment Form */}
           <div className="mb-12 p-8 bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-800">
@@ -383,6 +403,16 @@ const ContentDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         {/* Related Articles Section */}
         {relatedArticles.length > 0 && (
           <div className="my-16 pt-12 border-t border-gray-200 dark:border-gray-800">
+            {/* Advertisement Before Related Articles */}
+            <div className="mb-12">
+              <GoogleRectangleAd
+                adSlot={AD_SLOTS.articleSidebar}
+                width={300}
+                height={250}
+                className="mb-8"
+              />
+            </div>
+
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-10">
               More From {content.category.name}
             </h2>
