@@ -89,7 +89,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     setCartItems([]);
   };
 
-  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalQuantity = cartItems.length;
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price! * item.quantity,
     0,
